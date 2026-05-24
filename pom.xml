@@ -16,7 +16,7 @@
     </properties>
 
     <build>
-        <sourceDirectory>src/main/java</sourceDirectory>
+        <sourceDirectory>src/main/automart/java</sourceDirectory>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
