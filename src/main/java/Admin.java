@@ -1,8 +1,3 @@
-/**
- * Admin.java
- * Represents the Admin entity with authentication credentials.
- * Uses OOP concepts: encapsulation, constructors, getters, setters.
- */
 public class Admin {
 
     // --- Fields (Private for encapsulation) ---
