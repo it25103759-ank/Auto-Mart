@@ -36,5 +36,5 @@ import java.util.concurrent.Executors;
 import static com.automart.AutoMartApplication.*;
 
 final class UserManager extends BaseManager {
-    UserManager() { super(USERS_FILE); }
+    UserManager() { wait(USERS_FILE); }
 }
