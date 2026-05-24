@@ -1,0 +1,3078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auto Mart — Browse Inventory</title>
+  <meta name="description" content="Browse our premium second-hand car inventory. Filter by category, fuel type, transmission and find your perfect vehicle at the best price in Sri Lanka." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0a0a0a;
+      --bg-card:     #111111;
+      --bg-card-2:   #161616;
+      --bg-input:    #1a1a1a;
+      --border:      rgba(255,255,255,0.07);
+      --border-hl:   rgba(163,230,53,0.35);
+      --accent:      #a3e635;
+      --accent-dark: #84cc16;
+      --accent-glow: rgba(163,230,53,0.18);
+      --text:        #f0f0f0;
+      --text-muted:  #888;
+      --text-dim:    #555;
+      --red:         #ef4444;
+      --radius:      14px;
+      --radius-sm:   8px;
+      --shadow:      0 4px 24px rgba(0,0,0,0.55);
+      --shadow-lg:   0 12px 48px rgba(0,0,0,0.75);
+      --transition:  0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================
+       SCROLLBAR
+    ============================================================ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 66px;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-mark {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 16px;
+      color: #000;
+      letter-spacing: -1px;
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+
+    .nav-logo-text {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+
+    .nav-logo-text span { color: var(--accent); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-wishlist-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 99px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .nav-wishlist-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .wishlist-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      background: var(--accent);
+      color: #000;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 99px;
+      padding: 0 5px;
+      transition: var(--transition);
+    }
+
+    .wishlist-count.bump {
+      animation: bump 0.35s ease;
+    }
+
+    @keyframes bump {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.45); }
+      70%  { transform: scale(0.9); }
+      100% { transform: scale(1); }
+    }
+
+    .nav-sell-btn {
+      background: var(--accent);
+      color: #000;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 9px 20px;
+      border: none;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .nav-sell-btn:hover {
+      background: var(--accent-dark);
+      box-shadow: 0 0 20px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+
+    /* ============================================================
+       PAGE HERO
+    ============================================================ */
+    .page-hero {
+      padding: 52px 32px 36px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(163,230,53,0.04) 0%, transparent 100%);
+    }
+
+    .page-hero-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .page-hero-label::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 99px;
+    }
+
+    .page-hero h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1.05;
+      margin-bottom: 10px;
+    }
+
+    .page-hero h1 span { color: var(--accent); }
+
+    .page-hero p {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    .page-hero p strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       CATEGORY TABS
+    ============================================================ */
+    .category-tabs-wrap {
+      padding: 0 32px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: sticky;
+      top: 66px;
+      z-index: 900;
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 14px 0;
+    }
+
+    .category-tabs::-webkit-scrollbar { display: none; }
+
+    .cat-tab {
+      white-space: nowrap;
+      padding: 8px 18px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .cat-tab:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .cat-tab.active {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+      font-weight: 700;
+      box-shadow: 0 0 14px var(--accent-glow);
+    }
+
+    /* ============================================================
+       FILTER BAR
+    ============================================================ */
+    .filter-bar {
+      padding: 20px 32px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      background: rgba(17,17,17,0.8);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .filter-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-dim);
+    }
+
+    .filter-search {
+      position: relative;
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .filter-search .search-icon {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      pointer-events: none;
+      font-size: 15px;
+    }
+
+    .filter-search input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 10px 14px 10px 38px;
+      border-radius: var(--radius-sm);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .filter-search input::placeholder { color: var(--text-dim); }
+
+    .filter-search input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .filter-select {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 10px 34px 10px 14px;
+      border-radius: var(--radius-sm);
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      transition: var(--transition);
+      min-width: 130px;
+    }
+
+    .filter-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .filter-select option { background: #1a1a1a; }
+
+    .btn-apply {
+      background: var(--accent);
+      color: #000;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 10px 22px;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn-apply:hover {
+      background: var(--accent-dark);
+      box-shadow: 0 0 16px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+
+    .btn-reset {
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn-reset:hover {
+      border-color: var(--text-muted);
+      color: var(--text);
+    }
+
+    /* ============================================================
+       INVENTORY MAIN
+    ============================================================ */
+    .inventory-wrap {
+      padding: 28px 32px 60px;
+    }
+
+    .inventory-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .vehicle-count {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .vehicle-count strong {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .sort-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-dim);
+      background: var(--bg-card-2);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 99px;
+    }
+
+    .sort-indicator span { color: var(--accent); font-weight: 600; }
+
+    /* ============================================================
+       CARS GRID
+    ============================================================ */
+    .cars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    @media (max-width: 1100px) {
+      .cars-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 700px) {
+      .cars-grid { grid-template-columns: 1fr; }
+      .navbar { padding: 0 16px; }
+      .page-hero, .filter-bar, .inventory-wrap { padding-left: 16px; padding-right: 16px; }
+      .category-tabs-wrap { padding: 0 16px; }
+    }
+
+    /* ============================================================
+       CAR CARD
+    ============================================================ */
+    .car-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .car-card:hover {
+      border-color: var(--border-hl);
+      box-shadow: 0 8px 32px rgba(163,230,53,0.09), var(--shadow);
+      transform: translateY(-3px);
+    }
+
+    /* Image */
+    .card-img-wrap {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+      background: #0f0f0f;
+    }
+
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .car-card:hover .card-img {
+      transform: scale(1.06);
+    }
+
+    .card-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.7) 100%);
+      pointer-events: none;
+    }
+
+    /* Status badge (top-left) */
+    .status-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 99px;
+    }
+
+    .status-badge.active   { background: rgba(163,230,53,0.18); color: var(--accent); border: 1px solid rgba(163,230,53,0.4); }
+    .status-badge.pending  { background: rgba(251,191,36,0.18);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.4); }
+    .status-badge.dealer   { background: rgba(147,197,253,0.18); color: #93c5fd; border: 1px solid rgba(147,197,253,0.4); }
+
+    /* Wishlist heart (top-right) */
+    .card-wish-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: 99px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 16px;
+    }
+
+    .card-wish-btn:hover,
+    .card-wish-btn.wishlisted {
+      background: rgba(163,230,53,0.15);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .card-wish-btn.wishlisted {
+      color: var(--accent);
+    }
+
+    /* Category badge (bottom-left of image) */
+    .cat-badge {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text);
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 99px;
+    }
+
+    .cat-badge span { color: var(--accent); }
+
+    /* Card body */
+    .card-body {
+      padding: 18px 18px 14px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      color: var(--text);
+      line-height: 1.25;
+    }
+
+    .card-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-specs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .spec-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-card-2);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .spec-pill svg { opacity: 0.6; }
+
+    .card-price {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: var(--text);
+    }
+
+    .card-price sub {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      vertical-align: baseline;
+      margin-right: 3px;
+    }
+
+    /* Card footer */
+    .card-footer {
+      padding: 0 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ready-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .ready-tag::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+      flex-shrink: 0;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--accent); }
+      50%       { opacity: 0.5; box-shadow: 0 0 12px var(--accent); }
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-wish {
+      padding: 10px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .btn-wish:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .btn-wish.added {
+      background: var(--accent-glow);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-view {
+      padding: 10px 8px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: var(--accent);
+      color: #000;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .btn-view:hover {
+      background: var(--accent-dark);
+      box-shadow: 0 0 14px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+
+    /* ============================================================
+       EMPTY STATE
+    ============================================================ */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .empty-state .empty-icon {
+      font-size: 56px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+
+    .empty-state h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* ============================================================
+       DETAIL VIEW (overlay panel)
+    ============================================================ */
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(12px);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      overflow-y: auto;
+      padding: 28px 16px 48px;
+    }
+
+    .detail-overlay.open {
+      display: flex;
+      animation: fadeIn 0.28s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .detail-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hl);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 900px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp 0.32s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .detail-img-wrap {
+      position: relative;
+      height: 380px;
+      background: #0f0f0f;
+    }
+
+    .detail-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .detail-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%);
+    }
+
+    .detail-back-btn {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .detail-back-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .detail-price-badge {
+      position: absolute;
+      bottom: 18px;
+      right: 18px;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-hl);
+      border-radius: 12px;
+      padding: 12px 18px;
+      text-align: right;
+    }
+
+    .detail-price-badge .label {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .detail-price-badge .price {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: -1px;
+    }
+
+    .detail-price-badge .price sub {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      vertical-align: baseline;
+    }
+
+    .detail-content {
+      padding: 30px 36px 36px;
+    }
+
+    @media (max-width: 600px) {
+      .detail-content { padding: 20px 18px; }
+      .detail-img-wrap { height: 220px; }
+    }
+
+    .detail-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .detail-title-group {}
+
+    .detail-badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .detail-cat-badge {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 99px;
+      background: rgba(163,230,53,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(163,230,53,0.3);
+    }
+
+    .detail-title {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.1;
+    }
+
+    .detail-actions-top {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .detail-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .detail-section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .detail-desc {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .specs-table {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 600px) {
+      .specs-table { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .spec-item {
+      background: var(--bg-card-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      transition: var(--transition);
+    }
+
+    .spec-item:hover {
+      border-color: var(--border-hl);
+    }
+
+    .spec-item .spec-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      margin-bottom: 5px;
+    }
+
+    .spec-item .spec-val {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .spec-item .spec-val.accent { color: var(--accent); }
+
+    .detail-cta-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .btn-contact {
+      flex: 1;
+      min-width: 200px;
+      background: var(--accent);
+      color: #000;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 24px;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-contact:hover {
+      background: var(--accent-dark);
+      box-shadow: 0 0 24px var(--accent-glow);
+      transform: translateY(-2px);
+    }
+
+    .btn-detail-wish {
+      padding: 14px 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-detail-wish:hover,
+    .btn-detail-wish.added {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    /* ============================================================
+       WISHLIST PANEL (slide-in)
+    ============================================================ */
+    .wishlist-sidebar {
+      position: fixed;
+      top: 0;
+      right: -420px;
+      width: 400px;
+      max-width: 95vw;
+      height: 100vh;
+      background: var(--bg-card);
+      border-left: 1px solid var(--border-hl);
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: -12px 0 50px rgba(0,0,0,0.6);
+    }
+
+    .wishlist-sidebar.open {
+      right: 0;
+    }
+
+    .wishlist-sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 2999;
+      display: none;
+    }
+
+    .wishlist-sidebar-backdrop.open { display: block; }
+
+    .wish-sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .wish-sidebar-header h2 {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+    }
+
+    .wish-sidebar-header h2 span { color: var(--accent); }
+
+    .wish-close-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 99px;
+      background: var(--bg-card-2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      transition: var(--transition);
+    }
+
+    .wish-close-btn:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .wish-sidebar-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .wish-empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--text-muted);
+      font-size: 14px;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .wish-empty .wish-empty-icon { font-size: 48px; opacity: 0.3; }
+
+    .wish-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: var(--bg-card-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      transition: var(--transition);
+    }
+
+    .wish-item:hover { border-color: var(--border-hl); }
+
+    .wish-item-img {
+      width: 70px;
+      height: 52px;
+      object-fit: cover;
+      border-radius: 6px;
+      flex-shrink: 0;
+      background: #0f0f0f;
+    }
+
+    .wish-item-info { flex: 1; min-width: 0; }
+
+    .wish-item-info .title {
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .wish-item-info .price {
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 600;
+      margin-top: 3px;
+    }
+
+    .wish-item-info .meta {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    .wish-remove-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 99px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .wish-remove-btn:hover {
+      border-color: var(--red);
+      color: var(--red);
+      background: rgba(239,68,68,0.1);
+    }
+
+    .wish-sidebar-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .wish-total {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .wish-total strong {
+      color: var(--accent);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    /* ============================================================
+       TOAST
+    ============================================================ */
+    .toast-container {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hl);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 12px 22px;
+      border-radius: 99px;
+      box-shadow: var(--shadow);
+      white-space: nowrap;
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.2s forwards;
+      backdrop-filter: blur(10px);
+    }
+
+    .toast .toast-accent { color: var(--accent); font-weight: 700; }
+
+    @keyframes toastIn  { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateY(8px); } }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 32px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+
+    .site-footer a { color: var(--accent); text-decoration: none; }
+    .site-footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<!-- ================================================================
+     NAVBAR
+================================================================ -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <a class="nav-brand" href="#" id="nav-brand-link" aria-label="Auto Mart Home">
+    <div class="nav-logo-mark">AM</div>
+    <span class="nav-logo-text">Auto<span>Mart</span></span>
+  </a>
+  <div class="nav-actions">
+    <button class="nav-wishlist-btn" id="nav-wishlist-btn" aria-label="View Wishlist" aria-live="polite">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+      Wishlist
+      <span class="wishlist-count" id="wishlist-count">0</span>
+    </button>
+    <a class="nav-sell-btn" href="#" id="nav-sell-btn">Sell a Car</a>
+  </div>
+</nav>
+
+<!-- ================================================================
+     PAGE HERO
+================================================================ -->
+<header class="page-hero" role="banner">
+  <div class="page-hero-label">Dynamic Car Display Page</div>
+  <h1>Browse by <span>Category</span></h1>
+  <p>Cars are loaded dynamically into a <strong>Linked List</strong>, and the price sort uses <strong>Merge Sort</strong>.</p>
+</header>
+
+<!-- ================================================================
+     CATEGORY TABS
+================================================================ -->
+<div class="category-tabs-wrap" role="navigation" aria-label="Category filter tabs">
+  <div class="category-tabs" id="category-tabs" role="tablist">
+    <button class="cat-tab active" data-cat="All"        role="tab" aria-selected="true"  id="tab-all">All</button>
+    <button class="cat-tab"        data-cat="SUV"        role="tab" aria-selected="false" id="tab-suv">SUV</button>
+    <button class="cat-tab"        data-cat="Crossover"  role="tab" aria-selected="false" id="tab-crossover">Crossover</button>
+    <button class="cat-tab"        data-cat="Sedan"      role="tab" aria-selected="false" id="tab-sedan">Sedan</button>
+    <button class="cat-tab"        data-cat="Hatchback"  role="tab" aria-selected="false" id="tab-hatchback">Hatchback</button>
+    <button class="cat-tab"        data-cat="Pickup"     role="tab" aria-selected="false" id="tab-pickup">Pickup</button>
+    <button class="cat-tab"        data-cat="Hybrid"     role="tab" aria-selected="false" id="tab-hybrid">Hybrid</button>
+  </div>
+</div>
+
+<!-- ================================================================
+     FILTER BAR
+================================================================ -->
+<section class="filter-bar" role="search" aria-label="Vehicle search and filters">
+  <div class="filter-search">
+    <span class="search-icon" aria-hidden="true">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </span>
+    <input type="search" id="search-input" placeholder="Search by make, model, year…" aria-label="Search inventory" />
+  </div>
+
+  <div class="filter-group">
+    <span class="filter-label">Fuel</span>
+    <select class="filter-select" id="fuel-select" aria-label="Filter by fuel type">
+      <option value="All">All</option>
+      <option value="Petrol">Petrol</option>
+      <option value="Diesel">Diesel</option>
+      <option value="Hybrid">Hybrid</option>
+      <option value="Electric">Electric</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <span class="filter-label">Transmission</span>
+    <select class="filter-select" id="trans-select" aria-label="Filter by transmission">
+      <option value="All">All</option>
+      <option value="Automatic">Automatic</option>
+      <option value="Manual">Manual</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <span class="filter-label">Sort by</span>
+    <select class="filter-select" id="sort-select" aria-label="Sort vehicles">
+      <option value="default">Default</option>
+      <option value="price-asc">Price: Low → High</option>
+      <option value="price-desc">Price: High → Low</option>
+      <option value="year-desc">Newest First</option>
+      <option value="km-asc">Lowest Mileage</option>
+    </select>
+  </div>
+
+  <button class="btn-apply" id="apply-btn" aria-label="Apply filters">Apply</button>
+  <button class="btn-reset" id="reset-btn" aria-label="Reset all filters">Reset</button>
+</section>
+
+<!-- ================================================================
+     INVENTORY GRID
+================================================================ -->
+<main class="inventory-wrap" role="main" id="inventory-main">
+  <div class="inventory-meta">
+    <p class="vehicle-count" id="vehicle-count" aria-live="polite">
+      Showing <strong id="count-num">0</strong> vehicles
+    </p>
+    <div class="sort-indicator" id="sort-indicator" aria-live="polite">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+        <line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/>
+        <line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+      </svg>
+      Sort: <span id="sort-label">Default</span>
+    </div>
+  </div>
+  <div class="cars-grid" id="cars-grid" role="list" aria-label="Vehicle listings"></div>
+</main>
+
+<!-- ================================================================
+     DETAIL OVERLAY
+================================================================ -->
+<div class="detail-overlay" id="detail-overlay" role="dialog" aria-modal="true" aria-label="Vehicle details">
+  <div class="detail-panel" id="detail-panel">
+    <!-- Injected by JS -->
+  </div>
+</div>
+
+<!-- ================================================================
+     WISHLIST SIDEBAR BACKDROP
+================================================================ -->
+<div class="wishlist-sidebar-backdrop" id="wish-backdrop" aria-hidden="true"></div>
+
+<!-- ================================================================
+     WISHLIST SIDEBAR
+================================================================ -->
+<aside class="wishlist-sidebar" id="wishlist-sidebar" role="complementary" aria-label="Wishlist">
+  <div class="wish-sidebar-header">
+    <h2>My <span>Wishlist</span></h2>
+    <button class="wish-close-btn" id="wish-close-btn" aria-label="Close wishlist">✕</button>
+  </div>
+  <div class="wish-sidebar-list" id="wish-list-items">
+    <div class="wish-empty">
+      <div class="wish-empty-icon">🚗</div>
+      <p>Your wishlist is empty.<br>Click the heart on a car to save it!</p>
+    </div>
+  </div>
+  <div class="wish-sidebar-footer">
+    <div class="wish-total">
+      <span>Total saved</span>
+      <strong id="wish-total-price">LKR 0</strong>
+    </div>
+  </div>
+</aside>
+
+<!-- ================================================================
+     TOAST CONTAINER
+================================================================ -->
+<div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer class="site-footer">
+  <p>© 2025 <a href="#">AutoMart</a> — Sri Lanka's Premier Second-Hand Vehicle Marketplace</p>
+</footer>
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+"use strict";
+
+/* ----------------------------------------------------------------
+   1. DATA — Vehicle Array (Linked-List style traversal in JS)
+---------------------------------------------------------------- */
+const VEHICLES = [
+  /* ---- Sedans ---- */
+  {
+    id: 4,
+    title: "Audi A6 Black Edition",
+    badge: "Sedan 2020",
+    year: 2020,
+    description: "Executive sedan with a clean black finish, premium road presence, and refined daily-driving comfort. Full dealer maintained.",
+    km: 38000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 17800000,
+    category: "Sedan",
+    color: "Mythos Black",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/sport-sedan-2.jpg"
+  },
+  {
+    id: 5,
+    title: "Volkswagen Passat TSI",
+    badge: "Sedan 2019",
+    year: 2019,
+    description: "Well-balanced family sedan with elegant styling, strong cabin comfort, and enviable ownership reliability. Dealer serviced.",
+    km: 43000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 15400000,
+    category: "Sedan",
+    color: "Reflex Silver",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/sedan-1.jpg"
+  },
+  {
+    id: 6,
+    title: "Audi A4 Quattro",
+    badge: "Sedan 2020",
+    year: 2020,
+    description: "Smart executive sedan with understated styling, premium finish, and confident all-round capability. All-wheel drive.",
+    km: 37000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 16900000,
+    category: "Sedan",
+    color: "Floret Silver",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/sport-sedan-3.jpg"
+  },
+  {
+    id: 7,
+    title: "Toyota Land Cruiser Prado 2019",
+    badge: "SUV 2019",
+    year: 2019,
+    description: "Iconic 4WD capability meets luxury refinement. 7-seater with sunroof, heated seats, and premium audio system.",
+    km: 60000,
+    fuel: "Diesel",
+    transmission: "Automatic",
+    price: 32000000,
+    category: "SUV",
+    color: "Graphite",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/suv-1.jpg"
+  },
+  {
+    id: 8,
+    title: "Mitsubishi Montero Sport 2020",
+    badge: "SUV 2020",
+    year: 2020,
+    description: "Rugged yet refined Montero Sport with Super Select 4WD, 7 seats, and class-leading ground clearance.",
+    km: 48000,
+    fuel: "Diesel",
+    transmission: "Automatic",
+    price: 19500000,
+    category: "SUV",
+    color: "Titanium Gray",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/suv-2.jpg"
+  },
+  {
+    id: 9,
+    title: "Nissan X-Trail 2018",
+    badge: "SUV 2018",
+    year: 2018,
+    description: "Family-friendly SUV with 360-degree camera, panoramic roof, and intelligent 4WD. Well cared for single owner.",
+    km: 68000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 13800000,
+    category: "SUV",
+    color: "Pearl White",
+    condition: "Good",
+    status: "Dealer",
+    image: "src/main/resources/static/img/listings/suv-3.jpg"
+  },
+  {
+    id: 10,
+    title: "Toyota RAV4 Hybrid 2021",
+    badge: "SUV 2021",
+    year: 2021,
+    description: "Latest generation RAV4 Hybrid with E-Four AWD. Exceptional fuel economy with SUV practicality. Low import.",
+    km: 22000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 27500000,
+    category: "SUV",
+    color: "Blueprint",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/suv-4.jpg"
+  },
+  /* ---- Crossovers ---- */
+  {
+    id: 11,
+    title: "Honda HR-V 2020",
+    badge: "Crossover 2020",
+    year: 2020,
+    description: "Stylish compact crossover with Honda Sensing, LaneWatch, and the magic seat versatility. Perfect urban companion.",
+    km: 34000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 12200000,
+    category: "Crossover",
+    color: "Lunar Silver",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/crossover-2.jpg"
+  },
+  {
+    id: 12,
+    title: "Mazda CX-5 2019",
+    badge: "Crossover 2019",
+    year: 2019,
+    description: "KODO design meets SkyActiv technology. Beautifully crafted CX-5 with Bose audio, heated seats, and i-Activsense.",
+    km: 51000,
+    fuel: "Diesel",
+    transmission: "Automatic",
+    price: 18700000,
+    category: "Crossover",
+    color: "Soul Red Crystal",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/crossover-3.jpg"
+  },
+  {
+    id: 13,
+    title: "Subaru Forester 2020",
+    badge: "Crossover 2020",
+    year: 2020,
+    description: "Symmetrical AWD with Eyesight safety, panoramic sunroof, and sporty interior. Great condition inside and out.",
+    km: 44000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 16200000,
+    category: "Crossover",
+    color: "Crystal White",
+    condition: "Excellent",
+    status: "Pending",
+    image: "src/main/resources/static/img/listings/crossover-4.jpg"
+  },
+  /* ---- Hatchbacks ---- */
+  {
+    id: 14,
+    title: "Honda Fit GP5 2016",
+    badge: "Hatchback 2016",
+    year: 2016,
+    description: "Sporty GP5 Fit with RS body kit, 6-speed DCT transmission, and fuel-sipping hybrid powertrain. Sporty daily driver.",
+    km: 58000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 7400000,
+    category: "Hatchback",
+    color: "Alabaster Silver",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/hatchback-1.jpg"
+  },
+  {
+    id: 15,
+    title: "Toyota Yaris Cross 2021",
+    badge: "Hatchback 2021",
+    year: 2021,
+    description: "Brand-new generation Yaris Cross with hybrid powertrain, connected infotainment, and Toyota Safety Sense.",
+    km: 18000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 11900000,
+    category: "Hatchback",
+    color: "Scarlet",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/hatchback-2.jpg"
+  },
+  {
+    id: 16,
+    title: "Suzuki Swift Sport 2019",
+    badge: "Hatchback 2019",
+    year: 2019,
+    description: "Turbocharged hot hatch with Brembo brakes, Recaro seats, and adaptive cruise control. Pure driving fun.",
+    km: 36000,
+    fuel: "Petrol",
+    transmission: "Manual",
+    price: 8200000,
+    category: "Hatchback",
+    color: "Champion Yellow",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/hatchback-3.jpg"
+  },
+  {
+    id: 17,
+    title: "Perodua Axia Style 2022",
+    badge: "Hatchback 2022",
+    year: 2022,
+    description: "Economical and practical city car with ASA safety, reverse camera, and excellent fuel efficiency. Near-new condition.",
+    km: 11000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 4300000,
+    category: "Hatchback",
+    color: "Electric Blue",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/hatchback-4.jpg"
+  },
+  /* ---- Pickups ---- */
+  {
+    id: 18,
+    title: "Toyota Hilux Revo 2020",
+    badge: "Pickup 2020",
+    year: 2020,
+    description: "Thailand's best-selling pickup. 4x4 double cab with smart cab, black fenders, and bulletproof durability.",
+    km: 80000,
+    fuel: "Diesel",
+    transmission: "Manual",
+    price: 18500000,
+    category: "Pickup",
+    color: "Attitude Black",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/pickup-1.jpg"
+  },
+  {
+    id: 19,
+    title: "Isuzu D-Max LS 2021",
+    badge: "Pickup 2021",
+    year: 2021,
+    description: "Heavy-duty commercial pickup with 3.0L Blue Power engine, 360-degree camera, and best-in-class towing capacity.",
+    km: 62000,
+    fuel: "Diesel",
+    transmission: "Automatic",
+    price: 21500000,
+    category: "Pickup",
+    color: "Spinel Red",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/pickup-2.jpg"
+  },
+  {
+    id: 20,
+    title: "Mitsubishi Triton 4WD 2019",
+    badge: "Pickup 2019",
+    year: 2019,
+    description: "Workhorse Triton with Super Select 4WD, comfortable double cab interior, and strong diesel performance.",
+    km: 74000,
+    fuel: "Diesel",
+    transmission: "Manual",
+    price: 16800000,
+    category: "Pickup",
+    color: "Sterling Silver",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/pickup-3.jpg"
+  },
+  {
+    id: 21,
+    title: "Ford Ranger Wildtrak 2022",
+    badge: "Pickup 2022",
+    year: 2022,
+    description: "Next-gen Ranger with SYNC 4 infotainment, Matrix LED headlights, and trail control off-road system.",
+    km: 28000,
+    fuel: "Diesel",
+    transmission: "Automatic",
+    price: 26000000,
+    category: "Pickup",
+    color: "Conquer Grey",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/pickup-4.jpg"
+  },
+  {
+    id: 22,
+    title: "Nissan Navara Pro-4X 2021",
+    badge: "Pickup 2021",
+    year: 2021,
+    description: "Off-road ready Navara with Bilstein shocks, Utili-Track system, and premium Pro-4X exterior styling.",
+    km: 41000,
+    fuel: "Diesel",
+    transmission: "Automatic",
+    price: 22800000,
+    category: "Pickup",
+    color: "Gun Metallic",
+    condition: "Excellent",
+    status: "Dealer",
+    image: "src/main/resources/static/img/listings/pickup-5.jpg"
+  },
+  {
+    id: 23,
+    title: "Toyota Tundra TRD Pro 2020",
+    badge: "Pickup 2020",
+    year: 2020,
+    description: "Full-size American truck with TRD Pro suspension, Fox shocks, and the legendary 5.7L V8 Tundra engine.",
+    km: 55000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 35000000,
+    category: "Pickup",
+    color: "Midnight Black",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/pickup-6.jpg"
+  },
+  /* ---- Hybrids ---- */
+  {
+    id: 24,
+    title: "Toyota Prius 2019",
+    badge: "Hybrid 2019",
+    year: 2019,
+    description: "Global icon of hybrid efficiency. Latest Prius with TSS-P, 11.6-inch touchscreen, and exceptional 26 km/L economy.",
+    km: 49000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 11200000,
+    category: "Hybrid",
+    color: "Wind Chill Pearl",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/hybrid-2.jpg"
+  },
+  {
+    id: 25,
+    title: "Toyota Axio Hybrid 2017",
+    badge: "Hybrid 2017",
+    year: 2017,
+    description: "Popular Sri Lankan hybrid sedan with comfortable cabin, great fuel economy, and reliable Toyota build quality.",
+    km: 67000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 8600000,
+    category: "Hybrid",
+    color: "Super White",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/hybrid-3.jpg"
+  },
+  {
+    id: 26,
+    title: "Honda Insight 2020",
+    badge: "Hybrid 2020",
+    year: 2020,
+    description: "Honda's answer to the Prius. Two-motor hybrid system delivers smooth power and exceptional efficiency in a sleek body.",
+    km: 31000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 13800000,
+    category: "Hybrid",
+    color: "Aegean Blue",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/hybrid-4.jpg"
+  },
+  {
+    id: 27,
+    title: "Lexus ES 300h 2021",
+    badge: "Hybrid 2021",
+    year: 2021,
+    description: "Ultra-luxurious Lexus ES hybrid with Lexus Link+, Mark Levinson audio, and signature spindle grille design.",
+    km: 19000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 39500000,
+    category: "Hybrid",
+    color: "Obsidian Black",
+    condition: "Excellent",
+    status: "Dealer",
+    image: "src/main/resources/static/img/listings/hybrid-5.jpg"
+  },
+  {
+    id: 28,
+    title: "Toyota Alphard Hybrid 2020",
+    badge: "Hybrid 2020",
+    year: 2020,
+    description: "Executive MPV with captain chairs, bi-tone interior, power side doors, and the smooth Alphard hybrid powertrain.",
+    km: 26000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 44000000,
+    category: "Hybrid",
+    color: "Silver Metallic",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/hybrid-6.jpg"
+  },
+  /* ---- More Sedans ---- */
+  {
+    id: 29,
+    title: "Mercedes-Benz C200 2019",
+    badge: "Sedan 2019",
+    year: 2019,
+    description: "Elegant C-Class with MBUX infotainment, LED intelligent light system, and AMG Line styling package.",
+    km: 45000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 24500000,
+    category: "Sedan",
+    color: "Iridium Silver",
+    condition: "Excellent",
+    status: "Dealer",
+    image: "src/main/resources/static/img/listings/sport-sedan-4.jpg"
+  },
+  {
+    id: 30,
+    title: "Toyota Allion 260 2018",
+    badge: "Sedan 2018",
+    year: 2018,
+    description: "Japan's popular executive sedan with roomy cabin, quiet ride, and reliable Toyota engineering. Single owner.",
+    km: 62000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 8900000,
+    category: "Sedan",
+    color: "Gray Metallic",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/sport-sedan-5.jpg"
+  },
+  {
+    id: 31,
+    title: "Honda Accord 2019",
+    badge: "Sedan 2019",
+    year: 2019,
+    description: "10th gen Accord with Honda Sensing, 2.0T turbocharged engine, and premium interior with wireless CarPlay.",
+    km: 53000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 19800000,
+    category: "Sedan",
+    color: "Modern Steel",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/sport-sedan-6.jpg"
+  },
+  {
+    id: 32,
+    title: "Lexus IS 350 F Sport",
+    badge: "Sedan 2021",
+    year: 2021,
+    description: "F Sport performance trim with AVS adaptive suspension, Mark Levinson sound, and stunning F-Sport interior.",
+    km: 24000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 33500000,
+    category: "Sedan",
+    color: "Sonic Chrome",
+    condition: "Excellent",
+    status: "Dealer",
+    image: "src/main/resources/static/img/listings/sport-sedan-7.jpg"
+  },
+  {
+    id: 33,
+    title: "Nissan Sylphy 2020",
+    badge: "Sedan 2020",
+    year: 2020,
+    description: "Comfortable family sedan with spacious rear cabin, ProPILOT assist, and quiet NVH-optimized bodywork.",
+    km: 38000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 11700000,
+    category: "Sedan",
+    color: "Brilliant Silver",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/sport-sedan-8.jpg"
+  },
+  {
+    id: 34,
+    title: "Mazda 6 2020",
+    badge: "Sedan 2020",
+    year: 2020,
+    description: "SkyActiv precision meets premium Mazda styling. Bose audio, ventilated seats, and Mazda Connect infotainment.",
+    km: 41000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 17200000,
+    category: "Sedan",
+    color: "Machine Gray",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/sport-sedan-9.jpg"
+  },
+  /* ---- Fresh Arrivals (mix) ---- */
+  {
+    id: 35,
+    title: "Toyota Vitz RS 2017",
+    badge: "Hatchback 2017",
+    year: 2017,
+    description: "Sporty Vitz RS with paddle shifters, front fog lights, and RS-exclusive alloy wheels. Fun urban hatchback.",
+    km: 72000,
+    fuel: "Petrol",
+    transmission: "Auto",
+    price: 5400000,
+    category: "Hatchback",
+    color: "Magma Orange",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/fresh-1.jpg"
+  },
+  {
+    id: 36,
+    title: "Honda Vezel G 2019",
+    badge: "Crossover 2019",
+    year: 2019,
+    description: "G-grade Vezel with Honda Sensing, full-view camera, and the signature Vezel exterior that dominates Sri Lankan roads.",
+    km: 47000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 9800000,
+    category: "Crossover",
+    color: "Platinum White",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/fresh-2.jpg"
+  },
+  {
+    id: 37,
+    title: "BMW M3 Competition 2022",
+    badge: "Sedan 2022",
+    year: 2022,
+    description: "The ultimate driving machine. S58 3.0T straight-six with 503hp, M xDrive, and carbon fibre roof. Track-ready.",
+    km: 15000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 52000000,
+    category: "Sedan",
+    color: "Frozen Portimao Blue",
+    condition: "Excellent",
+    status: "Dealer",
+    image: "src/main/resources/static/img/listings/fresh-3.jpg"
+  },
+  {
+    id: 38,
+    title: "Audi Q5 40 TFSI 2021",
+    badge: "SUV 2021",
+    year: 2021,
+    description: "Premium Audi Q5 with Quattro AWD, Virtual Cockpit, Audi MMI Navigation, and panoramic sunroof. Immaculate.",
+    km: 28000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 31000000,
+    category: "SUV",
+    color: "Navarra Blue",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/fresh-4.jpg"
+  },
+  {
+    id: 39,
+    title: "Toyota Premio 2018",
+    badge: "Sedan 2018",
+    year: 2018,
+    description: "Ultra-comfortable Premio 2.0 G-EX with leather seats, wood-grain trim, and extremely smooth automatic gearbox.",
+    km: 59000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 8200000,
+    category: "Sedan",
+    color: "Beige",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/fresh-5.jpg"
+  },
+  {
+    id: 40,
+    title: "Kia Sportage GT-Line 2021",
+    badge: "SUV 2021",
+    year: 2021,
+    description: "GT-Line trim with Kia DriveWise ADAS, Meridian sound, panoramic glass roof, and striking exterior design.",
+    km: 33000,
+    fuel: "Diesel",
+    transmission: "Automatic",
+    price: 20500000,
+    category: "SUV",
+    color: "Quantum Gray",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/fresh-6.jpg"
+  },
+  {
+    id: 41,
+    title: "Honda CR-V Hybrid 2020",
+    badge: "Crossover 2020",
+    year: 2020,
+    description: "All-new CR-V Hybrid with Sport Hybrid dual-motor system, panoramic roof, and Honda Sensing safety suite.",
+    km: 37000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 22000000,
+    category: "Crossover",
+    color: "Sonic Gray Pearl",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/fresh-7.jpg"
+  },
+  {
+    id: 42,
+    title: "Mazda 3 Hatchback 2021",
+    badge: "Hatchback 2021",
+    year: 2021,
+    description: "Stunning 4th-gen Mazda 3 with Skyactiv-X engine, head-up display, Bose audio, and the most beautiful interior in class.",
+    km: 23000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 16500000,
+    category: "Hatchback",
+    color: "Polymetal Gray",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/fresh-8.jpg"
+  },
+  {
+    id: 43,
+    title: "Toyota Wigo 2020",
+    badge: "Hatchback 2020",
+    year: 2020,
+    description: "Budget-friendly city hatch with smartphone connectivity, rear camera, and Toyota reliability. Great starter car.",
+    km: 44000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 3600000,
+    category: "Hatchback",
+    color: "Orange",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/fresh-9.jpg"
+  },
+  {
+    id: 44,
+    title: "Mercedes GLC 300 2020",
+    badge: "SUV 2020",
+    year: 2020,
+    description: "Sporty GLC 300 with AMG Line package, MBUX infotainment, Burmester surround sound, and adaptive damping.",
+    km: 39000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 38000000,
+    category: "SUV",
+    color: "Selenite Grey",
+    condition: "Excellent",
+    status: "Dealer",
+    image: "src/main/resources/static/img/listings/fresh-10.jpg"
+  },
+  {
+    id: 45,
+    title: "Suzuki Jimny 2021",
+    badge: "SUV 2021",
+    year: 2021,
+    description: "Classic off-roader reborn. Jimny with AllGrip Pro 4WD, ladder-frame construction, and cult-favourite styling.",
+    km: 26000,
+    fuel: "Petrol",
+    transmission: "Manual",
+    price: 14500000,
+    category: "SUV",
+    color: "Jungle Green",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/fresh-11.jpg"
+  },
+  {
+    id: 46,
+    title: "Hyundai Tucson N-Line 2022",
+    badge: "Crossover 2022",
+    year: 2022,
+    description: "Bold N-Line styling with distinctive boomerang DRL, 10.25-inch digital cockpit, and HTRAC AWD. Head-turner.",
+    km: 17000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 23000000,
+    category: "Crossover",
+    color: "Shimmering Silver",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/fresh-12.jpg"
+  },
+  {
+    id: 47,
+    title: "Toyota Fortuner GR Sport",
+    badge: "SUV 2022",
+    year: 2022,
+    description: "GR Sport-tuned Fortuner with exclusive black exterior, GR embossed seats, and sport-tuned suspension on 4WD.",
+    km: 21000,
+    fuel: "Diesel",
+    transmission: "Automatic",
+    price: 37500000,
+    category: "SUV",
+    color: "Attitude Black",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/fresh-13.jpg"
+  },
+  {
+    id: 48,
+    title: "Volkswagen Golf GTI 2019",
+    badge: "Hatchback 2019",
+    year: 2019,
+    description: "Iconic hot hatch with 245hp TSI engine, DSG transmission, DCC adaptive chassis, and Discover Pro navigation.",
+    km: 47000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 18900000,
+    category: "Hatchback",
+    color: "Pure Gray",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/fresh-14.jpg"
+  },
+  {
+    id: 49,
+    title: "BMW X3 xDrive30i 2020",
+    badge: "SUV 2020",
+    year: 2020,
+    description: "xDrive AWD luxury SUV with Live Cockpit Professional, head-up display, Harman Kardon, and M Sport package.",
+    km: 42000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 34000000,
+    category: "SUV",
+    color: "Phytonic Blue",
+    condition: "Excellent",
+    status: "Dealer",
+    image: "src/main/resources/static/img/listings/fresh-15.jpg"
+  },
+  {
+    id: 50,
+    title: "Toyota Corolla Cross 2021",
+    badge: "Crossover 2021",
+    year: 2021,
+    description: "New Corolla Cross with Toyota Safety Sense 2.0, 9-inch infotainment, and available Hybrid powertrain option.",
+    km: 29000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 14800000,
+    category: "Crossover",
+    color: "Celestite Gray",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/sedan-2.jpg"
+  },
+  {
+    id: 51,
+    title: "Subaru Outback 2020",
+    badge: "Crossover 2020",
+    year: 2020,
+    description: "Adventure-ready Outback with Symmetrical AWD, X-Mode, 11.6-inch infotainment, and 213mm ground clearance.",
+    km: 40000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 21500000,
+    category: "Crossover",
+    color: "Crystal White",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/sedan-3.jpg"
+  },
+  {
+    id: 52,
+    title: "Porsche Cayenne 2020",
+    badge: "SUV 2020",
+    year: 2020,
+    description: "Flagship Porsche SUV with Sport Chrono package, PASM active suspension, Bose Surround Sound, and turbo S exhaust.",
+    km: 34000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 78000000,
+    category: "SUV",
+    color: "Crayon",
+    condition: "Excellent",
+    status: "Dealer",
+    image: "src/main/resources/static/img/listings/sedan-4.jpg"
+  },
+  {
+    id: 53,
+    title: "Toyota Mark X 250G 2018",
+    badge: "Sedan 2018",
+    year: 2018,
+    description: "Stylish rear-wheel drive Mark X with dual exhaust, 18-inch alloys, and premium leather interior. Sporty cruiser.",
+    km: 64000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 9500000,
+    category: "Sedan",
+    color: "Black Mica",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/sport-sedan-10.jpg"
+  },
+  {
+    id: 54,
+    title: "Audi A3 Sportback 2020",
+    badge: "Hatchback 2020",
+    year: 2020,
+    description: "Premium German hatchback with MMI Navigation Plus, S-Line exterior, virtual cockpit, and quattro all-wheel drive.",
+    km: 32000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 15800000,
+    category: "Hatchback",
+    color: "Floret Silver",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/sport-sedan-11.jpg"
+  },
+  {
+    id: 55,
+    title: "Honda City 2021",
+    badge: "Sedan 2021",
+    year: 2021,
+    description: "6th-generation City with 1.5L DOHC i-VTEC, Honda Sensing, LED headlights, and 8-inch touchscreen. Popular choice.",
+    km: 31000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 9100000,
+    category: "Sedan",
+    color: "Platinum White",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/sport-sedan-12.jpg"
+  },
+  {
+    id: 56,
+    title: "Toyota Camry Hybrid 2020",
+    badge: "Sedan 2020",
+    year: 2020,
+    description: "8th-gen Camry Hybrid with Toyota Safety Sense P, JBL audio, and a supremely refined ride. Executive choice.",
+    km: 36000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 21000000,
+    category: "Sedan",
+    color: "Celestial Silver",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/sport-sedan-13.jpg"
+  },
+  {
+    id: 57,
+    title: "Kia EV6 GT-Line 2022",
+    badge: "Crossover 2022",
+    year: 2022,
+    description: "Next-generation EV crossover with 800V ultra-fast charging, 510km range, AWD, and a futuristic cockpit experience.",
+    km: 12000,
+    fuel: "Electric",
+    transmission: "Automatic",
+    price: 46000000,
+    category: "Crossover",
+    color: "Runway Red",
+    condition: "Excellent",
+    status: "Dealer",
+    image: "src/main/resources/static/img/listings/crossover-1.jpg"
+  },
+  {
+    id: 58,
+    title: "Toyota Innova Crysta 2021",
+    badge: "SUV 2021",
+    year: 2021,
+    description: "Premium 7-seater MPV with captain seats, 9-inch infotainment, ambient lighting, and 2.8L diesel power.",
+    km: 48000,
+    fuel: "Diesel",
+    transmission: "Automatic",
+    price: 17500000,
+    category: "SUV",
+    color: "Super White II",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/suv-1.jpg"
+  },
+  {
+    id: 59,
+    title: "Daihatsu Terios 2018",
+    badge: "SUV 2018",
+    year: 2018,
+    description: "Compact 7-seater SUV with 4WD capability, third row seating, and impressive ground clearance for a small frame.",
+    km: 70000,
+    fuel: "Petrol",
+    transmission: "Manual",
+    price: 5900000,
+    category: "SUV",
+    color: "Silver Metallic",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/suv-2.jpg"
+  },
+  {
+    id: 60,
+    title: "Volkswagen Tiguan R-Line 2020",
+    badge: "SUV 2020",
+    year: 2020,
+    description: "R-Line exterior with DSG transmission, 4Motion AWD, Digital Cockpit, and a premium-feeling cabin interior.",
+    km: 44000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 26500000,
+    category: "SUV",
+    color: "Reflex Silver",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/suv-3.jpg"
+  },
+  {
+    id: 61,
+    title: "Suzuki Baleno 2020",
+    badge: "Hatchback 2020",
+    year: 2020,
+    description: "Lightweight Baleno with SHVS mild hybrid, Apple CarPlay, 9-inch touchscreen, and 25 km/L highway economy.",
+    km: 38000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 5700000,
+    category: "Hatchback",
+    color: "Pearl Snow White",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/hatchback-1.jpg"
+  },
+  {
+    id: 62,
+    title: "Nissan Leaf 2020",
+    badge: "Hatchback 2020",
+    year: 2020,
+    description: "Japan's best-selling EV with 40kWh battery, ProPILOT assist, e-Pedal one-pedal driving, and 311km range.",
+    km: 28000,
+    fuel: "Electric",
+    transmission: "Automatic",
+    price: 13500000,
+    category: "Hatchback",
+    color: "Pearl White",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/hatchback-2.jpg"
+  },
+  {
+    id: 63,
+    title: "Toyota Rush 2020",
+    badge: "SUV 2020",
+    year: 2020,
+    description: "7-seat family SUV with 4x2 capability, 360-degree camera, and Toyota's proven 1.5L NR-FE engine. Great value.",
+    km: 53000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 8800000,
+    category: "SUV",
+    color: "White",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/suv-4.jpg"
+  },
+  {
+    id: 64,
+    title: "Mitsubishi Eclipse Cross 2021",
+    badge: "Crossover 2021",
+    year: 2021,
+    description: "Bold Eclipse Cross with S-AWC Super All-Wheel Control, dual-screen infotainment, and coupe-SUV styling.",
+    km: 29000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 18200000,
+    category: "Crossover",
+    color: "Red Diamond",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/crossover-4.jpg"
+  },
+  {
+    id: 65,
+    title: "Honda Jade RS Hybrid",
+    badge: "Hybrid 2019",
+    year: 2019,
+    description: "RS-grade 6-seater Jade with i-MMD Sport Hybrid, captain chairs, and sporty RS bodywork. Japan-spec import.",
+    km: 44000,
+    fuel: "Hybrid",
+    transmission: "Auto",
+    price: 10500000,
+    category: "Hybrid",
+    color: "Burgundy Night Pearl",
+    condition: "Good",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/hybrid-1.jpg"
+  },
+  {
+    id: 66,
+    title: "Mazda CX-30 2021",
+    badge: "Crossover 2021",
+    year: 2021,
+    description: "Compact urban crossover with Skyactiv-X engine, i-Activsense, Bose audio, and stunning KODO Soul of Motion design.",
+    km: 21000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 20000000,
+    category: "Crossover",
+    color: "Zircon Sand",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/crossover-2.jpg"
+  },
+  {
+    id: 67,
+    title: "Perodua Ativa X 2022",
+    badge: "Crossover 2022",
+    year: 2022,
+    description: "All-new Ativa with turbo engine, ASA 3.0 safety, wireless charging, and 360-degree surround view camera system.",
+    km: 13000,
+    fuel: "Petrol",
+    transmission: "Automatic",
+    price: 6500000,
+    category: "Crossover",
+    color: "Bright Silver",
+    condition: "Excellent",
+    status: "Active",
+    image: "src/main/resources/static/img/listings/crossover-3.jpg"
+  },
+  {
+    id: 68,
+    title: "BMW 530e Plug-in Hybrid",
+    badge: "Hybrid 2021",
+    year: 2021,
+    description: "eDrive plug-in hybrid 5-Series with 50km EV range, gesture control, Bowers & Wilkins audio, and M Sport trim.",
+    km: 23000,
+    fuel: "Hybrid",
+    transmission: "Automatic",
+    price: 48000000,
+    category: "Hybrid",
+    color: "Alpine White",
+    condition: "Excellent",
+    status: "Dealer",
+    image: "src/main/resources/static/img/listings/hybrid-2.jpg"
+  }
+];
+
+/* ----------------------------------------------------------------
+   2. LINKED LIST Implementation (traversal for filtering)
+---------------------------------------------------------------- */
+class VehicleNode {
+  constructor(data) { this.data = data; this.next = null; }
+}
+
+class VehicleLinkedList {
+  constructor() { this.head = null; this.size = 0; }
+
+  push(data) {
+    const node = new VehicleNode(data);
+    if (!this.head) { this.head = node; }
+    else {
+      let cur = this.head;
+      while (cur.next) cur = cur.next;
+      cur.next = node;
+    }
+    this.size++;
+  }
+
+  toArray() {
+    const arr = [];
+    let cur = this.head;
+    while (cur) { arr.push(cur.data); cur = cur.next; }
+    return arr;
+  }
+
+  filter(predicate) {
+    const result = new VehicleLinkedList();
+    let cur = this.head;
+    while (cur) {
+      if (predicate(cur.data)) result.push(cur.data);
+      cur = cur.next;
+    }
+    return result;
+  }
+}
+
+/* Build a fresh linked list from the current VEHICLES array.
+   Called every time filtering/sorting runs so that vehicles
+   added to VEHICLES after page load are included automatically. */
+function buildLinkedList() {
+  const list = new VehicleLinkedList();
+  VEHICLES.forEach(v => list.push(v));
+  return list;
+}
+
+/* Public helper — call this to add a new vehicle at runtime.
+   It pushes to VEHICLES, then re-renders the grid instantly. */
+function addVehicle(vehicleObj) {
+  VEHICLES.push(vehicleObj);
+  renderGrid();
+}
+
+/* ----------------------------------------------------------------
+   3. MERGE SORT (for price/year/km sorting)
+---------------------------------------------------------------- */
+function mergeSort(arr, compareFn) {
+  if (arr.length <= 1) return arr;
+  const mid = Math.floor(arr.length / 2);
+  const left  = mergeSort(arr.slice(0, mid), compareFn);
+  const right = mergeSort(arr.slice(mid),    compareFn);
+  return merge(left, right, compareFn);
+}
+
+function merge(left, right, compareFn) {
+  const result = [];
+  let i = 0, j = 0;
+  while (i < left.length && j < right.length) {
+    if (compareFn(left[i], right[j]) <= 0) result.push(left[i++]);
+    else result.push(right[j++]);
+  }
+  return result.concat(left.slice(i)).concat(right.slice(j));
+}
+
+/* ----------------------------------------------------------------
+   4. STATE
+---------------------------------------------------------------- */
+const state = {
+  activeCategory: 'All',
+  searchQuery: '',
+  fuel: 'All',
+  transmission: 'All',
+  sortBy: 'default',
+  wishlist: new Set()
+};
+
+/* ----------------------------------------------------------------
+   5. LOCAL STORAGE (Wishlist)
+---------------------------------------------------------------- */
+const WISH_KEY = 'automart_wishlist_v1';
+
+function loadWishlist() {
+  try {
+    const raw = localStorage.getItem(WISH_KEY);
+    if (raw) {
+      const ids = JSON.parse(raw);
+      ids.forEach(id => state.wishlist.add(id));
+    }
+  } catch(e) {}
+}
+
+function saveWishlist() {
+  localStorage.setItem(WISH_KEY, JSON.stringify([...state.wishlist]));
+}
+
+/* ----------------------------------------------------------------
+   6. FILTER + SORT pipeline
+---------------------------------------------------------------- */
+function getFilteredVehicles() {
+  const filtered = buildLinkedList().filter(v => {
+    const q = state.searchQuery.toLowerCase();
+    const matchSearch = !q ||
+      v.title.toLowerCase().includes(q) ||
+      v.description.toLowerCase().includes(q) ||
+      v.fuel.toLowerCase().includes(q) ||
+      v.category.toLowerCase().includes(q) ||
+      String(v.year).includes(q) ||
+      v.color.toLowerCase().includes(q);
+
+    const matchCat   = state.activeCategory === 'All' || v.category === state.activeCategory;
+    const matchFuel  = state.fuel === 'All' || v.fuel === state.fuel;
+    const matchTrans = state.transmission === 'All' ||
+      v.transmission.toLowerCase().includes(state.transmission.toLowerCase());
+
+    return matchSearch && matchCat && matchFuel && matchTrans;
+  }).toArray();
+
+  // Sort using Merge Sort
+  const comparators = {
+    'price-asc':  (a, b) => a.price - b.price,
+    'price-desc': (a, b) => b.price - a.price,
+    'year-desc':  (a, b) => b.year  - a.year,
+    'km-asc':     (a, b) => a.km    - b.km
+  };
+
+  if (comparators[state.sortBy]) {
+    return mergeSort(filtered, comparators[state.sortBy]);
+  }
+  return filtered;
+}
+
+/* ----------------------------------------------------------------
+   7. FORMATTING HELPERS
+---------------------------------------------------------------- */
+function formatPrice(n) {
+  return 'LKR\u00a0' + n.toLocaleString('en-LK');
+}
+
+function formatKm(n) {
+  return n.toLocaleString('en') + '\u00a0km';
+}
+
+function statusClass(s) {
+  return s.toLowerCase();
+}
+
+function getTransIcon(t) {
+  return t.toLowerCase().includes('auto')
+    ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`
+    : `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><polyline points="8 7 12 3 16 7"/><polyline points="8 17 12 21 16 17"/></svg>`;
+}
+
+function getFuelIcon() {
+  return `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V6a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16"/><path d="M3 22h11"/><path d="M14 10h2a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2v0a2 2 0 0 0 2-2v-7l-3-3"/></svg>`;
+}
+
+function getKmIcon() {
+  return `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>`;
+}
+
+/* ----------------------------------------------------------------
+   8. CARD BUILDER
+---------------------------------------------------------------- */
+function buildCard(v) {
+  const isWished = state.wishlist.has(v.id);
+
+  return `
+<article class="car-card" role="listitem" id="card-${v.id}" aria-label="${v.title}">
+  <div class="card-img-wrap">
+    <img class="card-img"
+         src="${v.image}"
+         alt="${v.title}"
+         loading="lazy"
+         onerror="this.src='https://placehold.co/400x220/111111/333333?text=No+Image'" />
+    <div class="card-img-overlay"></div>
+    <span class="status-badge ${statusClass(v.status)}">${v.status}</span>
+    <button class="card-wish-btn ${isWished ? 'wishlisted' : ''}"
+            id="heart-${v.id}"
+            onclick="toggleWishlist(${v.id})"
+            aria-label="${isWished ? 'Remove from wishlist' : 'Add to wishlist'}"
+            aria-pressed="${isWished}">
+      ${isWished ? '♥' : '♡'}
+    </button>
+    <div class="cat-badge"><span>${v.category}</span> ${v.year}</div>
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">${v.title}</h3>
+    <p class="card-desc">${v.description}</p>
+    <div class="card-specs">
+      <span class="spec-pill">${getKmIcon()} ${formatKm(v.km)}</span>
+      <span class="spec-pill">${getFuelIcon()} ${v.fuel}</span>
+      <span class="spec-pill">${getTransIcon(v.transmission)} ${v.transmission}</span>
+    </div>
+    <div class="card-price"><sub>LKR</sub> ${(v.price).toLocaleString('en-LK')}</div>
+  </div>
+  <div class="card-footer">
+    <div class="ready-tag">Ready to loan</div>
+    <div class="card-actions">
+      <button class="btn-wish ${isWished ? 'added' : ''}"
+              id="wish-btn-${v.id}"
+              onclick="toggleWishlist(${v.id})"
+              aria-pressed="${isWished}">
+        ${isWished ? '✓ Added' : '♡ Wishlist'}
+      </button>
+      <button class="btn-view"
+              id="view-btn-${v.id}"
+              onclick="openDetail(${v.id})">
+        View Details →
+      </button>
+    </div>
+  </div>
+</article>`;
+}
+
+/* ----------------------------------------------------------------
+   9. RENDER GRID
+---------------------------------------------------------------- */
+function renderGrid() {
+  const grid = document.getElementById('cars-grid');
+  const vehicles = getFilteredVehicles();
+  document.getElementById('count-num').textContent = vehicles.length;
+
+  const sortLabels = {
+    'default':    'Default',
+    'price-asc':  'Price Low→High',
+    'price-desc': 'Price High→Low',
+    'year-desc':  'Newest First',
+    'km-asc':     'Lowest Mileage'
+  };
+  document.getElementById('sort-label').textContent = sortLabels[state.sortBy] || 'Default';
+
+  if (vehicles.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>No vehicles found</h3>
+        <p>Try adjusting your filters or search query.</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = vehicles.map(buildCard).join('');
+}
+
+/* ----------------------------------------------------------------
+   10. WISHLIST LOGIC
+---------------------------------------------------------------- */
+function toggleWishlist(id) {
+  const v = VEHICLES.find(x => x.id === id);
+  if (!v) return;
+
+  if (state.wishlist.has(id)) {
+    state.wishlist.delete(id);
+    showToast(`<span class="toast-accent">${v.title}</span> removed from wishlist`);
+  } else {
+    state.wishlist.add(id);
+    showToast(`<span class="toast-accent">${v.title}</span> added to wishlist ♥`);
+  }
+
+  saveWishlist();
+  updateWishlistUI(id);
+  updateNavCount();
+  renderWishlistSidebar();
+}
+
+function updateWishlistUI(id) {
+  const isWished = state.wishlist.has(id);
+
+  const heartBtn = document.getElementById(`heart-${id}`);
+  if (heartBtn) {
+    heartBtn.classList.toggle('wishlisted', isWished);
+    heartBtn.textContent = isWished ? '♥' : '♡';
+    heartBtn.setAttribute('aria-pressed', isWished);
+    heartBtn.setAttribute('aria-label', isWished ? 'Remove from wishlist' : 'Add to wishlist');
+  }
+
+  const wishBtn = document.getElementById(`wish-btn-${id}`);
+  if (wishBtn) {
+    wishBtn.classList.toggle('added', isWished);
+    wishBtn.textContent = isWished ? '✓ Added' : '♡ Wishlist';
+    wishBtn.setAttribute('aria-pressed', isWished);
+  }
+
+  // Also update detail overlay if open
+  const detailWish = document.getElementById('detail-wish-btn');
+  if (detailWish && detailWish.dataset.id == id) {
+    detailWish.classList.toggle('added', isWished);
+    detailWish.textContent = isWished ? '♥ In Wishlist' : '♡ Add to Wishlist';
+  }
+}
+
+function updateNavCount() {
+  const countEl = document.getElementById('wishlist-count');
+  const n = state.wishlist.size;
+  countEl.textContent = n;
+  countEl.classList.remove('bump');
+  void countEl.offsetWidth; // reflow to restart animation
+  countEl.classList.add('bump');
+}
+
+function renderWishlistSidebar() {
+  const list = document.getElementById('wish-list-items');
+  const totalEl = document.getElementById('wish-total-price');
+  const ids = [...state.wishlist];
+
+  if (ids.length === 0) {
+    list.innerHTML = `
+      <div class="wish-empty">
+        <div class="wish-empty-icon">🚗</div>
+        <p>Your wishlist is empty.<br>Click the heart on a car to save it!</p>
+      </div>`;
+    totalEl.textContent = 'LKR 0';
+    return;
+  }
+
+  let total = 0;
+  const html = ids.map(id => {
+    const v = VEHICLES.find(x => x.id === id);
+    if (!v) return '';
+    total += v.price;
+    return `
+<div class="wish-item" id="wish-item-${v.id}">
+  <img class="wish-item-img"
+       src="${v.image}"
+       alt="${v.title}"
+       onerror="this.src='https://placehold.co/70x52/111/333?text=Car'" />
+  <div class="wish-item-info">
+    <div class="title">${v.title}</div>
+    <div class="price">${formatPrice(v.price)}</div>
+    <div class="meta">${v.fuel} · ${v.transmission} · ${v.year}</div>
+  </div>
+  <button class="wish-remove-btn"
+          onclick="toggleWishlist(${v.id})"
+          aria-label="Remove ${v.title} from wishlist">✕</button>
+</div>`;
+  }).join('');
+
+  list.innerHTML = html;
+  totalEl.textContent = formatPrice(total);
+}
+
+/* ----------------------------------------------------------------
+   11. WISHLIST SIDEBAR OPEN/CLOSE
+---------------------------------------------------------------- */
+function openWishlistSidebar() {
+  document.getElementById('wishlist-sidebar').classList.add('open');
+  document.getElementById('wish-backdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderWishlistSidebar();
+}
+
+function closeWishlistSidebar() {
+  document.getElementById('wishlist-sidebar').classList.remove('open');
+  document.getElementById('wish-backdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ----------------------------------------------------------------
+   12. DETAIL VIEW
+---------------------------------------------------------------- */
+function openDetail(id) {
+  const v = VEHICLES.find(x => x.id === id);
+  if (!v) return;
+
+  const isWished = state.wishlist.has(id);
+
+  const panel = document.getElementById('detail-panel');
+  panel.innerHTML = `
+    <div class="detail-img-wrap">
+      <img class="detail-img"
+           src="${v.image}"
+           alt="${v.title}"
+           onerror="this.src='https://placehold.co/900x380/111111/333333?text=No+Image'" />
+      <div class="detail-img-overlay"></div>
+      <button class="detail-back-btn" onclick="closeDetail()" id="detail-back-btn" aria-label="Back to inventory">
+        ← Back to Inventory
+      </button>
+      <div class="detail-price-badge">
+        <div class="label">Asking Price</div>
+        <div class="price"><sub>LKR</sub> ${v.price.toLocaleString('en-LK')}</div>
+      </div>
+    </div>
+    <div class="detail-content">
+      <div class="detail-header">
+        <div class="detail-title-group">
+          <div class="detail-badges">
+            <span class="detail-cat-badge">${v.category}</span>
+            <span class="status-badge ${statusClass(v.status)}" style="position:static;">${v.status}</span>
+          </div>
+          <h2 class="detail-title">${v.title}</h2>
+        </div>
+      </div>
+
+      <div class="detail-section-title">Full Description</div>
+      <p class="detail-desc">${v.description}</p>
+
+      <div class="detail-section-title">Specifications</div>
+      <div class="specs-table">
+        <div class="spec-item">
+          <div class="spec-lbl">Year</div>
+          <div class="spec-val accent">${v.year}</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-lbl">Mileage</div>
+          <div class="spec-val">${formatKm(v.km)}</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-lbl">Fuel Type</div>
+          <div class="spec-val">${v.fuel}</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-lbl">Transmission</div>
+          <div class="spec-val">${v.transmission}</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-lbl">Color</div>
+          <div class="spec-val">${v.color}</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-lbl">Condition</div>
+          <div class="spec-val">${v.condition}</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-lbl">Category</div>
+          <div class="spec-val">${v.category}</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-lbl">Status</div>
+          <div class="spec-val">${v.status}</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-lbl">Listed Price</div>
+          <div class="spec-val accent">${formatPrice(v.price)}</div>
+        </div>
+      </div>
+
+      <div class="detail-section-title">Actions</div>
+      <div class="detail-cta-row">
+        <button class="btn-contact" id="detail-contact-btn" onclick="showContactToast('${v.title.replace(/'/g,"\\'")}')">
+          📞 Contact Seller
+        </button>
+        <button class="btn-detail-wish ${isWished ? 'added' : ''}"
+                id="detail-wish-btn"
+                data-id="${v.id}"
+                onclick="toggleWishlist(${v.id})">
+          ${isWished ? '♥ In Wishlist' : '♡ Add to Wishlist'}
+        </button>
+      </div>
+    </div>
+  `;
+
+  const overlay = document.getElementById('detail-overlay');
+  overlay.classList.add('open');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function showContactToast(title) {
+  showToast(`📞 Seller contact info for <span class="toast-accent">${title}</span> sent to your email`);
+}
+
+/* ----------------------------------------------------------------
+   13. TOAST
+---------------------------------------------------------------- */
+function showToast(html) {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = html;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 2700);
+}
+
+/* ----------------------------------------------------------------
+   14. FILTER EVENT HANDLERS
+---------------------------------------------------------------- */
+function applyFilters() {
+  state.searchQuery   = document.getElementById('search-input').value;
+  state.fuel          = document.getElementById('fuel-select').value;
+  state.transmission  = document.getElementById('trans-select').value;
+  state.sortBy        = document.getElementById('sort-select').value;
+  renderGrid();
+}
+
+function resetFilters() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('fuel-select').value  = 'All';
+  document.getElementById('trans-select').value = 'All';
+  document.getElementById('sort-select').value  = 'default';
+  state.searchQuery  = '';
+  state.fuel         = 'All';
+  state.transmission = 'All';
+  state.sortBy       = 'default';
+  renderGrid();
+}
+
+/* ----------------------------------------------------------------
+   15. CATEGORY TABS
+---------------------------------------------------------------- */
+function setCategory(cat) {
+  state.activeCategory = cat;
+  document.querySelectorAll('.cat-tab').forEach(tab => {
+    const isActive = tab.dataset.cat === cat;
+    tab.classList.toggle('active', isActive);
+    tab.setAttribute('aria-selected', isActive);
+  });
+  renderGrid();
+}
+
+/* ----------------------------------------------------------------
+   16. INIT
+---------------------------------------------------------------- */
+document.addEventListener('DOMContentLoaded', () => {
+  loadWishlist();
+  updateNavCount();
+  renderGrid();
+
+  // Category tabs
+  document.getElementById('category-tabs').addEventListener('click', e => {
+    if (e.target.classList.contains('cat-tab')) {
+      setCategory(e.target.dataset.cat);
+    }
+  });
+
+  // Filter buttons
+  document.getElementById('apply-btn').addEventListener('click', applyFilters);
+  document.getElementById('reset-btn').addEventListener('click', resetFilters);
+
+  // Live search (debounced)
+  let searchTimer;
+  document.getElementById('search-input').addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(applyFilters, 320);
+  });
+
+  // Wishlist sidebar
+  document.getElementById('nav-wishlist-btn').addEventListener('click', openWishlistSidebar);
+  document.getElementById('wish-close-btn').addEventListener('click', closeWishlistSidebar);
+  document.getElementById('wish-backdrop').addEventListener('click', closeWishlistSidebar);
+
+  // Detail overlay: close on backdrop click
+  document.getElementById('detail-overlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeDetail();
+  });
+
+  // Keyboard escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeDetail();
+      closeWishlistSidebar();
+    }
+  });
+});
+</script>
+
+</body>
+</html>

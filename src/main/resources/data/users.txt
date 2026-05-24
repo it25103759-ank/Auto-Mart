@@ -1,0 +1,9 @@
+buyer	buyer1	buyer1@gmail.com	0770000001	salt$eda10c5a	active		
+seller	seller1	seller1@gmail.com	0770000002	salt$7ca050f8	banned	Spam	
+seller	imesh22	shithmi@gmail.com	7402259848	salt$b1c877ba	active		
+buyer	Lasith	lasit@gmail.com	7402259845	salt$8738c9c9	active		
+buyer	Roman	roman@gmail.com	7802564586	salt$9f1963b7	active		
+buyer	Nithu	gamage@gmail.com	0778836459	salt$9ee8140c	active		
+admin	Navod_admin	navod@gmail.com	0769532586	salt$4b66e24f	active		
+seller	apple_demo_seller	apple.demo.seller@gmail.com	0770000000	salt$1fdb87df	active		
+seller	google_demo_seller	google.demo.seller@gmail.com	0770000000	salt$1fdb87df	active		

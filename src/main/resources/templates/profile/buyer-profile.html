@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoMart — Buyer Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#c8ff3e;--gold-l:#dfff72;--gold-dim:rgba(200,255,62,0.13);--gold-glow:rgba(200,255,62,0.08);--cyan:#3efff8;
+  --bg:#05090c;--panel:#07100f;--card:#0f171b;--card2:#121f25;--input:#101a20;
+  --b:rgba(255,255,255,0.065);--bh:rgba(201,168,76,0.35);
+  --t1:#edeae2;--t2:#8a8898;--t3:#3e3d4a;
+  --success:#3effa0;--danger:#ff4f6e;--warn:#ffb830;--info:#3efff8;
+}
+html,body{min-height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1)}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--t3);border-radius:2px}
+
+/* ── TOPBAR ───────────────────────────────────────────── */
+.topbar{
+  height:60px;background:var(--panel);border-bottom:1px solid var(--b);
+  display:flex;align-items:center;padding:0 32px;gap:16px;
+  position:sticky;top:0;z-index:100;
+}
+.topbar::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold) 40%,var(--gold-l) 60%,transparent)}
+.logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:var(--gold);display:flex;align-items:center;gap:9px}
+.logo-mark{width:32px;height:32px;border:1.5px solid var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.nav-links{display:flex;gap:2px;margin-left:24px}
+.nav-link{padding:6px 14px;border-radius:7px;font-size:13px;color:var(--t2);cursor:pointer;transition:all .18s;white-space:nowrap}
+.nav-link:hover{color:var(--t1);background:rgba(255,255,255,0.03)}
+.nav-link.active{color:var(--gold-l);background:var(--gold-dim)}
+.tb-spacer{flex:1}
+.tb-search{position:relative;width:220px}
+.tb-search input{width:100%;background:var(--card);border:1px solid var(--b);border-radius:8px;padding:7px 12px 7px 32px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--t1);outline:none;transition:border-color .18s}
+.tb-search input:focus{border-color:var(--gold)}
+.tb-search input::placeholder{color:var(--t3)}
+.tb-search-ic{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--t3);width:14px;height:14px}
+.tb-icon{width:34px;height:34px;border-radius:8px;background:var(--card);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t2);transition:all .18s;position:relative}
+.tb-icon:hover{background:var(--gold-dim);border-color:var(--bh);color:var(--gold-l)}
+.tb-badge{position:absolute;top:-3px;right:-3px;width:14px;height:14px;border-radius:50%;background:var(--danger);color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--panel)}
+.tb-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#c9a84c,#8b6914);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#1a1200;cursor:pointer;border:2px solid var(--gold);flex-shrink:0}
+
+/* ── PAGE SHELL ───────────────────────────────────────── */
+.page{max-width:1180px;margin:0 auto;padding:32px 24px 60px}
+
+/* ── PROFILE HERO ─────────────────────────────────────── */
+.hero{
+  background:var(--card);border:1px solid var(--b);border-radius:20px;
+  overflow:hidden;margin-bottom:24px;position:relative;
+}
+.hero-banner{
+  height:160px;
+  background:linear-gradient(135deg,#0b0d15 0%,#12172a 40%,#1a1e2d 60%,#0f1319 100%);
+  position:relative;overflow:hidden;
+}
+.hero-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(201,168,76,0.12) 0%,transparent 60%)}
+.hero-banner-art{position:absolute;right:40px;top:50%;transform:translateY(-50%);opacity:0.18}
+/* Diagonal stripes */
+.hero-banner::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(105deg,transparent,transparent 40px,rgba(201,168,76,0.03) 40px,rgba(201,168,76,0.03) 41px);
+}
+.hero-body{padding:0 32px 28px;display:flex;align-items:flex-end;gap:24px;position:relative;margin-top:-52px}
+.avatar-wrap{position:relative;flex-shrink:0}
+.avatar-ring{
+  width:104px;height:104px;border-radius:50%;
+  background:linear-gradient(135deg,#c9a84c 0%,#e8c97a 40%,#8b6914 100%);
+  padding:3px;box-shadow:0 0 0 4px var(--card),0 8px 32px rgba(201,168,76,0.25);
+}
+.avatar-inner{
+  width:100%;height:100%;border-radius:50%;
+  background:linear-gradient(135deg,#c9a84c,#8b6914);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:36px;font-weight:600;color:#1a1200;
+}
+.avatar-upload{
+  position:absolute;bottom:4px;right:4px;
+  width:28px;height:28px;border-radius:50%;
+  background:var(--gold);color:#1a1200;
+  border:2px solid var(--card);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:13px;transition:background .18s;
+}
+.avatar-upload:hover{background:var(--gold-l)}
+.hero-meta{flex:1;padding-bottom:4px}
+.hero-name{font-family:'Playfair Display',serif;font-size:26px;font-weight:500;line-height:1.15;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.verified-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(61,186,138,0.12);border:1px solid rgba(61,186,138,0.25);
+  color:var(--success);border-radius:999px;
+  font-size:10px;font-weight:600;padding:3px 9px;letter-spacing:.04em;
+  font-family:'DM Sans',sans-serif;
+}
+.hero-handle{font-size:13px;color:var(--t2);margin-top:4px;font-weight:300}
+.hero-badges{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--card2);border:1px solid var(--b);
+  border-radius:8px;padding:5px 11px;font-size:11px;color:var(--t2);
+}
+.hero-badge.gold-b{background:var(--gold-dim);border-color:rgba(201,168,76,0.2);color:var(--gold-l)}
+.hero-right{display:flex;flex-direction:column;align-items:flex-end;gap:12px;padding-bottom:4px;flex-shrink:0}
+.hero-actions{display:flex;gap:8px}
+
+/* ── PROFILE COMPLETE ─────────────────────────────────── */
+.complete-bar{
+  background:var(--card2);border:1px solid var(--b);border-radius:12px;
+  padding:14px 20px;margin-bottom:24px;
+  display:flex;align-items:center;gap:16px;
+}
+.complete-pct{font-family:'Playfair Display',serif;font-size:22px;font-weight:500;color:var(--gold-l);flex-shrink:0;width:46px}
+.complete-info{flex:1}
+.complete-label{font-size:13px;font-weight:500;margin-bottom:5px}
+.complete-track{height:6px;background:var(--card);border-radius:999px;overflow:hidden}
+.complete-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--gold-l));transition:width 1s ease}
+.complete-hint{font-size:11px;color:var(--t3);margin-top:4px}
+.complete-steps{display:flex;gap:8px;flex-shrink:0}
+.step-pill{padding:4px 10px;background:var(--card);border:1px solid var(--b);border-radius:999px;font-size:10px;color:var(--t3)}
+.step-pill.done{background:rgba(61,186,138,0.1);border-color:rgba(61,186,138,0.2);color:var(--success)}
+
+/* ── MAIN GRID ────────────────────────────────────────── */
+.main-grid{display:grid;grid-template-columns:280px 1fr;gap:20px;align-items:start}
+
+/* ── LEFT PANEL ───────────────────────────────────────── */
+.left-panel{display:flex;flex-direction:column;gap:14px;position:sticky;top:80px}
+.side-card{background:var(--card);border:1px solid var(--b);border-radius:14px;overflow:hidden}
+.side-card-header{padding:14px 18px;border-bottom:1px solid var(--b);font-size:12px;font-weight:500;color:var(--t2);letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between}
+.side-card-body{padding:16px 18px}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat-box{background:var(--card2);border:1px solid var(--b);border-radius:10px;padding:12px;text-align:center}
+.stat-box-num{font-family:'Playfair Display',serif;font-size:22px;font-weight:500;color:var(--gold-l);line-height:1}
+.stat-box-lbl{font-size:10px;color:var(--t3);margin-top:4px;letter-spacing:.04em}
+
+/* Activity feed */
+.activity-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--b)}
+.activity-item:last-child{border-bottom:none;padding-bottom:0}
+.activity-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.activity-text{font-size:11px;color:var(--t2);line-height:1.45}
+.activity-text strong{color:var(--t1);font-weight:500}
+.activity-time{font-size:10px;color:var(--t3);margin-top:2px}
+
+/* Sidebar nav links */
+.sb-nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:9px;cursor:pointer;
+  font-size:13px;color:var(--t2);
+  transition:background .15s,color .15s;
+  border:1px solid transparent;
+}
+.sb-nav-item:hover{background:rgba(255,255,255,0.025);color:var(--t1)}
+.sb-nav-item.active{background:var(--gold-dim);color:var(--gold-l);border-color:rgba(201,168,76,0.15)}
+.sb-nav-item svg{flex-shrink:0;width:16px;height:16px}
+
+/* ── RIGHT PANEL (TABS + CONTENT) ─────────────────────── */
+.right-panel{}
+.tab-bar{display:flex;gap:2px;background:var(--card);border:1px solid var(--b);border-radius:11px;padding:4px;margin-bottom:18px;flex-wrap:wrap}
+.tab{padding:8px 18px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;color:var(--t2);transition:all .18s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.tab.active{background:var(--gold);color:#1a1200}
+.tab:not(.active):hover{color:var(--t1);background:rgba(255,255,255,0.04)}
+.tab-panel{display:none;animation:fadeUp .28s ease}
+.tab-panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── FORM CARD ────────────────────────────────────────── */
+.form-card{background:var(--card);border:1px solid var(--b);border-radius:14px;overflow:hidden;margin-bottom:16px}
+.form-card-header{padding:16px 22px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:12px}
+.form-card-icon{width:34px;height:34px;border-radius:9px;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;color:var(--gold);flex-shrink:0}
+.form-card-title{font-size:14px;font-weight:500;color:var(--t1)}
+.form-card-sub{font-size:11px;color:var(--t3);margin-top:2px}
+.form-card-body{padding:22px}
+
+/* FORM ELEMENTS */
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:7px;margin-bottom:0}
+.form-group.span2{grid-column:span 2}
+.form-label{font-size:11px;font-weight:500;color:var(--t2);letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:5px}
+.required{color:var(--danger);font-size:9px}
+.form-input,.form-select,.form-textarea{
+  background:var(--input);border:1px solid var(--b);border-radius:9px;
+  padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--t1);
+  width:100%;outline:none;transition:border-color .18s,box-shadow .18s;-webkit-appearance:none;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--t3)}
+.form-select{cursor:pointer}
+.form-textarea{resize:vertical;min-height:90px;line-height:1.6}
+.form-hint{font-size:11px;color:var(--t3);margin-top:2px}
+.input-group{position:relative}
+.input-prefix{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--t3)}
+.input-prefix+.form-input{padding-left:30px}
+.input-suffix{position:absolute;right:13px;top:50%;transform:translateY(-50%)}
+.form-actions{display:flex;align-items:center;gap:10px;padding-top:16px;margin-top:16px;border-top:1px solid var(--b)}
+
+/* ── BUTTONS ──────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .18s;white-space:nowrap}
+.btn-gold{background:var(--gold);color:#1a1200}.btn-gold:hover{background:var(--gold-l)}
+.btn-outline{background:transparent;border:1px solid var(--b);color:var(--t2)}.btn-outline:hover{border-color:var(--bh);color:var(--gold-l)}
+.btn-ghost{background:transparent;color:var(--t2)}.btn-ghost:hover{color:var(--t1)}
+.btn-danger{background:transparent;border:1px solid rgba(226,90,90,0.25);color:var(--danger)}.btn-danger:hover{background:rgba(226,90,90,0.08)}
+.btn-success{background:rgba(61,186,138,0.12);border:1px solid rgba(61,186,138,0.2);color:var(--success)}.btn-success:hover{background:rgba(61,186,138,0.2)}
+.btn-sm{padding:6px 13px;font-size:12px}
+
+/* ── TOGGLE ───────────────────────────────────────────── */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--b)}
+.toggle-row:last-child{border-bottom:none;padding-bottom:0}
+.toggle-info .t-name{font-size:13px;font-weight:500;color:var(--t1)}
+.toggle-info .t-sub{font-size:11px;color:var(--t3);margin-top:3px;line-height:1.4}
+.toggle{width:42px;height:24px;background:var(--input);border:1px solid rgba(255,255,255,0.09);border-radius:999px;cursor:pointer;position:relative;flex-shrink:0;transition:background .2s,border-color .2s}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--t3);transition:transform .2s,background .2s}
+.toggle.on{background:var(--gold);border-color:var(--gold)}
+.toggle.on::after{transform:translateX(18px);background:#1a1200}
+
+/* ── SECURITY ITEMS ───────────────────────────────────── */
+.sec-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--b)}
+.sec-item:last-child{border-bottom:none;padding-bottom:0}
+.sec-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-icon.ok{background:rgba(61,186,138,0.1);color:var(--success)}
+.sec-icon.warn{background:rgba(239,159,39,0.1);color:var(--warn)}
+.sec-icon.off{background:var(--card2);color:var(--t3)}
+.sec-name{font-size:13px;font-weight:500;color:var(--t1)}
+.sec-sub{font-size:11px;color:var(--t3);margin-top:3px}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;font-size:10px;font-weight:600;padding:3px 8px}
+.pill-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.pill.ok{background:rgba(61,186,138,0.1);color:var(--success)}
+.pill.warn{background:rgba(239,159,39,0.1);color:var(--warn)}
+.pill.off{background:var(--card2);color:var(--t3)}
+.pill.pro{background:var(--gold-dim);color:var(--gold-l)}
+
+/* ── PREFERENCE CARDS ─────────────────────────────────── */
+.pref-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.pref-chip{
+  border:1px solid var(--b);border-radius:10px;padding:12px 14px;cursor:pointer;
+  background:var(--card2);transition:all .18s;text-align:center;
+  font-size:12px;color:var(--t2);
+}
+.pref-chip:hover{border-color:var(--bh);color:var(--gold-l)}
+.pref-chip.selected{background:var(--gold-dim);border-color:rgba(201,168,76,0.35);color:var(--gold-l)}
+.pref-chip-icon{font-size:22px;margin-bottom:6px}
+.pref-chip-label{font-weight:500;font-size:11px}
+
+/* ── RANGE SLIDER ─────────────────────────────────────── */
+.range-wrap{position:relative;padding:8px 0}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:var(--card2);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);border:3px solid var(--card);cursor:pointer;box-shadow:0 0 6px rgba(201,168,76,0.4)}
+.range-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:4px}
+.range-val{font-size:13px;font-weight:500;color:var(--gold-l);text-align:center;margin-bottom:4px}
+
+/* ── SESSIONS ─────────────────────────────────────────── */
+.session-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card2);border:1px solid var(--b);border-radius:10px;margin-bottom:10px}
+.session-item:last-child{margin-bottom:0}
+.session-icon{width:38px;height:38px;border-radius:9px;background:var(--input);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ── DANGER ZONE ──────────────────────────────────────── */
+.danger-zone{border:1px solid rgba(226,90,90,0.18);border-radius:12px;padding:18px 20px;background:rgba(226,90,90,0.04)}
+.danger-title{font-size:13px;font-weight:500;color:var(--danger);margin-bottom:5px;display:flex;align-items:center;gap:7px}
+.danger-desc{font-size:12px;color:var(--t3);margin-bottom:12px;line-height:1.5}
+
+/* ── NOTIFICATION CHANNELS ────────────────────────────── */
+.notif-channel{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--b)}
+.notif-channel:last-child{border-bottom:none}
+.channel-icon{width:36px;height:36px;border-radius:9px;background:var(--card2);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--t2)}
+
+/* ── LISTING CARDS ────────────────────────────────────── */
+.listing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.listing-card{background:var(--card2);border:1px solid var(--b);border-radius:12px;overflow:hidden;transition:border-color .18s,transform .15s}
+.listing-card:hover{border-color:rgba(201,168,76,0.2);transform:translateY(-2px)}
+.listing-thumb{height:100px;background:linear-gradient(135deg,#1a1f2e,#212638);display:flex;align-items:center;justify-content:center;font-size:40px;position:relative}
+.listing-status{position:absolute;top:8px;right:8px}
+.listing-info{padding:12px}
+.listing-name{font-size:13px;font-weight:500;color:var(--t1);margin-bottom:3px}
+.listing-meta{font-size:11px;color:var(--t3)}
+.listing-price{font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:var(--gold-l);margin-top:8px}
+.listing-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--b)}
+
+/* ── REVIEWS ──────────────────────────────────────────── */
+.review-item{padding:14px 0;border-bottom:1px solid var(--b)}
+.review-item:last-child{border-bottom:none;padding-bottom:0}
+.review-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.reviewer-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+.stars{color:var(--gold);font-size:12px;letter-spacing:1px}
+.review-text{font-size:12px;color:var(--t2);line-height:1.6}
+.review-car{font-size:10px;color:var(--t3);margin-top:5px;display:flex;align-items:center;gap:5px}
+
+/* ── TOAST ────────────────────────────────────────────── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--success);color:#0a2e20;border-radius:10px;padding:11px 18px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;pointer-events:none;z-index:999;box-shadow:0 8px 32px rgba(0,0,0,0.4)}
+.toast.show{opacity:1;transform:none}
+
+/* ── RESPONSIVE ───────────────────────────────────────── */
+@media(max-width:900px){.main-grid{grid-template-columns:1fr}.left-panel{position:static}.form-grid-2,.form-grid-3{grid-template-columns:1fr}.form-group.span2{grid-column:1}.pref-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+
+<style id="automart-profile-live-panels-css">
+.live-panel{position:fixed;top:68px;right:20px;width:min(350px,calc(100vw - 28px));background:rgba(5,10,12,.97);border:1px solid rgba(200,255,62,.24);border-radius:16px;box-shadow:0 28px 90px rgba(0,0,0,.5),0 0 35px rgba(200,255,62,.08);z-index:10000;display:none;overflow:hidden}.live-panel.show{display:block}.live-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.08)}.live-head strong{color:var(--gold-l);font-size:13px}.live-head button{background:var(--gold-dim);color:var(--gold-l);border:1px solid var(--bh);border-radius:999px;padding:5px 9px;font-size:10px;cursor:pointer}.live-item{display:flex;gap:10px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer}.live-item.read{opacity:.58}.live-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold);margin-top:5px}.live-item.read .live-dot{background:var(--t3);box-shadow:none}.live-item b{display:block;font-size:12px}.live-item p{font-size:11px;color:var(--t2);line-height:1.45;margin-top:2px}.live-empty{text-align:center;padding:28px;color:var(--t2);font-size:12px}.tb-badge.is-zero{display:none}
+</style>
+
+<style id="automart-profile-realtime-buttons-style">
+  .automart-confirm-overlay{
+    position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;
+    background:rgba(0,0,0,.62);backdrop-filter:blur(12px);padding:22px;
+  }
+  .automart-confirm-card{
+    width:min(100%,420px);background:linear-gradient(145deg,rgba(12,20,22,.98),rgba(4,9,10,.98));
+    border:1px solid rgba(200,255,62,.28);border-top:3px solid #c8ff3e;border-radius:20px;
+    padding:28px 24px 22px;text-align:center;box-shadow:0 32px 90px rgba(0,0,0,.62),0 0 34px rgba(200,255,62,.12);
+    animation:automartConfirmIn .24s ease both;
+  }
+  @keyframes automartConfirmIn{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+  .automart-confirm-icon{
+    width:56px;height:56px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;
+    background:rgba(200,255,62,.12);border:1px solid rgba(200,255,62,.24);color:#c8ff3e;font-size:24px;
+    box-shadow:0 0 24px rgba(200,255,62,.14);
+  }
+  .automart-confirm-title{font-size:20px;font-weight:800;color:#f3f8ed;margin:0 0 8px;font-family:inherit}
+  .automart-confirm-message{font-size:13px;color:#aab6ac;line-height:1.6;margin:0 0 22px}
+  .automart-confirm-actions{display:flex;gap:10px}
+  .automart-confirm-actions button{flex:1;padding:12px 0;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;transition:.16s ease;font-family:inherit}
+  .automart-confirm-cancel{background:transparent;border:1px solid rgba(255,255,255,.14);color:#aebbad}
+  .automart-confirm-cancel:hover{background:rgba(255,255,255,.05);color:#fff}
+  .automart-confirm-ok{background:#c8ff3e;border:1px solid rgba(200,255,62,.65);color:#07100b;box-shadow:0 0 20px rgba(200,255,62,.18)}
+  .automart-confirm-ok:hover{filter:brightness(1.07);transform:translateY(-1px)}
+  .automart-profile-mini-btn{
+    display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;
+    border:1px solid rgba(200,255,62,.2)!important;background:rgba(9,16,18,.72)!important;color:#dce8d6!important;
+    border-radius:10px!important;padding:8px 14px!important;font-size:12px!important;font-weight:700!important;
+    cursor:pointer!important;text-decoration:none!important;box-shadow:0 0 14px rgba(200,255,62,.08)!important;
+  }
+  .automart-profile-mini-btn:hover{border-color:rgba(200,255,62,.45)!important;color:#c8ff3e!important;background:rgba(200,255,62,.08)!important}
+  .automart-profile-save-btn-fixed{
+    background:#c8ff3e!important;color:#07100b!important;border:0!important;border-radius:12px!important;
+    box-shadow:0 0 24px rgba(200,255,62,.22)!important;font-weight:900!important;
+  }
+  .avatar-inner.has-photo,.tb-av.has-photo,#globalProfileAvatar.has-photo,.profile-avatar.has-photo{
+    background-image:var(--automart-avatar-photo)!important;background-size:cover!important;background-position:center!important;color:transparent!important;
+  }
+</style>
+
+
+<style id="automart-zero-broken-profile-style">
+  .automart-confirm-overlay{position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.62);backdrop-filter:blur(12px);padding:22px}
+  .automart-confirm-card{width:min(100%,420px);background:linear-gradient(145deg,rgba(12,20,22,.98),rgba(4,9,10,.98));border:1px solid rgba(200,255,62,.28);border-top:3px solid #c8ff3e;border-radius:20px;padding:28px 24px 22px;text-align:center;box-shadow:0 32px 90px rgba(0,0,0,.62),0 0 34px rgba(200,255,62,.12);animation:automartConfirmIn .24s ease both}
+  @keyframes automartConfirmIn{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+  .automart-confirm-icon{width:56px;height:56px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:rgba(200,255,62,.12);border:1px solid rgba(200,255,62,.24);color:#c8ff3e;font-size:24px;box-shadow:0 0 24px rgba(200,255,62,.14)}
+  .automart-confirm-title{font-size:20px;font-weight:800;color:#f3f8ed;margin:0 0 8px;font-family:inherit}
+  .automart-confirm-message{font-size:13px;color:#aab6ac;line-height:1.6;margin:0 0 22px}
+  .automart-confirm-actions{display:flex;gap:10px}
+  .automart-confirm-actions button{flex:1;padding:12px 0;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;transition:.16s ease;font-family:inherit}
+  .automart-confirm-cancel{background:transparent;border:1px solid rgba(255,255,255,.14);color:#aebbad}
+  .automart-confirm-cancel:hover{background:rgba(255,255,255,.05);color:#fff}
+  .automart-confirm-ok{background:#c8ff3e;border:1px solid rgba(200,255,62,.65);color:#07100b;box-shadow:0 0 20px rgba(200,255,62,.18)}
+  .automart-confirm-ok:hover{filter:brightness(1.07);transform:translateY(-1px)}
+  .automart-profile-mini-btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;border:1px solid rgba(200,255,62,.2)!important;background:rgba(9,16,18,.72)!important;color:#dce8d6!important;border-radius:10px!important;padding:8px 14px!important;font-size:12px!important;font-weight:700!important;cursor:pointer!important;text-decoration:none!important;box-shadow:0 0 14px rgba(200,255,62,.08)!important}
+  .automart-profile-mini-btn:hover{border-color:rgba(200,255,62,.45)!important;color:#c8ff3e!important;background:rgba(200,255,62,.08)!important}
+  .automart-profile-save-btn-fixed{background:#c8ff3e!important;color:#07100b!important;border:0!important;border-radius:12px!important;box-shadow:0 0 24px rgba(200,255,62,.22)!important;font-weight:900!important}
+  .avatar-inner.has-photo,.tb-av.has-photo,#globalProfileAvatar.has-photo,.profile-avatar.has-photo{background-image:var(--automart-avatar-photo)!important;background-size:cover!important;background-position:center!important;color:transparent!important}
+  .automart-add-listing-modal{position:fixed;inset:0;z-index:999998;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.66);backdrop-filter:blur(12px);padding:20px}
+  .automart-add-listing-card{width:min(100%,640px);max-height:92vh;overflow:auto;background:linear-gradient(145deg,rgba(12,20,22,.98),rgba(4,9,10,.98));border:1px solid rgba(200,255,62,.25);border-radius:22px;padding:22px;box-shadow:0 32px 90px rgba(0,0,0,.65)}
+  .automart-add-listing-card h3{margin:0 0 12px;color:#f4f9ed;font-size:24px}.automart-add-listing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.automart-add-listing-card label{display:grid;gap:6px;color:#aab6ac;font-size:12px;font-weight:700}.automart-add-listing-card input,.automart-add-listing-card select,.automart-add-listing-card textarea{width:100%;border:1px solid rgba(255,255,255,.1);background:#101a20;color:#f3f8ed;border-radius:12px;padding:11px;font:inherit}.automart-add-listing-preview{height:170px;border:1px dashed rgba(200,255,62,.25);border-radius:16px;background:rgba(255,255,255,.025);background-size:cover;background-position:center;display:grid;place-items:center;color:#7f8b82;margin:12px 0}.automart-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}@media(max-width:680px){.automart-add-listing-grid{grid-template-columns:1fr}}
+</style>
+
+
+<style id="automart-storage-safe-popup-style">
+.automart-confirm-overlay{position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.62);backdrop-filter:blur(12px);padding:22px}
+.automart-confirm-card{width:min(100%,420px);background:linear-gradient(145deg,rgba(12,20,22,.98),rgba(4,9,10,.98));border:1px solid rgba(200,255,62,.28);border-top:3px solid #c8ff3e;border-radius:20px;padding:28px 24px 22px;text-align:center;box-shadow:0 32px 90px rgba(0,0,0,.62),0 0 34px rgba(200,255,62,.12);animation:automartConfirmIn .24s ease both}
+@keyframes automartConfirmIn{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+.automart-confirm-icon{width:56px;height:56px;margin:0 auto 16px;border-radius:50%;display:grid;place-items:center;background:rgba(200,255,62,.12);border:1px solid rgba(200,255,62,.24);color:#c8ff3e;font-size:24px;box-shadow:0 0 24px rgba(200,255,62,.14)}
+.automart-confirm-title{font-size:20px;font-weight:800;color:#f3f8ed;margin:0 0 8px;font-family:inherit}
+.automart-confirm-message{font-size:13px;color:#aab6ac;line-height:1.6;margin:0 0 22px}
+.automart-confirm-actions{display:flex;gap:10px}.automart-confirm-actions button{flex:1;padding:12px 0;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;transition:.16s ease;font-family:inherit}
+.automart-confirm-cancel{background:transparent;border:1px solid rgba(255,255,255,.14);color:#aebbad}.automart-confirm-cancel:hover{background:rgba(255,255,255,.05);color:#fff}
+.automart-confirm-ok{background:#c8ff3e;border:1px solid rgba(200,255,62,.65);color:#07100b;box-shadow:0 0 20px rgba(200,255,62,.18)}
+.automart-profile-mini-btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;border:1px solid rgba(200,255,62,.2)!important;background:rgba(9,16,18,.72)!important;color:#dce8d6!important;border-radius:10px!important;padding:8px 14px!important;font-size:12px!important;font-weight:700!important;cursor:pointer!important;text-decoration:none!important;box-shadow:0 0 14px rgba(200,255,62,.08)!important}
+.automart-profile-mini-btn:hover{border-color:rgba(200,255,62,.45)!important;color:#c8ff3e!important;background:rgba(200,255,62,.08)!important}
+.automart-profile-save-btn-fixed{background:#c8ff3e!important;color:#07100b!important;border:0!important;border-radius:12px!important;box-shadow:0 0 24px rgba(200,255,62,.22)!important;font-weight:900!important}
+</style>
+
+</head>
+<body>
+
+<!-- ══ TOPBAR ══════════════════════════════════════════ -->
+<header class="topbar">
+  <a class="logo" href="/" style="text-decoration:none"><div class="logo-mark"><img src="/assets/img/full-project-logo.png" alt="AutoMart logo" style="width:100%;height:100%;object-fit:contain;border-radius:7px"></div>AutoMart</a>
+  <nav class="nav-links">
+    <a class="nav-link" href="/" style="text-decoration:none">Home</a>
+    <a class="nav-link" href="/inventory" style="text-decoration:none">Inventory</a>
+    <a class="nav-link active" href="/profile" style="text-decoration:none">Profile</a>
+    <a class="nav-link" href="/sell" style="text-decoration:none">Sell Car</a>
+    <a class="nav-link" href="/requests" style="text-decoration:none">Requests</a>
+    <a class="nav-link" href="/reviews" style="text-decoration:none">Reviews</a>
+  </nav>
+  <div class="tb-spacer"></div>
+  <div class="tb-search">
+    <svg class="tb-search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="Search cars…">
+  </div>
+  <div class="tb-icon" data-live-panel-toggle="notifications">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    <div class="tb-badge" data-notification-count>0</div>
+  </div>
+  <div class="tb-icon" data-live-panel-toggle="messages">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <div class="tb-badge" data-message-count>0</div>
+  </div>
+  <div class="tb-av" id="profileTopAvatar">KP</div>
+</header>
+
+<div class="page">
+
+  <!-- ══ PROFILE HERO ════════════════════════════════════ -->
+  <div class="hero">
+    <div class="hero-banner">
+      <!-- SVG car silhouette watermark -->
+      <div class="hero-banner-art">
+        <svg width="420" height="140" viewBox="0 0 480 160" fill="none">
+          <path d="M140 105 C155 72 185 58 220 54 L285 54 C318 58 348 72 360 105Z" fill="rgba(201,168,76,0.6)"/>
+          <rect x="48" y="105" width="384" height="38" rx="8" fill="rgba(201,168,76,0.5)"/>
+          <ellipse cx="130" cy="143" rx="24" ry="14" fill="rgba(0,0,0,0.5)"/>
+          <ellipse cx="350" cy="143" rx="24" ry="14" fill="rgba(0,0,0,0.5)"/>
+          <circle cx="130" cy="143" r="18" fill="rgba(201,168,76,0.4)" stroke="rgba(201,168,76,0.8)" stroke-width="1.5"/>
+          <circle cx="350" cy="143" r="18" fill="rgba(201,168,76,0.4)" stroke="rgba(201,168,76,0.8)" stroke-width="1.5"/>
+          <path d="M170 103 C180 78 200 66 224 62 L278 62 C302 66 318 78 328 103Z" fill="rgba(201,168,76,0.25)"/>
+          <path d="M48 112 C56 107 68 105 80 106 L80 120 C68 121 56 120 48 116Z" fill="rgba(201,168,76,0.4)"/>
+          <ellipse cx="65" cy="112" rx="12" ry="4" fill="rgba(255,255,255,0.15)"/>
+        </svg>
+      </div>
+      <!-- banner edit -->
+      <button id="profileBannerBtn" type="button" style="position:absolute;bottom:12px;right:16px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.12);color:#fff;border-radius:7px;padding:5px 12px;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .18s" onmouseover="this.style.background='rgba(201,168,76,0.3)'" onmouseout="this.style.background='rgba(0,0,0,0.5)'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Change banner
+      </button>
+    </div>
+
+    <div class="hero-body">
+      <div class="avatar-wrap">
+        <div class="avatar-ring">
+          <div class="avatar-inner" id="profileHeroAvatar">K</div>
+        </div>
+        <div class="avatar-upload" onclick="document.getElementById('premiumProfilePhotoInput').click()" title="Change photo">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div><input id="premiumProfilePhotoInput" type="file" accept=".jpg, .jpeg, .png" style="display:none">
+      </div>
+
+      <div class="hero-meta">
+        <div class="hero-name" id="profileHeroName">
+          Kasun Perera
+          <div class="verified-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Verified Buyer
+          </div>
+        </div>
+        <div class="hero-handle" id="profileHeroHandle">@kasun_automart · Member since January 2021 · Colombo, Sri Lanka</div>
+        <div class="hero-badges">
+          <div class="hero-badge gold-b">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Trusted Buyer
+          </div>
+          <div class="hero-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            ID Verified
+          </div>
+          <div class="hero-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12"/><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 17 12m-9 0a5 5 0 0 0 5 5"/></svg>
+            Top Responder
+          </div>
+          <div class="hero-badge">⭐ 4.9 Rating</div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-actions">
+          <button class="btn btn-outline btn-sm" onclick="showToast('Public profile opened')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            View Public
+          </button>
+          <button class="btn btn-gold btn-sm" onclick="showToast('Profile saved!')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Save Profile
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PROFILE COMPLETION ═══════════════════════════════ -->
+  <div class="complete-bar">
+    <div class="complete-pct">82%</div>
+    <div class="complete-info">
+      <div class="complete-label">Profile Strength — <span style="color:var(--warn)">Good</span></div>
+      <div class="complete-track"><div class="complete-fill" style="width:82%"></div></div>
+      <div class="complete-hint">Add a profile bio and inspection city to reach <strong style="color:var(--gold-l)">100% — Premium</strong></div>
+    </div>
+    <div class="complete-steps">
+      <div class="step-pill done">✓ Photo</div>
+      <div class="step-pill done">✓ Email</div>
+      <div class="step-pill done">✓ Phone</div>
+      <div class="step-pill">Bio</div>
+      <div class="step-pill">Inspection</div>
+    </div>
+  </div>
+
+  <!-- ══ MAIN GRID ════════════════════════════════════════ -->
+  <div class="main-grid">
+
+    <!-- LEFT SIDEBAR -->
+    <div class="left-panel">
+
+      <!-- Stats -->
+      <div class="side-card">
+        <div class="side-card-header">Account Stats</div>
+        <div class="side-card-body">
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-box-num">12</div>
+              <div class="stat-box-lbl">Active Listings</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-num">98%</div>
+              <div class="stat-box-lbl">Response Rate</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-num">4.9★</div>
+              <div class="stat-box-lbl">Avg Rating</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-num">47</div>
+              <div class="stat-box-lbl">Cars Sold</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-num">312</div>
+              <div class="stat-box-lbl">Total Views</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-num">28</div>
+              <div class="stat-box-lbl">Reviews</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Nav -->
+      <div class="side-card">
+        <div class="side-card-header">Quick Navigation</div>
+        <div class="side-card-body" style="display:flex;flex-direction:column;gap:3px">
+          <div class="sb-nav-item active" onclick="setTab('personal');updateSbNav(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            Personal Information
+          </div>
+          <div class="sb-nav-item" onclick="setTab('marketplace');updateSbNav(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2Z"/><path d="M5 17v2m14-2v2"/></svg>
+            Marketplace Prefs
+          </div>
+          <div class="sb-nav-item" onclick="setTab('listings');updateSbNav(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
+            My Listings
+          </div>
+          <div class="sb-nav-item" onclick="setTab('reviews');updateSbNav(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Reviews & Ratings
+          </div>
+          <div class="sb-nav-item" onclick="setTab('security');updateSbNav(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Security
+          </div>
+          <div class="sb-nav-item" onclick="setTab('notifications');updateSbNav(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Notifications
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="side-card">
+        <div class="side-card-header">Recent Activity</div>
+        <div class="side-card-body">
+          <div class="activity-item">
+            <div class="activity-dot" style="background:var(--gold)"></div>
+            <div><div class="activity-text"><strong>New listing</strong> approved by admin</div><div class="activity-time">Today, 10:24 AM</div></div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot" style="background:var(--info)"></div>
+            <div><div class="activity-text">New message from <strong>Nuwan A.</strong></div><div class="activity-time">Today, 9:11 AM</div></div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot" style="background:var(--success)"></div>
+            <div><div class="activity-text">Review received — <strong>5 stars</strong></div><div class="activity-time">Yesterday</div></div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot" style="background:var(--warn)"></div>
+            <div><div class="activity-text"><strong>Saved vehicle</strong> price alert triggered</div><div class="activity-time">2 days ago</div></div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot" style="background:var(--success)"></div>
+            <div><div class="activity-text">Honda Fit <strong>sold</strong> — LKR 4.2M</div><div class="activity-time">5 days ago</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Plan badge -->
+      <div style="background:linear-gradient(135deg,#1a1e29,#212638);border:1px solid rgba(201,168,76,0.2);border-radius:14px;padding:18px;text-align:center">
+        <div style="font-size:22px;margin-bottom:8px">⭐</div>
+        <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--gold-l);margin-bottom:4px">Trusted Buyer</div>
+        <div style="font-size:11px;color:var(--t3);margin-bottom:14px">Renews June 15, 2026 · LKR 3,990/mo</div>
+        <button class="btn btn-gold btn-sm" style="width:100%;justify-content:center" onclick="showToast('Opening plan manager…')">Manage Plan</button>
+      </div>
+
+    </div>
+
+    <!-- RIGHT CONTENT -->
+    <div class="right-panel">
+
+      <!-- TAB BAR -->
+      <div class="tab-bar">
+        <div class="tab active" id="tab-personal" onclick="setTab('personal')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          Personal
+        </div>
+        <div class="tab" id="tab-marketplace" onclick="setTab('marketplace')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2Z"/></svg>
+          Marketplace
+        </div>
+        <div class="tab" id="tab-listings" onclick="setTab('listings')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
+          My Listings
+        </div>
+        <div class="tab" id="tab-reviews" onclick="setTab('reviews')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Reviews
+        </div>
+        <div class="tab" id="tab-security" onclick="setTab('security')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Security
+        </div>
+        <div class="tab" id="tab-notifications" onclick="setTab('notifications')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+          Notifications
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════ -->
+      <!-- TAB: PERSONAL INFO                  -->
+      <!-- ════════════════════════════════════ -->
+      <div class="tab-panel active" id="panel-personal">
+
+        <!-- Basic Info -->
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="form-card-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+            <div><div class="form-card-title">Basic Information</div><div class="form-card-sub">Your identity on AutoMart — visible to buyers</div></div>
+          </div>
+          <div class="form-card-body">
+            <div class="form-grid-2" style="gap:16px;margin-bottom:16px">
+              <div class="form-group">
+                <label class="form-label">First Name <span class="required">*</span></label>
+                <input type="text" class="form-input" value="Kasun">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name <span class="required">*</span></label>
+                <input type="text" class="form-input" value="Perera">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Display Name</label>
+                <input type="text" class="form-input" value="kasun_automart">
+                <div class="form-hint">Shown publicly on listings and your profile page</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date of Birth</label>
+                <input type="date" class="form-input" value="1990-03-15">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gender</label>
+                <select class="form-select">
+                  <option>Male</option><option>Female</option><option>Prefer not to say</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nationality</label>
+                <input type="text" class="form-input" value="Sri Lankan">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:16px">
+              <label class="form-label">About Me / Seller Bio</label>
+              <textarea class="form-textarea">Trusted seller with 4+ years on AutoMart. Specialising in Japanese import cars — Toyota, Honda, Nissan. All vehicles are fully inspected before listing. Serious buyers only. Fast response guaranteed.</textarea>
+              <div class="form-hint" style="display:flex;justify-content:space-between"><span>Tell buyers about yourself, your experience, and what types of vehicles you sell</span><span style="color:var(--gold)">284 / 500</span></div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-gold" onclick="showToast('Basic info saved!')">Save Changes</button>
+              <button class="btn btn-outline">Discard</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="form-card-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <div><div class="form-card-title">Contact Details</div><div class="form-card-sub">How buyers and AutoMart can reach you</div></div>
+          </div>
+          <div class="form-card-body">
+            <div class="form-grid-2" style="gap:16px;margin-bottom:16px">
+              <div class="form-group">
+                <label class="form-label">Email Address <span class="required">*</span></label>
+                <div class="input-group">
+                  <input type="email" class="form-input" value="kasun.perera@gmail.com">
+                  <div class="input-suffix"><span class="pill ok"><span class="pill-dot"></span>Verified</span></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone Number <span class="required">*</span></label>
+                <div class="input-group">
+                  <input type="tel" class="form-input" value="+94 77 123 4567">
+                  <div class="input-suffix"><span class="pill ok"><span class="pill-dot"></span>Verified</span></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">WhatsApp Number</label>
+                <div class="input-group">
+                  <span class="input-prefix">📱</span>
+                  <input type="tel" class="form-input" value="+94 77 123 4567" style="padding-left:32px">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Contact Preference</label>
+                <select class="form-select">
+                  <option>Phone &amp; Chat</option>
+                  <option>Chat Only</option>
+                  <option>Phone Only</option>
+                  <option>WhatsApp Only</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Website / Social Link</label>
+                <div class="input-group">
+                  <span class="input-prefix">🔗</span>
+                  <input type="url" class="form-input" placeholder="https://…" style="padding-left:32px">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Preferred Language</label>
+                <select class="form-select">
+                  <option>English</option>
+                  <option>සිංහල (Sinhala)</option>
+                  <option>தமிழ் (Tamil)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-gold" onclick="showToast('Contact info saved!')">Save Changes</button>
+              <button class="btn btn-outline">Discard</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="form-card-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div><div class="form-card-title">Location</div><div class="form-card-sub">Your primary listing and contact location</div></div>
+          </div>
+          <div class="form-card-body">
+            <div class="form-grid-3" style="gap:14px;margin-bottom:14px">
+              <div class="form-group">
+                <label class="form-label">Province</label>
+                <select class="form-select"><option>Western Province</option><option>Central Province</option><option>Southern Province</option><option>Northern Province</option><option>Eastern Province</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">District</label>
+                <select class="form-select"><option>Colombo</option><option>Gampaha</option><option>Kalutara</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">City</label>
+                <input type="text" class="form-input" value="Colombo 05">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:14px">
+              <label class="form-label">Full Address (optional — not shown publicly)</label>
+              <input type="text" class="form-input" placeholder="Street address for inspection coordination…">
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-gold" onclick="showToast('Location saved!')">Save Location</button>
+              <button class="btn btn-outline">Discard</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ════════════════════════════════════ -->
+      <!-- TAB: MARKETPLACE PREFERENCES        -->
+      <!-- ════════════════════════════════════ -->
+      <div class="tab-panel" id="panel-marketplace">
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="form-card-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
+            <div><div class="form-card-title">Preferred Body Type</div><div class="form-card-sub">Select all vehicle types you're interested in buying or selling</div></div>
+          </div>
+          <div class="form-card-body">
+            <div class="pref-grid" style="grid-template-columns:repeat(4,1fr)">
+              <div class="pref-chip selected" onclick="this.classList.toggle('selected')"><div class="pref-chip-icon">🚗</div><div class="pref-chip-label">Sedan</div></div>
+              <div class="pref-chip selected" onclick="this.classList.toggle('selected')"><div class="pref-chip-icon">🚙</div><div class="pref-chip-label">SUV</div></div>
+              <div class="pref-chip" onclick="this.classList.toggle('selected')"><div class="pref-chip-icon">🚐</div><div class="pref-chip-label">Van</div></div>
+              <div class="pref-chip" onclick="this.classList.toggle('selected')"><div class="pref-chip-icon">🚌</div><div class="pref-chip-label">Bus</div></div>
+              <div class="pref-chip selected" onclick="this.classList.toggle('selected')"><div class="pref-chip-icon">🚘</div><div class="pref-chip-label">Hatchback</div></div>
+              <div class="pref-chip" onclick="this.classList.toggle('selected')"><div class="pref-chip-icon">🏎</div><div class="pref-chip-label">Sports</div></div>
+              <div class="pref-chip" onclick="this.classList.toggle('selected')"><div class="pref-chip-icon">🚚</div><div class="pref-chip-label">Pickup</div></div>
+              <div class="pref-chip" onclick="this.classList.toggle('selected')"><div class="pref-chip-icon">⚡</div><div class="pref-chip-label">Electric</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="form-card-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+            <div><div class="form-card-title">Budget Range</div><div class="form-card-sub">Set your typical buying or selling price range in LKR</div></div>
+          </div>
+          <div class="form-card-body">
+            <div class="form-grid-2" style="gap:16px;margin-bottom:20px">
+              <div class="form-group">
+                <label class="form-label">Minimum Budget</label>
+                <div class="input-group">
+                  <span class="input-prefix" style="font-size:11px;font-weight:500">LKR</span>
+                  <input type="text" class="form-input" value="1,000,000" style="padding-left:36px">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Maximum Budget</label>
+                <div class="input-group">
+                  <span class="input-prefix" style="font-size:11px;font-weight:500">LKR</span>
+                  <input type="text" class="form-input" value="15,000,000" style="padding-left:36px">
+                </div>
+              </div>
+            </div>
+            <div class="range-wrap">
+              <div class="range-val" id="budgetVal">LKR 1M — 15M</div>
+              <input type="range" min="500000" max="50000000" value="15000000" oninput="document.getElementById('budgetVal').textContent='Up to LKR '+Math.round(this.value/1000000)+'M'">
+              <div class="range-labels"><span>LKR 500K</span><span>LKR 50M</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="form-card-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg></div>
+            <div><div class="form-card-title">More Preferences</div><div class="form-card-sub">Fuel type, transmission and inspection preferences</div></div>
+          </div>
+          <div class="form-card-body">
+            <div class="form-grid-2" style="gap:16px;margin-bottom:16px">
+              <div class="form-group">
+                <label class="form-label">Preferred Fuel Type</label>
+                <select class="form-select"><option>All Types</option><option>Petrol</option><option selected>Hybrid</option><option>Electric</option><option>Diesel</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Transmission</label>
+                <select class="form-select"><option selected>Automatic</option><option>Manual</option><option>CVT</option><option>Any</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Preferred Make</label>
+                <select class="form-select"><option>Any Make</option><option selected>Toyota</option><option>Honda</option><option>Nissan</option><option>BMW</option><option>Mercedes</option><option>Suzuki</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Max Mileage (km)</label>
+                <input type="text" class="form-input" value="80,000">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Preferred Contact Method</label>
+                <select class="form-select"><option selected>Phone &amp; Chat</option><option>Chat Only</option><option>WhatsApp Only</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Inspection City</label>
+                <select class="form-select"><option selected>Colombo</option><option>Kandy</option><option>Gampaha</option><option>Galle</option><option>Matara</option></select>
+              </div>
+            </div>
+
+            <div style="background:var(--card2);border:1px solid var(--b);border-radius:10px;padding:16px;margin-bottom:14px">
+              <div style="font-size:12px;font-weight:500;color:var(--t1);margin-bottom:12px;display:flex;align-items:center;gap:7px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Marketplace Features
+              </div>
+              <div class="toggle-row"><div class="toggle-info"><div class="t-name">Accept test-drive requests</div><div class="t-sub">Buyers can request a test drive directly from your listing</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="toggle-row"><div class="toggle-info"><div class="t-name">Show price negotiable badge</div><div class="t-sub">Display "Negotiable" label on all your listings</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="toggle-row"><div class="toggle-info"><div class="t-name">Auto-boost new listings</div><div class="t-sub">Automatically feature new listings for 48 hours</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+              <div class="toggle-row"><div class="toggle-info"><div class="t-name">Trusted Buyer Badge</div><div class="t-sub">Show badge on your buyer profile to build trust</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+              <div class="toggle-row"><div class="toggle-info"><div class="t-name">Premium Auction Offers</div><div class="t-sub">Receive sealed auction-style offers on your vehicles</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-gold" onclick="showToast('Preferences saved!')">Save Preferences</button>
+              <button class="btn btn-outline">Reset to Default</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════ -->
+      <!-- TAB: MY LISTINGS                    -->
+      <!-- ════════════════════════════════════ -->
+      <div class="tab-panel" id="panel-listings">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div style="font-size:13px;color:var(--t2)">12 active listings · 47 sold · 3 pending</div>
+          <button class="btn btn-gold btn-sm" onclick="showToast('New listing form opening…')">+ New Listing</button>
+        </div>
+        <div class="listing-grid">
+
+          <div class="listing-card"><div class="listing-thumb" style="background:linear-gradient(135deg,#1a2a1e,#1e3024)">🚗<div class="listing-status"><span class="pill ok"><span class="pill-dot"></span>Active</span></div></div><div class="listing-info"><div class="listing-name">Toyota Prius PHV 2020</div><div class="listing-meta">Galle · 31,000 km · Auto · Plug-in Hybrid</div><div class="listing-price">LKR 9,800,000</div><div style="font-size:10px;color:var(--t3);margin-top:3px">689 views · 8 enquiries · Listed 6 days ago</div><div class="listing-actions"><button class="btn btn-outline btn-sm">Edit</button><button class="btn btn-outline btn-sm">Boost</button><button class="btn btn-danger btn-sm">Remove</button></div></div></div>
+        </div>
+        <div style="text-align:center;margin-top:16px">
+          <button class="btn btn-outline" onclick="showToast('Loading all listings…')">View All 12 Listings →</button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════ -->
+      <!-- TAB: REVIEWS                        -->
+      <!-- ════════════════════════════════════ -->
+      <div class="tab-panel" id="panel-reviews">
+        <div class="form-card">
+          <div class="form-card-body" style="display:flex;align-items:center;gap:32px;padding:24px">
+            <div style="text-align:center;flex-shrink:0">
+              <div style="font-family:'Playfair Display',serif;font-size:56px;font-weight:500;color:var(--gold-l);line-height:1">4.9</div>
+              <div class="stars" style="font-size:18px;letter-spacing:3px">★★★★★</div>
+              <div style="font-size:11px;color:var(--t3);margin-top:6px">Based on 28 reviews</div>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;color:var(--t2);width:20px">5★</span><div style="flex:1;height:5px;background:var(--card2);border-radius:999px;overflow:hidden"><div style="width:85%;height:100%;background:var(--gold);border-radius:999px"></div></div><span style="font-size:11px;color:var(--t3);width:24px">24</span></div>
+                <div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;color:var(--t2);width:20px">4★</span><div style="flex:1;height:5px;background:var(--card2);border-radius:999px;overflow:hidden"><div style="width:10%;height:100%;background:var(--gold-dim);border-radius:999px"></div></div><span style="font-size:11px;color:var(--t3);width:24px">3</span></div>
+                <div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;color:var(--t2);width:20px">3★</span><div style="flex:1;height:5px;background:var(--card2);border-radius:999px;overflow:hidden"><div style="width:4%;height:100%;background:var(--gold-dim);border-radius:999px"></div></div><span style="font-size:11px;color:var(--t3);width:24px">1</span></div>
+                <div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;color:var(--t2);width:20px">2★</span><div style="flex:1;height:5px;background:var(--card2);border-radius:999px;overflow:hidden"><div style="width:0%"></div></div><span style="font-size:11px;color:var(--t3);width:24px">0</span></div>
+                <div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;color:var(--t2);width:20px">1★</span><div style="flex:1;height:5px;background:var(--card2);border-radius:999px;overflow:hidden"><div style="width:0%"></div></div><span style="font-size:11px;color:var(--t3);width:24px">0</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-card">
+          <div class="form-card-header" style="justify-content:space-between">
+            <div style="font-size:14px;font-weight:500">Recent Reviews (28)</div>
+            <select class="form-select" style="width:auto;padding:5px 10px;font-size:11px"><option>Newest First</option><option>Highest Rating</option></select>
+          </div>
+          <div class="form-card-body">
+            <div class="review-item">
+              <div class="review-top"><div class="reviewer-av" style="background:rgba(77,143,224,0.2);color:var(--info)">NA</div><div><div style="font-size:13px;font-weight:500">Nuwan Amarasekara</div><div class="stars">★★★★★</div></div><div style="margin-left:auto;font-size:11px;color:var(--t3)">3 days ago</div></div>
+              <div class="review-text">Kasun was extremely professional and honest about the condition of the vehicle. The car was exactly as described — clean interior, full service history provided. Highly recommend!</div>
+              <div class="review-car"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10"/></svg>Toyota Prius PHV 2020</div>
+            </div>
+            <div class="review-item">
+              <div class="review-top"><div class="reviewer-av" style="background:rgba(61,186,138,0.2);color:var(--success)">RP</div><div><div style="font-size:13px;font-weight:500">Roshan Pathirana</div><div class="stars">★★★★★</div></div><div style="margin-left:auto;font-size:11px;color:var(--t3)">1 week ago</div></div>
+              <div class="review-text">Quick response, fair pricing, and the car was in perfect condition. Transfer process was smooth. Would definitely buy from Kasun again.</div>
+              <div class="review-car"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10"/></svg>Honda Fit GP5 2018</div>
+            </div>
+            <div class="review-item">
+              <div class="review-top"><div class="reviewer-av" style="background:rgba(239,159,39,0.2);color:var(--warn)">TK</div><div><div style="font-size:13px;font-weight:500">Tharaka Kumara</div><div class="stars">★★★★<span style="color:var(--t3)">★</span></div></div><div style="margin-left:auto;font-size:11px;color:var(--t3)">2 weeks ago</div></div>
+              <div class="review-text">Good experience overall. Kasun was responsive and the car was clean. Slight delay in paperwork but resolved quickly. Good seller.</div>
+              <div class="review-car"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10"/></svg>Suzuki Alto VXR 2020</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════ -->
+      <!-- TAB: SECURITY                       -->
+      <!-- ════════════════════════════════════ -->
+      <div class="tab-panel" id="panel-security">
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="form-card-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div><div class="form-card-title">Security Status</div><div class="form-card-sub">Your account protection overview</div></div>
+          </div>
+          <div class="form-card-body">
+            <div class="sec-item"><div class="sec-icon ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div style="flex:1"><div class="sec-name">Password</div><div class="sec-sub">Last changed 42 days ago · Strength: Strong</div></div><button class="btn btn-outline btn-sm" onclick="showToast('Password reset email sent')">Change Password</button></div>
+            <div class="sec-item"><div class="sec-icon warn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div style="flex:1"><div class="sec-name">Two-Factor Authentication</div><div class="sec-sub">Not enabled — strongly recommended for seller accounts</div></div><div style="display:flex;align-items:center;gap:8px"><span class="pill warn"><span class="pill-dot"></span>Disabled</span><button class="btn btn-success btn-sm" onclick="showToast('Setting up 2FA…')">Enable 2FA</button></div></div>
+            <div class="sec-item"><div class="sec-icon ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div style="flex:1"><div class="sec-name">Email Verified</div><div class="sec-sub">kasun.perera@gmail.com</div></div><span class="pill ok"><span class="pill-dot"></span>Verified</span></div>
+            <div class="sec-item"><div class="sec-icon ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07"/><path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 17 12m-9 0a5 5 0 0 0 5 5"/></svg></div><div style="flex:1"><div class="sec-name">Phone Verified</div><div class="sec-sub">+94 77 123 4567</div></div><span class="pill ok"><span class="pill-dot"></span>Verified</span></div>
+            <div class="sec-item"><div class="sec-icon ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 4V2m8 2V2M3 10h18"/></svg></div><div style="flex:1"><div class="sec-name">NIC / Passport Verified</div><div class="sec-sub">Identity document verified on January 15, 2021</div></div><span class="pill ok"><span class="pill-dot"></span>Verified</span></div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="form-card-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+            <div><div class="form-card-title">Active Sessions</div><div class="form-card-sub">Devices currently signed in to your account</div></div>
+          </div>
+          <div class="form-card-body">
+            <div class="session-item">
+              <div class="session-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+              <div style="flex:1"><div style="font-size:13px;font-weight:500">Chrome on Windows 11</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Colombo, LK · Active now</div></div>
+              <span style="background:rgba(61,186,138,0.1);color:var(--success);border-radius:999px;font-size:10px;font-weight:600;padding:3px 9px">Current</span>
+            </div>
+            <div class="session-item">
+              <div class="session-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+              <div style="flex:1"><div style="font-size:13px;font-weight:500">Safari on iPhone 15</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Colombo, LK · 3 hours ago</div></div>
+              <button class="btn btn-danger btn-sm" onclick="showToast('Session revoked')">Revoke</button>
+            </div>
+            <div style="margin-top:14px">
+              <button class="btn btn-danger btn-sm" onclick="showToast('All other sessions signed out')">Sign out all other devices</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="danger-zone">
+          <div class="danger-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Danger Zone</div>
+          <div class="danger-desc">Deleting your account is permanent and irreversible. All your listings, messages, reviews and transaction history will be permanently removed. Your username cannot be recovered.</div>
+          <div style="display:flex;gap:10px">
+            <button class="btn btn-danger btn-sm" >📋 Download My Data</button>
+            <button class="btn btn-danger btn-sm" >⏸ Deactivate Account</button>
+            <button class="btn btn-danger btn-sm" >🗑 Delete Account</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ════════════════════════════════════ -->
+      <!-- TAB: NOTIFICATIONS                  -->
+      <!-- ════════════════════════════════════ -->
+      <div class="tab-panel" id="panel-notifications">
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="form-card-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+            <div><div class="form-card-title">Notification Channels</div><div class="form-card-sub">Where you want AutoMart to reach you</div></div>
+          </div>
+          <div class="form-card-body">
+            <div class="notif-channel"><div class="channel-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:500">Email</div><div style="font-size:11px;color:var(--t3)">kasun.perera@gmail.com</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="notif-channel"><div class="channel-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:500">Push Notifications</div><div style="font-size:11px;color:var(--t3)">Mobile &amp; Desktop browser</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="notif-channel"><div class="channel-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:500">SMS Alerts</div><div style="font-size:11px;color:var(--t3)">+94 77 123 4567</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="notif-channel"><div class="channel-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div style="flex:1"><div style="font-size:13px;font-weight:500">In-App Chat</div><div style="font-size:11px;color:var(--t3)">Messages &amp; enquiries</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="form-card-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+            <div><div class="form-card-title">Notification Preferences</div><div class="form-card-sub">Fine-tune what you hear about</div></div>
+          </div>
+          <div class="form-card-body">
+            <div class="toggle-row"><div class="toggle-info"><div class="t-name">New buyer enquiry</div><div class="t-sub">When someone sends a message about your listing</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="t-name">Listing approved / rejected</div><div class="t-sub">When an admin reviews your submitted listing</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="t-name">Price drop on saved cars</div><div class="t-sub">Alerts when cars in your watchlist drop in price</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="t-name">Test-drive request</div><div class="t-sub">Immediate notification when a buyer requests a drive</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="t-name">New review received</div><div class="t-sub">When a buyer leaves a rating or review on your profile</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="t-name">Weekly performance digest</div><div class="t-sub">Summary of your listing views, leads and engagement</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="t-name">Promotional offers</div><div class="t-sub">AutoMart deals, discount codes and platform news</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="t-name">Security alerts</div><div class="t-sub">Sign-ins from new devices and suspicious activity</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+
+        <div class="form-actions" style="border-top:none;margin-top:0">
+          <button class="btn btn-gold" onclick="showToast('Notification preferences saved!')">Save Preferences</button>
+          <button class="btn btn-outline">Reset to Default</button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg">Saved</span>
+</div>
+
+<script>
+// TAB NAVIGATION
+function setTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  const panel = document.getElementById('panel-' + name);
+  const tab = document.getElementById('tab-' + name);
+  if(panel) panel.classList.add('active');
+  if(tab) tab.classList.add('active');
+}
+function updateSbNav(el) {
+  document.querySelectorAll('.sb-nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+// TOAST
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg || 'Done';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+// ANIMATE profile completion bar on load
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const fill = document.querySelector('.complete-fill');
+    if(fill) fill.style.width = '82%';
+  }, 300);
+});
+</script>
+
+<script id="automart-premium-profile-real-sync">
+(function(){
+  'use strict';
+  const PROFILE_KEY='automartUserProfileRealV4';
+  const ADMIN_PROFILE_KEY='automartAdminProfileRealV2';
+  const SHARED_KEY='automartSharedMarketplaceDataV2';
+  const PANEL_KEY='automartAdminPanelStateV1';
+  const gmailRe=/^[a-z0-9._]+@gmail\.com$/;
+  const phoneRe=/^\d{10}$/;
+  const districts=['Colombo','Gampaha','Kalutara','Kandy','Matale','Nuwara Eliya','Galle','Matara','Hambantota','Jaffna','Kilinochchi','Mannar','Vavuniya','Mullaitivu','Batticaloa','Ampara','Trincomalee','Kurunegala','Puttalam','Anuradhapura','Polonnaruwa','Badulla','Monaragala','Ratnapura','Kegalle'];
+  const provinces=['Western Province','Central Province','Southern Province','Northern Province','Eastern Province','North Western Province','North Central Province','Uva Province','Sabaragamuwa Province'];
+  const districtProvince={Colombo:'Western Province',Gampaha:'Western Province',Kalutara:'Western Province',Kandy:'Central Province',Matale:'Central Province','Nuwara Eliya':'Central Province',Galle:'Southern Province',Matara:'Southern Province',Hambantota:'Southern Province',Jaffna:'Northern Province',Kilinochchi:'Northern Province',Mannar:'Northern Province',Vavuniya:'Northern Province',Mullaitivu:'Northern Province',Batticaloa:'Eastern Province',Ampara:'Eastern Province',Trincomalee:'Eastern Province',Kurunegala:'North Western Province',Puttalam:'North Western Province',Anuradhapura:'North Central Province',Polonnaruwa:'North Central Province',Badulla:'Uva Province',Monaragala:'Uva Province',Ratnapura:'Sabaragamuwa Province',Kegalle:'Sabaragamuwa Province'};
+  function read(k,f){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f));}catch{return f;}}
+  function write(k,v){localStorage.setItem(k,JSON.stringify(v));}
+  function initials(n){return String(n||'AutoMart User').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'AU'}
+  function toast(msg){ if(typeof showToast==='function') showToast(msg); else alert(msg); }
+  function inputByLabel(label){
+    const labels=[...document.querySelectorAll('.form-label')];
+    const lab=labels.find(l=>l.textContent.toLowerCase().includes(label.toLowerCase()));
+    return lab ? lab.parentElement.querySelector('input,select,textarea') : null;
+  }
+  function defaults(){
+    const admin=read(ADMIN_PROFILE_KEY,{});
+    return {
+      firstName:(admin.fullName||'Kasun Perera').split(' ')[0]||'Kasun',
+      lastName:(admin.fullName||'Kasun Perera').split(' ').slice(1).join(' ')||'Perera',
+      displayName:admin.username||'kasun_automart',
+      email:admin.email||'kasun.perera@gmail.com',
+      phone:(admin.phone||'0771234567').replace(/\D/g,'').slice(0,10),
+      whatsapp:(admin.phone||'0771234567').replace(/\D/g,'').slice(0,10),
+      bio:'Trusted AutoMart seller. Fully inspected vehicles, quick responses, and clear communication.',
+      province:'Western Province',
+      district:'Colombo',
+      city:'Colombo',
+      photo:admin.photo||''
+    };
+  }
+  function profile(){return Object.assign(defaults(),read(PROFILE_KEY,{}));}
+  function setAvatar(el,p){
+    if(!el)return;
+    if(p.photo){el.textContent=''; el.style.background='url("'+p.photo+'") center/cover';}
+    else {el.textContent=initials(p.firstName+' '+p.lastName); el.style.background='linear-gradient(135deg,#c9a84c,#8b6914)';}
+  }
+  function applyProfile(){
+    const p=profile(), name=(p.firstName+' '+p.lastName).trim();
+    setAvatar(document.getElementById('profileTopAvatar'),p);
+    setAvatar(document.getElementById('profileHeroAvatar'),p);
+    const heroName=document.getElementById('profileHeroName');
+    if(heroName){ const badge=heroName.querySelector('.verified-badge'); heroName.childNodes[0].nodeValue='\n          '+name+' '; if(badge&&!heroName.contains(badge)) heroName.appendChild(badge); }
+    const handle=document.getElementById('profileHeroHandle'); if(handle) handle.textContent='@'+(p.displayName||p.firstName).replace(/\s+/g,'_').toLowerCase()+' · Member since January 2021 · '+(p.city||p.district)+', Sri Lanka';
+    const inputs=[...document.querySelectorAll('.form-input,.form-select,.form-textarea')];
+    const first=inputByLabel('First Name'), last=inputByLabel('Last Name'), display=inputByLabel('Display Name'), email=inputByLabel('Email Address'), phone=inputByLabel('Phone Number'), wa=inputByLabel('WhatsApp'), bio=[...document.querySelectorAll('textarea')][0], province=inputByLabel('Province'), district=inputByLabel('District'), city=inputByLabel('City');
+    if(first)first.value=p.firstName; if(last)last.value=p.lastName; if(display)display.value=p.displayName; if(email)email.value=p.email; if(phone)phone.value=p.phone; if(wa)wa.value=p.whatsapp; if(bio)bio.value=p.bio; if(province)province.value=p.province; if(district)district.value=p.district; if(city)city.value=p.city;
+    renderListingsAndReviews();
+    publishShared();
+  }
+  function enhanceDistrictProvince(){
+    const prov=inputByLabel('Province'), dist=inputByLabel('District');
+    if(prov){prov.innerHTML=provinces.map(x=>'<option>'+x+'</option>').join(''); prov.setAttribute('data-searchable','true');}
+    if(dist){dist.innerHTML=districts.map(x=>'<option>'+x+'</option>').join(''); dist.setAttribute('data-searchable','true'); dist.onchange=()=>{if(prov)prov.value=districtProvince[dist.value]||prov.value;};}
+  }
+  function saveProfile(){
+    const p=profile(), first=inputByLabel('First Name'), last=inputByLabel('Last Name'), display=inputByLabel('Display Name'), email=inputByLabel('Email Address'), phone=inputByLabel('Phone Number'), wa=inputByLabel('WhatsApp'), bio=[...document.querySelectorAll('textarea')][0], province=inputByLabel('Province'), district=inputByLabel('District'), city=inputByLabel('City');
+    const next=Object.assign(p,{firstName:first?.value.trim()||'',lastName:last?.value.trim()||'',displayName:display?.value.trim()||'',email:(email?.value||'').toLowerCase().trim(),phone:(phone?.value||'').replace(/\D/g,'').slice(0,10),whatsapp:(wa?.value||'').replace(/\D/g,'').slice(0,10),bio:bio?.value.trim()||'',province:province?.value||'',district:district?.value||'',city:city?.value.trim()||''});
+    if(!next.firstName||!next.lastName||!next.displayName)return toast('Please fill required profile fields.');
+    if(!gmailRe.test(next.email))return toast('Enter a valid Gmail address.');
+    if(!phoneRe.test(next.phone))return toast('Phone must be exactly 10 digits.');
+    write(PROFILE_KEY,next);
+    write(ADMIN_PROFILE_KEY,Object.assign(read(ADMIN_PROFILE_KEY,{}),{fullName:(next.firstName+' '+next.lastName).trim(),username:next.displayName,email:next.email,phone:next.phone,photo:next.photo}));
+    applyProfile();
+    log('Profile updated: '+next.displayName);
+    toast('Changes saved successfully');
+  }
+  function log(msg){
+    const panel=read(PANEL_KEY,{logs:[]}); panel.logs=Array.isArray(panel.logs)?panel.logs:[]; panel.logs.unshift('['+new Date().toLocaleString()+'] '+msg); write(PANEL_KEY,panel);
+  }
+  function publishShared(){
+    const shared=read(SHARED_KEY,{});
+    shared.profile=profile();
+    shared.adminProfile=Object.assign(read(ADMIN_PROFILE_KEY,{}),{fullName:(profile().firstName+' '+profile().lastName).trim(),username:profile().displayName,email:profile().email,phone:profile().phone,photo:profile().photo});
+    shared.updatedAt=Date.now();
+    write(SHARED_KEY,shared);
+  }
+  function renderListingsAndReviews(){
+    const shared=read(SHARED_KEY,{listings:[],reviews:[]});
+    const listings=(shared.listings||[]).slice(0,4);
+    const reviews=(shared.reviews||[]).slice(0,5);
+    const grid=document.querySelector('#panel-listings .listing-grid');
+    if(grid && listings.length){
+      grid.innerHTML=listings.map(l=>'<div class="listing-card"><div class="listing-thumb" style="background:url('+ (l.image||'/assets/img/listings/suv-1.jpg') +') center/cover"><div class="listing-status"><span class="pill '+(l.status==='active'?'ok':'warn')+'"><span class="pill-dot"></span>'+(l.status||'Active')+'</span></div></div><div class="listing-info"><div class="listing-name">'+(l.make||'Vehicle')+' '+(l.model||'')+' '+(l.year||'')+'</div><div class="listing-meta">'+(l.location||'Colombo')+' · '+(l.mileage||'0 km')+' · '+(l.transmission||'Auto')+' · '+(l.fuel||'Petrol')+'</div><div class="listing-price">'+(l.price||'LKR 0')+'</div><div style="font-size:10px;color:var(--t3);margin-top:3px">'+(l.views||0)+' views · '+(l.enquiries||0)+' enquiries · '+(l.posted||'Today')+'</div><div class="listing-actions"><button class="btn btn-outline btn-sm" onclick="showToast(&quot;Opening editor…&quot;)">Edit</button><button class="btn btn-outline btn-sm" onclick="showToast(&quot;Listing boosted&quot;)">Boost</button><button class="btn btn-danger btn-sm" onclick="this.closest(&quot;.listing-card&quot;).remove();showToast(&quot;Listing removed&quot;)">Remove</button></div></div></div>').join('');
+    }
+    const reviewPanel=document.getElementById('panel-reviews');
+    if(reviewPanel && reviews.length){
+      const container=reviewPanel.querySelector('.form-card-body')||reviewPanel;
+      const existing=reviewPanel.querySelector('[data-real-reviews]');
+      if(existing) existing.remove();
+      container.insertAdjacentHTML('beforeend','<div data-real-reviews>'+reviews.map(r=>'<div class="review-item"><div class="review-top"><div class="reviewer-av" style="background:linear-gradient(135deg,var(--gold),#8b6914);color:#1a1200">'+initials(r.user||'User')+'</div><div><div style="font-size:13px;font-weight:500">'+(r.user||'AutoMart User')+' <span class="pill ok">Verified</span></div><div class="stars">★★★★★</div></div></div><div class="review-text">'+(r.text||'Great AutoMart experience.')+'</div></div>').join('')+'</div>');
+    }
+  }
+  function wire(){
+    enhanceDistrictProvince();
+    document.querySelectorAll('input[type=email]').forEach(i=>i.addEventListener('input',()=>i.value=i.value.toLowerCase().replace(/\s/g,'').replace(/[^a-z0-9._@]/g,'')));
+    document.querySelectorAll('input[type=tel]').forEach(i=>{i.setAttribute('maxlength','10');i.addEventListener('input',()=>i.value=i.value.replace(/\D/g,'').slice(0,10));});
+    document.querySelectorAll('.form-actions .btn-gold').forEach(btn=>{btn.onclick=(e)=>{e.preventDefault(); saveProfile();};});
+    const topSave=[...document.querySelectorAll('.hero-actions .btn-gold')][0]; if(topSave) topSave.onclick=(e)=>{e.preventDefault(); saveProfile();};
+    const file=document.getElementById('premiumProfilePhotoInput');
+    if(file)file.onchange=()=>{const f=file.files&&file.files[0]; if(!f)return; if(!f.type.startsWith('image/'))return toast('Please choose a valid image.'); const r=new FileReader(); r.onload=()=>{const p=Object.assign(profile(),{photo:r.result}); write(PROFILE_KEY,p); write(ADMIN_PROFILE_KEY,Object.assign(read(ADMIN_PROFILE_KEY,{}),{photo:r.result,fullName:(p.firstName+' '+p.lastName).trim(),username:p.displayName,email:p.email,phone:p.phone})); applyProfile(); log('Profile photo updated'); toast('Profile photo saved');}; r.readAsDataURL(f);};
+  }
+  window.addEventListener('storage',e=>{ if([PROFILE_KEY,ADMIN_PROFILE_KEY,SHARED_KEY,PANEL_KEY].includes(e.key)) applyProfile(); });
+  document.addEventListener('DOMContentLoaded',()=>{wire(); applyProfile();});
+})();
+</script>
+
+
+<script id="automart-profile-confirmation-actions">
+(function(){
+  const PROFILE_KEY='automartUserProfileRealV4';
+  const SHARED_KEY='automartSharedMarketplaceDataV2';
+  function read(k,f){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f));}catch{return f;}}
+  function write(k,v){localStorage.setItem(k,JSON.stringify(v));}
+  function toast(msg){if(typeof showToast==='function')showToast(msg);else alert(msg)}
+  function confirmSave(message,cb){ if(window.AutoMartConfirm) return window.AutoMartConfirm('Confirm Changes', message||'Do you want to save these changes?','Confirm Save',cb); if(confirm(message||'Do you want to save these changes?')) cb(); }
+  function confirmRemove(message,cb){ if(window.AutoMartConfirm) return window.AutoMartConfirm('Confirm Changes', message||'Do you want to remove this item?','Confirm',cb); if(confirm(message||'Do you want to remove this item?')) cb(); }
+  function log(msg){const shared=read(SHARED_KEY,{}); shared.activity=Array.isArray(shared.activity)?shared.activity:[]; shared.activity.unshift({text:msg,time:new Date().toLocaleString(),type:'profile'}); shared.updatedAt=Date.now(); write(SHARED_KEY,shared);}
+  function rewriteSaveButtons(){
+    document.querySelectorAll('.form-actions .btn-gold,.hero-actions .btn-gold').forEach(btn=>{
+      if(btn.dataset.realConfirm==='1')return; btn.dataset.realConfirm='1';
+      btn.onclick=function(e){e.preventDefault(); confirmSave('Do you want to save these changes?',()=>{ if(typeof saveProfile==='function') saveProfile(); else toast('Changes saved successfully'); log('Profile settings saved'); });};
+    });
+    document.querySelectorAll('.listing-actions .btn-danger').forEach(btn=>{ if(btn.dataset.realConfirm==='1')return; btn.dataset.realConfirm='1'; btn.onclick=function(e){e.preventDefault(); const card=btn.closest('.listing-card'); confirmRemove('Do you want to remove this listing?',()=>{card&&card.remove(); log('Listing removed from profile'); toast('Listing removed');});}; });
+    document.querySelectorAll('.session-item .btn-danger,.session-item .btn-outline').forEach(btn=>{ if(btn.dataset.sessionConfirm==='1')return; if(/revoke/i.test(btn.textContent)){btn.dataset.sessionConfirm='1';btn.onclick=function(e){e.preventDefault();confirmRemove('Do you want to revoke this session?',()=>{btn.closest('.session-item')?.remove();toast('Session revoked');log('Security session revoked')});};}});
+  }
+  function wireBanner(){ const b=document.getElementById('profileBannerBtn'); if(!b||b.dataset.real==='1')return; b.dataset.real='1'; b.onclick=function(e){e.preventDefault(); confirmSave('Do you want to save this banner change?',()=>{const p=read(PROFILE_KEY,{});p.bannerUpdatedAt=Date.now();write(PROFILE_KEY,p);toast('Banner saved');log('Profile banner changed');});};}
+  document.addEventListener('DOMContentLoaded',()=>{rewriteSaveButtons();wireBanner();setTimeout(rewriteSaveButtons,500);});
+})();
+</script>
+
+<script id="automart-profile-live-panels-js">
+(function(){
+ const NK='automartLiveNotificationsV1', MK='automartLiveMessagesV1';
+ function read(k,f){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f));}catch{return f}}
+ function write(k,v){localStorage.setItem(k,JSON.stringify(v))}
+ function seed(){if(!localStorage.getItem(NK))write(NK,[{id:'n1',title:'Wishlist price drop',body:'A saved vehicle has a new price.',time:'Now',read:false},{id:'n2',title:'Request update',body:'Your buyer request status changed.',time:'Today',read:false}]);if(!localStorage.getItem(MK))write(MK,[{id:'m1',from:'AutoMart Seller',body:'Vehicle inspection is available tomorrow.',time:'10:15',read:false}]);}
+ function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ function data(type){return read(type==='messages'?MK:NK,[])}
+ function save(type,items){write(type==='messages'?MK:NK,items);badges()}
+ function badges(){const n=data('notifications').filter(x=>!x.read).length,m=data('messages').filter(x=>!x.read).length;document.querySelectorAll('[data-notification-count]').forEach(e=>{e.textContent=n;e.classList.toggle('is-zero',!n)});document.querySelectorAll('[data-message-count]').forEach(e=>{e.textContent=m;e.classList.toggle('is-zero',!m)});}
+ function show(type){document.querySelectorAll('.live-panel').forEach(x=>x.remove());const items=data(type);const p=document.createElement('div');p.className='live-panel show';p.dataset.type=type;p.innerHTML='<div class="live-head"><strong>'+(type==='messages'?'Messages':'Notifications')+'</strong><button data-read>Mark as read</button></div>'+(items.length?items.map(x=>'<div class="live-item '+(x.read?'read':'')+'" data-id="'+esc(x.id)+'"><span class="live-dot"></span><div><b>'+esc(x.title||x.from)+'</b><p>'+esc(x.body)+'</p><p>'+esc(x.time||'')+'</p></div></div>').join(''):'<div class="live-empty">No '+type+' yet.</div>');document.body.appendChild(p);p.querySelector('[data-read]').onclick=()=>{save(type,items.map(x=>Object.assign({},x,{read:true})));show(type)};p.querySelectorAll('.live-item').forEach(el=>el.onclick=()=>{save(type,items.map(x=>x.id===el.dataset.id?Object.assign({},x,{read:true}):x));el.classList.add('read')});}
+ document.addEventListener('DOMContentLoaded',()=>{seed();badges();document.querySelectorAll('[data-live-panel-toggle]').forEach(b=>b.onclick=()=>show(b.dataset.livePanelToggle));});
+ window.addEventListener('storage',e=>{if([NK,MK].includes(e.key))badges()});
+})();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<script src="/assets/js/automart-shared-profile.js"></script>
+<script src="/assets/js/automart-location-plan-fix.js"></script>
+<script src="/assets/js/automart-profile-remaining-fixes.js"></script>
+
+<script id="automart-profile-photo-buttons-force-fix">
+(function(){
+  'use strict';
+
+  const PHOTO_KEYS = [
+    'automartMediaAvatarV1','automartMediaAvatarV2','automartProfilePhoto','automartAvatarCache',
+    'automartProfileAvatar','automartOldProfilePhoto','automartUserAvatar','profilePhoto',
+    'avatarPhoto','profileImage','avatarImage','userAvatar','photoURL','currentUserProfilePhoto'
+  ];
+  const STORE_KEYS = [
+    'automartCurrentProfileV2','automartUserProfileRealV4','automartBuyerProfileRealV1',
+    'automartAdminProfileRealV2','automartSettingsProfileV1','automartSettingsPremiumV4',
+    'automartPremiumSettingsV2','automartSharedMarketplaceDataV2'
+  ];
+
+  function read(k,f){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f));}catch{return f;}}
+  function write(k,v){localStorage.setItem(k,JSON.stringify(v));}
+  function initials(name){return String(name||'AutoMart User').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'AU';}
+  function toast(msg,type){if(window.AutoMartToast) window.AutoMartToast(msg,type||'success'); else console.log(msg);}
+  function popup(title,msg,ok,cb,icon){
+    if(window.AutoMartConfirm) return window.AutoMartConfirm(title,msg,ok,cb,icon||'✓');
+    if(cb) cb();
+  }
+  function stripPhoto(o){
+    if(!o || typeof o !== 'object') return o;
+    ['photo','photoRef','profilePhoto','profilePhotoRef','profileImage','profileImageRef','avatar','avatarRef','avatarImage','photoURL','photoUrl','profilePicture','profilePictureRef','profilePhotoBase64','avatarBase64','userPhoto','userPhotoRef','imageUrl'].forEach(k=>delete o[k]);
+    Object.keys(o).forEach(k=>{
+      if(o[k] && typeof o[k] === 'object') stripPhoto(o[k]);
+      if(typeof o[k] === 'string' && o[k].startsWith('data:image') && /photo|avatar|profile|image/i.test(k)) delete o[k];
+    });
+    return o;
+  }
+  function hardClear(){
+    if(window.AutoMartHardClearProfilePhoto) {
+      try { window.AutoMartHardClearProfilePhoto(); } catch(e) {}
+    }
+    PHOTO_KEYS.forEach(k=>{try{localStorage.removeItem(k);sessionStorage.removeItem(k);}catch(e){}});
+    STORE_KEYS.forEach(k=>{
+      const v=read(k,null);
+      if(!v || typeof v !== 'object') return;
+      const cleaned=stripPhoto(JSON.parse(JSON.stringify(v)));
+      cleaned.photoRemoved=true;
+      cleaned.profilePhotoRemoved=true;
+      cleaned.profilePhotoVersion=Date.now();
+      if(cleaned.profile && typeof cleaned.profile==='object'){
+        cleaned.profile.photoRemoved=true;
+        cleaned.profile.profilePhotoRemoved=true;
+        cleaned.profile.profilePhotoVersion=Date.now();
+      }
+      if(cleaned.activeProfile && typeof cleaned.activeProfile==='object'){
+        cleaned.activeProfile.photoRemoved=true;
+        cleaned.activeProfile.profilePhotoRemoved=true;
+        cleaned.activeProfile.profilePhotoVersion=Date.now();
+      }
+      try{write(k,cleaned);}catch(e){}
+    });
+  }
+  function applyInitials(){
+    const profile = Object.assign({}, read('automartCurrentProfileV2',{}), read('automartUserProfileRealV4',{}), read('automartSettingsProfileV1',{}));
+    const name = profile.fullName || [profile.firstName, profile.lastName].filter(Boolean).join(' ') || profile.displayName || 'AutoMart User';
+    document.querySelectorAll('#globalProfileAvatar,.profile-avatar,.tb-av,.avatar,.avatar-inner,.settings-avatar,.avatar-preview,#adminProfilePhoto,.profile-avatar-lg').forEach(el=>{
+      el.classList.remove('has-photo');
+      el.style.removeProperty('--automart-avatar-photo');
+      el.style.removeProperty('--avatar-photo');
+      el.style.backgroundImage='';
+      el.textContent=initials(name);
+    });
+  }
+  function compress(file){
+    return new Promise((resolve,reject)=>{
+      if(!file || !file.type.startsWith('image/')) return reject(new Error('Please choose a valid image file.'));
+      const reader=new FileReader();
+      reader.onerror=()=>reject(new Error('Could not read image.'));
+      reader.onload=()=>{
+        const img=new Image();
+        img.onerror=()=>reject(new Error('Could not load image.'));
+        img.onload=()=>{
+          const max=360, quality=.72;
+          let w=img.width,h=img.height;
+          const ratio=Math.min(max/w,max/h,1);
+          w=Math.round(w*ratio); h=Math.round(h*ratio);
+          const canvas=document.createElement('canvas');
+          canvas.width=w; canvas.height=h;
+          canvas.getContext('2d').drawImage(img,0,0,w,h);
+          resolve(canvas.toDataURL('image/jpeg',quality));
+        };
+        img.src=reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  function pickAndSave(){
+    const input=document.createElement('input');
+    input.type='file';
+    input.accept='image/png,image/jpeg,image/webp,image/*';
+    input.style.display='none';
+    document.body.appendChild(input);
+    input.onchange=async()=>{
+      const file=input.files && input.files[0];
+      input.remove();
+      if(!file) return;
+      try{
+        const data=await compress(file);
+        popup('Confirm Changes','Do you want to save this profile picture?','Confirm',()=>{
+          hardClear(); // delete old first photo before new save
+          localStorage.setItem('automartMediaAvatarV2', data);
+          localStorage.setItem('automartMediaAvatarV1', data);
+          const light={photoRef:'automartMediaAvatarV2',profilePhotoRef:'automartMediaAvatarV2',photoRemoved:false,profilePhotoRemoved:false,profilePhotoVersion:Date.now()};
+          STORE_KEYS.forEach(k=>{
+            const v=stripPhoto(read(k,{})) || {};
+            if(k==='automartSettingsPremiumV4'){
+              v.profile=Object.assign(stripPhoto(v.profile||{}), light);
+            }else if(k==='automartSharedMarketplaceDataV2'){
+              v.activeProfile=Object.assign(stripPhoto(v.activeProfile||{}), light);
+              v.profile=Object.assign(stripPhoto(v.profile||{}), light);
+              v.buyerProfile=Object.assign(stripPhoto(v.buyerProfile||{}), light);
+              v.updatedAt=Date.now();
+            }else{
+              Object.assign(v, light);
+            }
+            try{write(k,v);}catch(e){}
+          });
+          document.querySelectorAll('#globalProfileAvatar,.profile-avatar,.tb-av,.avatar,.avatar-inner,.settings-avatar,.avatar-preview,#adminProfilePhoto,.profile-avatar-lg').forEach(el=>{
+            el.classList.add('has-photo');
+            el.style.setProperty('--automart-avatar-photo','url("'+data+'")');
+            el.style.setProperty('--avatar-photo','url("'+data+'")');
+            el.style.backgroundImage='url("'+data+'")';
+            el.style.backgroundSize='cover';
+            el.style.backgroundPosition='center';
+            el.textContent='';
+          });
+          window.dispatchEvent(new StorageEvent('storage',{key:'automartMediaAvatarV2',newValue:data}));
+          toast('Profile picture saved successfully');
+        },'📷');
+      }catch(err){toast(err.message||'Upload failed','error');}
+    };
+    input.click();
+  }
+  function removePhoto(){
+    popup('Confirm Changes','Are you sure you want to remove your profile picture?','Confirm',()=>{
+      hardClear();
+      applyInitials();
+      window.dispatchEvent(new StorageEvent('storage',{key:'automartCurrentProfileV2',newValue:'{}'}));
+      toast('Profile picture removed successfully');
+    },'🗑️');
+  }
+
+  // One-time cleanup of old added profile pictures when this fixed version first loads.
+  try{
+    if(!localStorage.getItem('automartSettingsOldPhotoClearedV2')){
+      hardClear();
+      localStorage.setItem('automartSettingsOldPhotoClearedV2','done');
+      if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyInitials);
+      else applyInitials();
+    }
+  }catch(e){}
+
+  // Capture BEFORE the old settings script, so these buttons always work.
+  document.addEventListener('click',function(e){
+    const btn=e.target.closest('[data-settings-action],button');
+    if(!btn) return;
+    const action=(btn.getAttribute('data-settings-action')||'').toLowerCase();
+    const text=(btn.textContent||btn.getAttribute('title')||btn.getAttribute('aria-label')||'').trim().toLowerCase();
+    if(action==='change-photo' || text.includes('change photo')){
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      pickAndSave();
+      return;
+    }
+    if(action==='remove-photo' || text.includes('remove photo')){
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      removePhoto();
+      return;
+    }
+  },true);
+})();
+</script>
+
+</body>
+</html>

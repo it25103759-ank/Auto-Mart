@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoMart — Settings</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-page:    #0d0f14;
+    --bg-panel:   #13161e;
+    --bg-card:    #1a1e29;
+    --bg-input:   #1f2433;
+    --border:     rgba(255,255,255,0.07);
+    --border-h:   rgba(255,255,255,0.14);
+    --gold:       #7EC820;
+    --gold-light: #A0E040;
+    --gold-dim:   rgba(126,200,32,0.12);
+    --text-1:     #f0ede6;
+    --text-2:     #9a9898;
+    --text-3:     #5c5b5b;
+    --success:    #3dba8a;
+    --danger:     #e25a5a;
+    --sidebar-w:  260px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg-page); color: var(--text-1); min-height: 100vh; display: flex; flex-direction: column; }
+  .topbar { height: 60px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 28px; gap: 16px; position: sticky; top: 0; z-index: 100; }
+  .logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; letter-spacing: 0.03em; color: var(--gold); display: flex; align-items: center; gap: 8px; }
+  .logo-icon { width: 128px; height: 46px; border: 1.5px solid var(--gold); border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 4px 8px; font-size: 15px; background: rgba(8,18,14,.62); box-shadow: 0 0 18px rgba(204,255,102,.12); }
+  .topbar-divider { flex: 1; }
+  .topbar-breadcrumb { font-size: 13px; color: var(--text-3); display: flex; align-items: center; gap: 6px; }
+  .topbar-breadcrumb span { color: var(--text-2); }
+  .avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #7EC820 0%, #8b6914 100%); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #1a1200; cursor: pointer; border: 2px solid transparent; transition: border-color .2s; }
+  .avatar:hover { border-color: var(--gold); }
+  .shell { display: flex; flex: 1; }
+  .sidebar { width: var(--sidebar-w); background: var(--bg-panel); border-right: 1px solid var(--border); padding: 28px 0; flex-shrink: 0; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; }
+  .sidebar-section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); padding: 0 24px 10px; margin-top: 8px; }
+  .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 11px 24px; cursor: pointer; transition: background .15s, color .15s; font-size: 14px; font-weight: 400; color: var(--text-2); border-left: 2px solid transparent; }
+  .sidebar-item:hover { background: rgba(255,255,255,0.03); color: var(--text-1); }
+  .sidebar-item.active { background: var(--gold-dim); color: var(--gold-light); border-left-color: var(--gold); font-weight: 500; }
+  .sidebar-item i { font-size: 17px; width: 20px; text-align: center; }
+  .sidebar-badge { margin-left: auto; background: var(--danger); color: #fff; font-size: 10px; font-weight: 600; border-radius: 20px; padding: 2px 6px; min-width: 18px; text-align: center; }
+  .content { flex: 1; padding: 36px 48px; max-width: 860px; }
+  .content-panel { display: none; }
+  .content-panel.active { display: block; }
+  .page-header { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+  .page-header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .page-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 500; color: var(--text-1); line-height: 1.2; }
+  .page-subtitle { margin-top: 6px; font-size: 14px; color: var(--text-2); font-weight: 300; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 20px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all .18s; white-space: nowrap; }
+  .btn-primary { background: var(--gold); color: #1a1200; }
+  .btn-primary:hover { background: var(--gold-light); }
+  .btn-outline { background: transparent; border: 1px solid var(--border-h); color: var(--text-2); }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold-light); }
+  .btn-danger { background: transparent; border: 1px solid rgba(226,90,90,0.3); color: var(--danger); }
+  .btn-danger:hover { background: rgba(226,90,90,0.08); }
+  .btn-sm { padding: 6px 14px; font-size: 12px; }
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
+  .card-header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .card-header-icon { width: 36px; height: 36px; border-radius: 9px; background: var(--gold-dim); display: flex; align-items: center; justify-content: center; font-size: 17px; color: var(--gold); }
+  .card-title { font-size: 15px; font-weight: 500; color: var(--text-1); }
+  .card-desc { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+  .card-body { padding: 24px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group.span2 { grid-column: span 2; }
+  .form-label { font-size: 12px; font-weight: 500; color: var(--text-2); letter-spacing: 0.02em; }
+  .form-label span { color: var(--danger); margin-left: 3px; }
+  .form-input, .form-select, .form-textarea { background: var(--bg-input); border: 1px solid var(--border); border-radius: 9px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text-1); width: 100%; outline: none; transition: border-color .18s, box-shadow .18s; -webkit-appearance: none; }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-dim); }
+  .form-input::placeholder { color: var(--text-3); }
+  .form-select { cursor: pointer; }
+  .form-textarea { resize: vertical; min-height: 90px; }
+  .form-hint { font-size: 11px; color: var(--text-3); }
+  .form-actions { display: flex; align-items: center; gap: 12px; margin-top: 8px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--border); }
+  .toggle-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .toggle-info { flex: 1; padding-right: 24px; }
+  .toggle-name { font-size: 14px; font-weight: 500; color: var(--text-1); }
+  .toggle-detail { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+  .toggle { width: 44px; height: 24px; background: var(--bg-input); border: 1px solid var(--border-h); border-radius: 999px; cursor: pointer; position: relative; flex-shrink: 0; transition: background .2s, border-color .2s; }
+  .toggle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--text-3); transition: transform .2s, background .2s; }
+  .toggle.on { background: var(--gold); border-color: var(--gold); }
+  .toggle.on::after { transform: translateX(20px); background: #1a1200; }
+  .profile-avatar-block { display: flex; align-items: center; gap: 20px; padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
+  .profile-avatar-lg { width: 76px; height: 76px; border-radius: 50%; background: linear-gradient(135deg, #7EC820 0%, #8b6914 100%); display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 600; color: #1a1200; border: 3px solid var(--bg-card); box-shadow: 0 0 0 2px var(--gold); flex-shrink: 0; font-family: 'Playfair Display', serif; }
+  .profile-meta h3 { font-size: 16px; font-weight: 500; }
+  .profile-meta p { font-size: 13px; color: var(--text-3); margin-top: 4px; }
+  .badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(61,186,138,0.12); color: var(--success); border-radius: 999px; font-size: 11px; font-weight: 500; padding: 3px 10px; margin-top: 8px; }
+  .stat-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+  .stat-card { background: var(--bg-input); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 500; color: var(--gold-light); line-height: 1; }
+  .stat-lbl { font-size: 12px; color: var(--text-3); margin-top: 6px; }
+  .plan-card { background: var(--bg-input); border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 18px; margin-bottom: 20px; }
+  .plan-icon { width: 48px; height: 48px; background: var(--gold-dim); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--gold); flex-shrink: 0; }
+  .plan-badge { display: inline-block; background: var(--gold-dim); color: var(--gold-light); border: 1px solid rgba(126,200,32,0.2); border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; padding: 3px 10px; margin-bottom: 4px; }
+  .plan-name { font-size: 16px; font-weight: 500; }
+  .plan-sub { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+  .security-item { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .security-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .security-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--bg-input); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--text-2); flex-shrink: 0; }
+  .security-icon.ok { background: rgba(61,186,138,0.1); color: var(--success); }
+  .security-icon.warn { background: rgba(239,159,39,0.1); color: #ef9f27; }
+  .security-name { font-size: 14px; font-weight: 500; }
+  .security-sub { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+  .security-action { margin-left: auto; }
+  .status-pill { display: inline-flex; align-items: center; gap: 5px; border-radius: 999px; font-size: 11px; font-weight: 600; padding: 4px 10px; }
+  .status-pill.ok { background: rgba(61,186,138,0.1); color: var(--success); }
+  .status-pill.warn { background: rgba(239,159,39,0.1); color: #ef9f27; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .payment-card { background: var(--bg-input); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 12px; transition: border-color .18s; }
+  .payment-card:hover { border-color: var(--border-h); }
+  .payment-card.selected { border-color: var(--gold); }
+  .card-chip { width: 46px; height: 32px; border-radius: 6px; background: linear-gradient(135deg, #7EC820, #8b6914); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #1a1200; }
+  .card-num { font-size: 14px; font-weight: 500; }
+  .card-exp { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+  .theme-option { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: border-color .18s; flex: 1; }
+  .theme-option:hover { border-color: var(--border-h); }
+  .theme-option.selected { border-color: var(--gold); }
+  .theme-preview { height: 80px; display: flex; }
+  .theme-option-name { padding: 10px 14px; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: space-between; background: var(--bg-input); }
+  .theme-check { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--border-h); display: flex; align-items: center; justify-content: center; font-size: 11px; }
+  .theme-option.selected .theme-check { background: var(--gold); border-color: var(--gold); color: #1a1200; }
+  .notif-channel { display: flex; align-items: center; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--border); }
+  .notif-channel:last-child { border-bottom: none; }
+  .channel-icon { width: 36px; height: 36px; border-radius: 9px; background: var(--bg-input); display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--text-2); flex-shrink: 0; }
+  .channel-name { font-size: 14px; font-weight: 500; flex: 1; }
+  .channel-sub { font-size: 12px; color: var(--text-3); }
+  .danger-zone { border: 1px solid rgba(226,90,90,0.2); border-radius: 14px; padding: 20px 24px; background: rgba(226,90,90,0.04); margin-bottom: 20px; }
+  .danger-zone-title { font-size: 14px; font-weight: 500; color: var(--danger); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .danger-zone-desc { font-size: 13px; color: var(--text-3); margin-bottom: 14px; }
+  .toast { position: fixed; bottom: 28px; right: 28px; background: var(--success); color: #0a2e20; border-radius: 10px; padding: 12px 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(10px); transition: opacity .3s, transform .3s; pointer-events: none; z-index: 999; }
+  .toast.show { opacity: 1; transform: none; }
+  ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--text-3); border-radius: 2px; }
+
+  /* AutoMart project integration upgrade */
+  .topbar .back-link { color: var(--text-2); text-decoration: none; font-size: 13px; border: 1px solid var(--border); padding: 7px 12px; border-radius: 999px; transition: .18s; }
+  .topbar .back-link:hover { color: var(--gold-light); border-color: var(--gold); background: var(--gold-dim); }
+  .mobile-menu-btn { display:none; background:var(--bg-input); border:1px solid var(--border); color:var(--gold-light); border-radius:8px; width:38px; height:38px; cursor:pointer; }
+  .settings-overlay { display:none; position:fixed; inset:60px 0 0; background:rgba(0,0,0,.45); z-index:80; }
+  .settings-overlay.show { display:block; }
+  .content { width:100%; }
+  .content-panel { animation: settingsFade .26s ease both; }
+  @keyframes settingsFade { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+  .card, .stat-card, .plan-card, .payment-card, .danger-zone { transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+  .card:hover, .stat-card:hover, .plan-card:hover, .payment-card:hover { transform: translateY(-2px); border-color: rgba(126,200,32,.24); box-shadow: 0 18px 46px rgba(0,0,0,.22); }
+  .btn-primary { box-shadow: 0 10px 26px rgba(126,200,32,.18); }
+  @media(max-width:980px){
+    .mobile-menu-btn{display:inline-flex;align-items:center;justify-content:center;}
+    .shell{display:block;}
+    .sidebar{position:fixed;left:0;top:60px;bottom:0;height:auto;z-index:90;transform:translateX(-105%);transition:transform .25s ease;box-shadow:20px 0 60px rgba(0,0,0,.35);}
+    .sidebar.open{transform:translateX(0);}
+    .content{max-width:none;padding:28px 22px;}
+    .topbar{padding:0 16px;}
+    .topbar-breadcrumb{display:none;}
+    .topbar .back-link{display:none;}
+  }
+  @media(max-width:680px){
+    .content{padding:22px 14px;}
+    .page-header-top,.plan-card,.profile-avatar-block,.security-item,.payment-card{align-items:flex-start;flex-direction:column;}
+    .form-grid,.stat-strip{grid-template-columns:1fr;}
+    .form-group.span2{grid-column:span 1;}
+    .theme-preview{height:54px;}
+    .card-body,.card-header{padding:18px;}
+    .page-title{font-size:24px;}
+    .theme-option{min-width:0;}
+  }
+
+
+  /* Settings fixes: validation states, premium modals, theme modes */
+  .form-input.valid { border-color: var(--success) !important; box-shadow: 0 0 0 3px rgba(61,186,138,.12) !important; }
+  .form-input.invalid { border-color: var(--danger) !important; box-shadow: 0 0 0 3px rgba(226,90,90,.12) !important; }
+  .field-message { min-height: 15px; margin-top: 2px; font-size: 11px; color: var(--text-3); }
+  .field-message.error { color: #ff9a9a; }
+  .field-message.success { color: var(--success); }
+  .settings-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.68); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+  .settings-modal-overlay.show { display: flex; }
+  .settings-modal { width: min(100%, 520px); max-height: min(90vh, 760px); overflow: auto; background: linear-gradient(180deg, rgba(26,30,41,.98), rgba(13,15,20,.98)); border: 1px solid rgba(126,200,32,.24); border-radius: 18px; box-shadow: 0 28px 90px rgba(0,0,0,.55), 0 0 40px rgba(126,200,32,.08); padding: 24px; animation: modalUp .22s ease both; }
+  @keyframes modalUp { from { opacity: 0; transform: translateY(18px) scale(.98); } to { opacity: 1; transform: none; } }
+  .settings-modal h3 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 8px; }
+  .settings-modal p { color: var(--text-2); font-size: 13px; line-height: 1.55; margin-bottom: 18px; }
+  .settings-modal .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); }
+  .plan-options { display: grid; gap: 12px; }
+  .plan-option { border: 1px solid var(--border); background: var(--bg-input); border-radius: 14px; padding: 16px; cursor: pointer; transition: border-color .2s, transform .2s, background .2s; }
+  .plan-option:hover { transform: translateY(-2px); border-color: var(--gold); }
+  .plan-option.selected { border-color: var(--gold); background: var(--gold-dim); }
+  .plan-option strong { display:block; color: var(--text-1); font-size: 15px; }
+  .plan-option small { display:block; color: var(--text-3); margin-top: 4px; }
+  body.theme-light { --bg-page:#f5f7f2; --bg-panel:#ffffff; --bg-card:#ffffff; --bg-input:#eef3ea; --border:rgba(20,40,20,.12); --border-h:rgba(126,200,32,.42); --text-1:#111827; --text-2:#53605b; --text-3:#7b8782; }
+  body.theme-system { --bg-page:#070a10; --bg-panel:#0d1119; --bg-card:#111827; --bg-input:#182233; --border:rgba(160,224,64,.10); --border-h:rgba(160,224,64,.25); --text-1:#f4f8ff; --text-2:#a5b4c3; --text-3:#607080; }
+  @media(max-width: 720px){ .settings-modal { padding:18px; } .settings-modal .modal-actions { flex-direction:column-reverse; } .settings-modal .modal-actions .btn { justify-content:center; } }
+
+
+/* Settings final polish: real logo icon, validation, faster compact loader support */
+.logo-icon img{width:100%;height:100%;object-fit:contain;border-radius:8px;display:block;}
+.logo span{display:inline-block;color:var(--gold);font-family:'Playfair Display',serif;font-weight:600;}
+.form-input.valid,.form-input.is-valid{border-color:var(--success)!important;box-shadow:0 0 0 3px rgba(61,186,138,.14)!important;}
+.form-input.invalid,.form-input.is-invalid{border-color:var(--danger)!important;box-shadow:0 0 0 3px rgba(226,90,90,.14)!important;}
+
+</style>
+
+<style id="settings-green-polish">
+  body { background: radial-gradient(circle at top right, rgba(126,200,32,.10), transparent 32%), var(--bg-page); }
+  .topbar, .sidebar, .card, .plan-card, .payment-card, .danger-zone { backdrop-filter: blur(14px); }
+  .form-input.is-valid, .form-select.is-valid { border-color: #7EC820 !important; box-shadow: 0 0 0 3px rgba(126,200,32,.12); }
+  .form-input.is-invalid, .form-select.is-invalid { border-color: #e25a5a !important; box-shadow: 0 0 0 3px rgba(226,90,90,.12); }
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.58); display:none; align-items:center; justify-content:center; z-index:1000; padding:20px; }
+  .modal-overlay.show { display:flex; }
+  .confirm-modal { width:min(100%,420px); background:#13161e; border:1px solid rgba(226,90,90,.28); border-top:3px solid #e25a5a; border-radius:18px; padding:28px; box-shadow:0 30px 90px rgba(0,0,0,.45); text-align:center; animation:settingsFade .25s ease both; }
+  .confirm-modal h3 { font-size:20px; margin-bottom:8px; }
+  .confirm-modal p { color:var(--text-2); font-size:13px; line-height:1.6; margin-bottom:20px; }
+  .confirm-actions { display:flex; gap:10px; }
+  .confirm-actions .btn { flex:1; justify-content:center; }
+  @media(max-width:680px){ .confirm-actions{flex-direction:column;} .content{max-width:none;} table{display:block;overflow-x:auto;} }
+
+  /* Settings fixes: validation states, premium modals, theme modes */
+  .form-input.valid { border-color: var(--success) !important; box-shadow: 0 0 0 3px rgba(61,186,138,.12) !important; }
+  .form-input.invalid { border-color: var(--danger) !important; box-shadow: 0 0 0 3px rgba(226,90,90,.12) !important; }
+  .field-message { min-height: 15px; margin-top: 2px; font-size: 11px; color: var(--text-3); }
+  .field-message.error { color: #ff9a9a; }
+  .field-message.success { color: var(--success); }
+  .settings-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.68); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+  .settings-modal-overlay.show { display: flex; }
+  .settings-modal { width: min(100%, 520px); max-height: min(90vh, 760px); overflow: auto; background: linear-gradient(180deg, rgba(26,30,41,.98), rgba(13,15,20,.98)); border: 1px solid rgba(126,200,32,.24); border-radius: 18px; box-shadow: 0 28px 90px rgba(0,0,0,.55), 0 0 40px rgba(126,200,32,.08); padding: 24px; animation: modalUp .22s ease both; }
+  @keyframes modalUp { from { opacity: 0; transform: translateY(18px) scale(.98); } to { opacity: 1; transform: none; } }
+  .settings-modal h3 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 8px; }
+  .settings-modal p { color: var(--text-2); font-size: 13px; line-height: 1.55; margin-bottom: 18px; }
+  .settings-modal .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); }
+  .plan-options { display: grid; gap: 12px; }
+  .plan-option { border: 1px solid var(--border); background: var(--bg-input); border-radius: 14px; padding: 16px; cursor: pointer; transition: border-color .2s, transform .2s, background .2s; }
+  .plan-option:hover { transform: translateY(-2px); border-color: var(--gold); }
+  .plan-option.selected { border-color: var(--gold); background: var(--gold-dim); }
+  .plan-option strong { display:block; color: var(--text-1); font-size: 15px; }
+  .plan-option small { display:block; color: var(--text-3); margin-top: 4px; }
+  body.theme-light { --bg-page:#f5f7f2; --bg-panel:#ffffff; --bg-card:#ffffff; --bg-input:#eef3ea; --border:rgba(20,40,20,.12); --border-h:rgba(126,200,32,.42); --text-1:#111827; --text-2:#53605b; --text-3:#7b8782; }
+  body.theme-system { --bg-page:#070a10; --bg-panel:#0d1119; --bg-card:#111827; --bg-input:#182233; --border:rgba(160,224,64,.10); --border-h:rgba(160,224,64,.25); --text-1:#f4f8ff; --text-2:#a5b4c3; --text-3:#607080; }
+  @media(max-width: 720px){ .settings-modal { padding:18px; } .settings-modal .modal-actions { flex-direction:column-reverse; } .settings-modal .modal-actions .btn { justify-content:center; } }
+
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="mobile-menu-btn" id="settingsMenuBtn" type="button" aria-label="Open settings menu">☰</button>
+  <a class="logo" href="/" aria-label="Go to AutoMart home" style="text-decoration:none;">
+    <div class="logo-icon"><img src="/assets/img/full-project-logo.png" alt="AutoMart logo"></div>
+    <span>AutoMart</span>
+  </a>
+  <div class="topbar-divider"></div>
+  <a class="back-link" href="/">← Marketplace</a>
+  <div class="topbar-breadcrumb">
+    Dashboard
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    <span>Settings</span>
+  </div>
+  <div style="width:1px;height:20px;background:var(--border);margin:0 12px;"></div>
+  <div class="avatar">KP</div>
+</header>
+
+<div class="settings-overlay" id="settingsOverlay"></div>
+<div class="shell">
+  <nav class="sidebar">
+    <div class="sidebar-section-label">Account</div>
+    <div class="sidebar-item active" data-panel="profile">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Profile
+    </div>
+    <div class="sidebar-item" data-panel="listings">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
+      My Listings
+      <span class="sidebar-badge">4</span>
+    </div>
+    <div class="sidebar-item" data-panel="subscription">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Subscription
+    </div>
+    <div class="sidebar-section-label" style="margin-top:12px;">Preferences</div>
+    <div class="sidebar-item" data-panel="notifications">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Notifications
+    </div>
+    <div class="sidebar-item" data-panel="appearance">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      Appearance
+    </div>
+    <div class="sidebar-section-label" style="margin-top:12px;">Security</div>
+    <div class="sidebar-item" data-panel="security">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Security
+    </div>
+    <div class="sidebar-item" data-panel="payments">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="3"/><path d="M1 10h22"/></svg>
+      Payments
+    </div>
+    <div class="sidebar-item" data-panel="privacy">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Privacy
+    </div>
+  </nav>
+
+  <main class="content">
+
+    <!-- PROFILE -->
+    <div class="content-panel active" id="panel-profile">
+      <div class="page-header">
+        <h1 class="page-title">Profile Settings</h1>
+        <p class="page-subtitle">Manage your public identity on AutoMart</p>
+      </div>
+      <div class="stat-strip">
+        <div class="stat-card"><div class="stat-num">12</div><div class="stat-lbl">Active Listings</div></div>
+        <div class="stat-card"><div class="stat-num">98%</div><div class="stat-lbl">Response Rate</div></div>
+        <div class="stat-card"><div class="stat-num">4.9★</div><div class="stat-lbl">Seller Rating</div></div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="profile-avatar-block">
+            <div class="profile-avatar-lg settings-avatar" data-profile-avatar>KP</div>
+            <div class="profile-meta">
+              <h3>Kasun Perera</h3>
+              <p>kasun.perera@gmail.com · Member since 2021</p>
+              <div class="badge">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Verified Seller
+              </div>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:10px;">
+              <button class="btn btn-outline btn-sm" type="button" data-settings-action="change-photo">Change Photo</button><input type="file" id="profilePhotoInput" accept=".jpg, .jpeg, .png" style="display:none">
+              <button class="btn btn-outline btn-sm" type="button" data-settings-action="remove-photo">Remove Photo</button>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">First Name <span>*</span></label><input type="text" class="form-input" name="firstName" data-profile-field="firstName" value="Kasun"/></div>
+            <div class="form-group"><label class="form-label">Last Name <span>*</span></label><input type="text" class="form-input" name="lastName" data-profile-field="lastName" value="Perera"/></div>
+            <div class="form-group"><label class="form-label">Display Name</label><input type="text" class="form-input" name="displayName" data-profile-field="displayName" value="kasun_automart"/><span class="form-hint">Visible on your listings and public profile</span></div>
+            <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input" name="phone" data-profile-field="phone" value="0771234567" placeholder="Enter 10-digit mobile number" inputmode="numeric" maxlength="10" data-mobile-input/></div>
+            <div class="form-group span2"><label class="form-label">Email Address</label><input type="email" class="form-input" name="email" data-profile-field="email" value="kasun.perera@gmail.com" placeholder="Enter your Gmail address" data-gmail-input/></div>
+            <div class="form-group"><label class="form-label">City / District</label><select class="form-select" name="city" data-profile-field="city" data-district-select title="Start typing to search districts"><option value="Colombo" selected>Colombo</option><option value="Gampaha">Gampaha</option><option value="Kalutara">Kalutara</option><option value="Kandy">Kandy</option><option value="Matale">Matale</option><option value="Nuwara Eliya">Nuwara Eliya</option><option value="Galle">Galle</option><option value="Matara">Matara</option><option value="Hambantota">Hambantota</option><option value="Jaffna">Jaffna</option><option value="Kilinochchi">Kilinochchi</option><option value="Mannar">Mannar</option><option value="Vavuniya">Vavuniya</option><option value="Mullaitivu">Mullaitivu</option><option value="Batticaloa">Batticaloa</option><option value="Ampara">Ampara</option><option value="Trincomalee">Trincomalee</option><option value="Kurunegala">Kurunegala</option><option value="Puttalam">Puttalam</option><option value="Anuradhapura">Anuradhapura</option><option value="Polonnaruwa">Polonnaruwa</option><option value="Badulla">Badulla</option><option value="Monaragala">Monaragala</option><option value="Ratnapura">Ratnapura</option><option value="Kegalle">Kegalle</option></select><span class="form-hint">Type the first letters to search districts.</span></div>
+            <div class="form-group"><label class="form-label">Province</label><select class="form-select" name="province" data-profile-field="province" data-province-select title="Province auto-selects from district"><option value="Western Province" selected>Western Province</option><option value="Central Province">Central Province</option><option value="Southern Province">Southern Province</option><option value="Northern Province">Northern Province</option><option value="Eastern Province">Eastern Province</option><option value="North Western Province">North Western Province</option><option value="North Central Province">North Central Province</option><option value="Uva Province">Uva Province</option><option value="Sabaragamuwa Province">Sabaragamuwa Province</option></select><span class="form-hint">Auto-selected from selected district.</span></div>
+            <div class="form-group span2"><label class="form-label">Bio</label><textarea class="form-textarea" name="bio" data-profile-field="bio">Trusted seller with 3+ years on AutoMart. Specialising in Japanese used cars. All vehicles fully inspected.</textarea></div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" type="button" data-settings-action="save-profile">Save Changes</button>
+            <button class="btn btn-outline" type="button" data-settings-action="discard">Discard</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTINGS -->
+    <div class="content-panel" id="panel-listings">
+      <div class="page-header">
+        <div class="page-header-top">
+          <div><h1 class="page-title">Listing Preferences</h1><p class="page-subtitle">Defaults applied to all your car listings</p></div>
+          <button class="btn btn-primary" type="button" data-settings-action="new-listing"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Listing</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="card-header-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
+            <div><div class="card-title">Default Listing Settings</div><div class="card-desc">Pre-fill these when creating a new ad</div></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Default Currency</label><select class="form-select"><option>LKR — Sri Lankan Rupee</option><option>USD — US Dollar</option></select></div>
+            <div class="form-group"><label class="form-label">Default Location</label><input type="text" class="form-input" value="Colombo 05"/></div>
+            <div class="form-group"><label class="form-label">Contact Preference</label><select class="form-select"><option>Phone &amp; Chat</option><option>Chat Only</option><option>Phone Only</option></select></div>
+            <div class="form-group"><label class="form-label">Listing Duration</label><select class="form-select"><option>30 days</option><option>60 days</option><option>90 days</option><option>Until Sold</option></select></div>
+          </div>
+          <div class="form-actions"><button class="btn btn-primary" type="button" data-settings-action="save-defaults">Save Defaults</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Visibility &amp; Boosts</div></div>
+        <div class="card-body">
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Auto-renew listings</div><div class="toggle-detail">Automatically renew your listing when it expires</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Show in Featured section</div><div class="toggle-detail">Pin listings to the top of search results (uses boost credits)</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Allow test-drive requests</div><div class="toggle-detail">Buyers can request a test drive directly from your listing</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Show price history</div><div class="toggle-detail">Display price change history publicly on your listing</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBSCRIPTION -->
+    <div class="content-panel" id="panel-subscription">
+      <div class="page-header"><h1 class="page-title">Subscription</h1><p class="page-subtitle">Your AutoMart plan and billing details</p></div>
+      <div class="plan-card">
+        <div class="plan-icon">★</div>
+        <div><div class="plan-badge">DEALER PRO</div><div class="plan-name">AutoMart Dealer Pro Plan</div><div class="plan-sub">Renews on 15 June 2026 · LKR 3,990 / month</div></div>
+        <div style="margin-left:auto;display:flex;gap:10px;"><button class="btn btn-outline btn-sm" type="button" data-settings-action="change-plan">Change Plan</button><button class="btn btn-primary btn-sm" type="button" data-settings-action="upgrade-plan">Upgrade</button></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Plan Features</div></div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Up to 50 active listings</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Priority search placement</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Verified Dealer badge</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>10 boost credits / month</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Advanced analytics dashboard</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Dedicated support line</div>
+          </div>
+        </div>
+      </div>
+      <div class="danger-zone">
+        <div class="danger-zone-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Cancel Subscription</div>
+        <div class="danger-zone-desc">Cancelling will downgrade your account to the Free plan at the end of your billing period. Your listings will remain but boosts and premium features will be disabled.</div>
+        <button class="btn btn-danger btn-sm" type="button" data-settings-action="cancel-subscription">Cancel Subscription</button>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="content-panel" id="panel-notifications">
+      <div class="page-header"><h1 class="page-title">Notifications</h1><p class="page-subtitle">Choose how and when AutoMart contacts you</p></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Delivery Channels</div></div>
+        <div class="card-body">
+          <div class="notif-channel"><div class="channel-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><div class="channel-name">Email</div><div class="channel-sub">kasun.perera@gmail.com</div></div><div class="toggle on" onclick="this.classList.toggle('on')" style="margin-left:auto;"></div></div>
+          <div class="notif-channel"><div class="channel-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div><div class="channel-name">Push Notifications</div><div class="channel-sub">Mobile &amp; desktop</div></div><div class="toggle on" onclick="this.classList.toggle('on')" style="margin-left:auto;"></div></div>
+          <div class="notif-channel"><div class="channel-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="channel-name">SMS</div><div class="channel-sub">+94 77 123 4567</div></div><div class="toggle" onclick="this.classList.toggle('on')" style="margin-left:auto;"></div></div>
+          <div class="notif-channel"><div class="channel-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div><div class="channel-name">In-App Messages</div><div class="channel-sub">Chat &amp; inbox notifications</div></div><div class="toggle on" onclick="this.classList.toggle('on')" style="margin-left:auto;"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Activity Alerts</div></div>
+        <div class="card-body">
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">New buyer message</div><div class="toggle-detail">When someone sends you a message about your listing</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Listing viewed</div><div class="toggle-detail">Daily digest of views on your active listings</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Price drop alerts</div><div class="toggle-detail">When a saved car in your watchlist drops in price</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Test drive requests</div><div class="toggle-detail">Notify me immediately when a test drive is requested</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">New review received</div><div class="toggle-detail">When a buyer leaves a rating or review for you</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Weekly performance report</div><div class="toggle-detail">Summary of listing views, leads and clicks</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+      </div>
+      <div class="form-actions" style="border-top:none;margin-top:0;"><button class="btn btn-primary" type="button" data-settings-action="save-preferences">Save Preferences</button></div>
+    </div>
+
+    <!-- APPEARANCE -->
+    <div class="content-panel" id="panel-appearance">
+      <div class="page-header"><h1 class="page-title">Appearance</h1><p class="page-subtitle">Personalise how AutoMart looks on your device</p></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Theme</div></div>
+        <div class="card-body">
+          <div style="display:flex;gap:14px;margin-bottom:24px;">
+            <div class="theme-option selected" data-theme="dark"><div class="theme-preview"><div style="width:32px;background:#13161e;"></div><div style="flex:1;background:#0d0f14;"></div></div><div class="theme-option-name">Dark Mode<div class="theme-check">✓</div></div></div>
+            <div class="theme-option" data-theme="light"><div class="theme-preview"><div style="width:32px;background:#f5f3ee;"></div><div style="flex:1;background:#ffffff;"></div></div><div class="theme-option-name">Light Mode<div class="theme-check"></div></div></div>
+            <div class="theme-option" data-theme="system"><div class="theme-preview"><div style="width:32px;background:#080808;"></div><div style="flex:1;background:#111111;"></div></div><div class="theme-option-name">System Default<div class="theme-check"></div></div></div>
+          </div>
+          <div style="margin-bottom:20px;">
+            <div class="form-label" style="margin-bottom:10px;">Accent Colour</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <div data-accent-color="#7EC820" onclick="selectAccent(this,'#7EC820')" style="width:34px;height:34px;border-radius:50%;background:#7EC820;border:3px solid #7EC820;box-shadow:0 0 0 2px var(--bg-card);cursor:pointer;"></div>
+              <div data-accent-color="#4d8fe0" onclick="selectAccent(this,'#4d8fe0')" style="width:34px;height:34px;border-radius:50%;background:#4d8fe0;border:3px solid transparent;box-shadow:0 0 0 2px var(--bg-card);cursor:pointer;"></div>
+              <div data-accent-color="#3dba8a" onclick="selectAccent(this,'#3dba8a')" style="width:34px;height:34px;border-radius:50%;background:#3dba8a;border:3px solid transparent;box-shadow:0 0 0 2px var(--bg-card);cursor:pointer;"></div>
+              <div data-accent-color="#e25a5a" onclick="selectAccent(this,'#e25a5a')" style="width:34px;height:34px;border-radius:50%;background:#e25a5a;border:3px solid transparent;box-shadow:0 0 0 2px var(--bg-card);cursor:pointer;"></div>
+              <div data-accent-color="#9b72e8" onclick="selectAccent(this,'#9b72e8')" style="width:34px;height:34px;border-radius:50%;background:#9b72e8;border:3px solid transparent;box-shadow:0 0 0 2px var(--bg-card);cursor:pointer;"></div>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Language</label><select class="form-select" data-language-select><option value="English">English</option><option value="සිංහල (Sinhala)">සිංහල (Sinhala)</option><option value="தமிழ் (Tamil)">தமிழ் (Tamil)</option></select></div>
+            <div class="form-group"><label class="form-label">Currency Display</label><select class="form-select"><option>LKR — Rs 1,000,000</option><option>LKR — 1M</option><option>USD</option></select></div>
+          </div>
+          <div class="form-actions"><button class="btn btn-primary" type="button" data-settings-action="apply-appearance">Apply Changes</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="content-panel" id="panel-security">
+      <div class="page-header"><h1 class="page-title">Security</h1><p class="page-subtitle">Keep your AutoMart account protected</p></div>
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-body">
+          <div class="security-item">
+            <div class="security-icon ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+            <div><div class="security-name">Password</div><div class="security-sub">Last changed 42 days ago</div></div>
+            <div class="security-action"><button class="btn btn-outline btn-sm" type="button" data-settings-action="change-password">Change Password</button></div>
+          </div>
+          <div class="security-item">
+            <div class="security-icon warn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+            <div><div class="security-name">Two-Factor Authentication</div><div class="security-sub">Not enabled — we recommend enabling 2FA</div></div>
+            <div class="security-action"><div class="status-pill warn"><div class="status-dot"></div> Off</div></div>
+            <button class="btn btn-outline btn-sm" style="margin-left:12px;" type="button" data-settings-action="enable-2fa">Enable</button>
+          </div>
+          <div class="security-item">
+            <div class="security-icon ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <div><div class="security-name">Email Verified</div><div class="security-sub">kasun.perera@gmail.com</div></div>
+            <div class="security-action"><div class="status-pill ok"><div class="status-dot"></div> Verified</div></div>
+          </div>
+          <div class="security-item">
+            <div class="security-icon ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+            <div><div class="security-name">Phone Verified</div><div class="security-sub">+94 77 123 4567</div></div>
+            <div class="security-action"><div class="status-pill ok"><div class="status-dot"></div> Verified</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Active Sessions</div><button class="btn btn-danger btn-sm" type="button" data-settings-action="signout-devices">Sign out all devices</button></div>
+        <div class="card-body">
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg-input);border-radius:10px;border:1px solid var(--border)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              <div style="flex:1;"><div style="font-size:13px;font-weight:500;">Chrome on Windows 11</div><div style="font-size:11px;color:var(--text-3);margin-top:2px;">Colombo, LK · Active now</div></div>
+              <div class="status-pill ok" style="font-size:10px;"><div class="status-dot"></div> Current</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;padding:12px;background:var(--bg-input);border-radius:10px;border:1px solid var(--border)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              <div style="flex:1;"><div style="font-size:13px;font-weight:500;">Safari on iPhone 15</div><div style="font-size:11px;color:var(--text-3);margin-top:2px;">Colombo, LK · 3 hours ago</div></div>
+              <button class="btn btn-outline btn-sm" style="font-size:11px;padding:4px 10px;" type="button" data-settings-action="revoke-session">Revoke</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS -->
+    <div class="content-panel" id="panel-payments">
+      <div class="page-header">
+        <div class="page-header-top">
+          <div><h1 class="page-title">Payment Methods</h1><p class="page-subtitle">Manage cards and billing for your AutoMart subscription</p></div>
+          <button class="btn btn-primary btn-sm" type="button" data-settings-action="add-card"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Card</button>
+        </div>
+      </div>
+      <div class="payment-card selected">
+        <div class="card-chip">▪</div>
+        <div><div class="card-num">•••• •••• •••• 4521</div><div class="card-exp">Visa · Expires 09/27</div></div>
+        <div style="margin-left:auto;"><div class="status-pill ok" style="font-size:11px;"><div class="status-dot"></div> Default</div></div>
+      </div>
+      <div class="payment-card">
+        <div class="card-chip" style="background:linear-gradient(135deg,#4d8fe0,#185fa5);">▪</div>
+        <div><div class="card-num">•••• •••• •••• 8832</div><div class="card-exp">Mastercard · Expires 03/26</div></div>
+        <div style="margin-left:auto;display:flex;gap:10px;"><button class="btn btn-outline btn-sm" type="button" data-settings-action="set-default-card">Set Default</button><button class="btn btn-danger btn-sm" type="button" data-settings-action="remove-card">Remove</button></div>
+      </div>
+      <div class="card" style="margin-top:20px;">
+        <div class="card-header"><div class="card-title">Billing History</div></div>
+        <div class="card-body" style="padding:0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;">
+            <thead><tr style="border-bottom:1px solid var(--border)">
+              <th style="padding:12px 24px;text-align:left;font-weight:500;color:var(--text-3);font-size:11px;letter-spacing:.05em;text-transform:uppercase;">Date</th>
+              <th style="padding:12px 24px;text-align:left;font-weight:500;color:var(--text-3);font-size:11px;letter-spacing:.05em;text-transform:uppercase;">Description</th>
+              <th style="padding:12px 24px;text-align:right;font-weight:500;color:var(--text-3);font-size:11px;letter-spacing:.05em;text-transform:uppercase;">Amount</th>
+              <th style="padding:12px 24px;text-align:right;font-weight:500;color:var(--text-3);font-size:11px;letter-spacing:.05em;text-transform:uppercase;">Status</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border)"><td style="padding:13px 24px;color:var(--text-2);">15 May 2026</td><td style="padding:13px 24px;">Dealer Pro — Monthly</td><td style="padding:13px 24px;text-align:right;font-weight:500;">LKR 3,990</td><td style="padding:13px 24px;text-align:right;"><div class="status-pill ok" style="font-size:11px;justify-content:flex-end;"><div class="status-dot"></div> Paid</div></td></tr>
+              <tr style="border-bottom:1px solid var(--border)"><td style="padding:13px 24px;color:var(--text-2);">15 Apr 2026</td><td style="padding:13px 24px;">Dealer Pro — Monthly</td><td style="padding:13px 24px;text-align:right;font-weight:500;">LKR 3,990</td><td style="padding:13px 24px;text-align:right;"><div class="status-pill ok" style="font-size:11px;justify-content:flex-end;"><div class="status-dot"></div> Paid</div></td></tr>
+              <tr><td style="padding:13px 24px;color:var(--text-2);">15 Mar 2026</td><td style="padding:13px 24px;">Dealer Pro — Monthly</td><td style="padding:13px 24px;text-align:right;font-weight:500;">LKR 3,990</td><td style="padding:13px 24px;text-align:right;"><div class="status-pill ok" style="font-size:11px;justify-content:flex-end;"><div class="status-dot"></div> Paid</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRIVACY -->
+    <div class="content-panel" id="panel-privacy">
+      <div class="page-header"><h1 class="page-title">Privacy</h1><p class="page-subtitle">Control your data and what others can see about you</p></div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Profile Visibility</div></div>
+        <div class="card-body">
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Public profile</div><div class="toggle-detail">Anyone can view your seller profile and past listings</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Show phone number on listings</div><div class="toggle-detail">Buyers can see your phone number directly on your ad</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Show last active time</div><div class="toggle-detail">Other users can see when you were last online</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Allow search engines to index your listings</div><div class="toggle-detail">Your listings may appear in Google and other search results</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Data &amp; Personalisation</div></div>
+        <div class="card-body">
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Personalised ad recommendations</div><div class="toggle-detail">Use my activity to show relevant vehicles and listings</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="toggle-row"><div class="toggle-info"><div class="toggle-name">Analytics &amp; usage tracking</div><div class="toggle-detail">Help AutoMart improve by sharing anonymous usage data</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-outline btn-sm" type="button" data-settings-action="download-data">Download My Data</button><button class="btn btn-outline btn-sm" type="button" data-settings-action="deactivate-account">Deactivate Account</button></div>
+        </div>
+      </div>
+      <div class="danger-zone">
+        <div class="danger-zone-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Delete Account</div>
+        <div class="danger-zone-desc">Permanently delete your account and all associated data, including active listings, messages, and reviews. This action cannot be undone.</div>
+        <button class="btn btn-danger btn-sm" type="button" data-settings-action="delete-account">Delete My Account</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+  Changes saved successfully
+</div>
+
+
+
+<script id="automart-settings-photo-buttons-force-fix">
+(function(){
+  'use strict';
+
+  const PHOTO_KEYS = [
+    'automartMediaAvatarV1','automartMediaAvatarV2','automartProfilePhoto','automartAvatarCache',
+    'automartProfileAvatar','automartOldProfilePhoto','automartUserAvatar','profilePhoto',
+    'avatarPhoto','profileImage','avatarImage','userAvatar','photoURL','currentUserProfilePhoto'
+  ];
+  const STORE_KEYS = [
+    'automartCurrentProfileV2','automartUserProfileRealV4','automartBuyerProfileRealV1',
+    'automartAdminProfileRealV2','automartSettingsProfileV1','automartSettingsPremiumV4',
+    'automartPremiumSettingsV2','automartSharedMarketplaceDataV2'
+  ];
+
+  function read(k,f){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f));}catch{return f;}}
+  function write(k,v){localStorage.setItem(k,JSON.stringify(v));}
+  function initials(name){return String(name||'AutoMart User').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'AU';}
+  function toast(msg,type){if(window.AutoMartToast) window.AutoMartToast(msg,type||'success'); else console.log(msg);}
+  function popup(title,msg,ok,cb,icon){
+    if(window.AutoMartConfirm) return window.AutoMartConfirm(title,msg,ok,cb,icon||'✓');
+    if(cb) cb();
+  }
+  function stripPhoto(o){
+    if(!o || typeof o !== 'object') return o;
+    ['photo','photoRef','profilePhoto','profilePhotoRef','profileImage','profileImageRef','avatar','avatarRef','avatarImage','photoURL','photoUrl','profilePicture','profilePictureRef','profilePhotoBase64','avatarBase64','userPhoto','userPhotoRef','imageUrl'].forEach(k=>delete o[k]);
+    Object.keys(o).forEach(k=>{
+      if(o[k] && typeof o[k] === 'object') stripPhoto(o[k]);
+      if(typeof o[k] === 'string' && o[k].startsWith('data:image') && /photo|avatar|profile|image/i.test(k)) delete o[k];
+    });
+    return o;
+  }
+  function hardClear(){
+    if(window.AutoMartHardClearProfilePhoto) {
+      try { window.AutoMartHardClearProfilePhoto(); } catch(e) {}
+    }
+    PHOTO_KEYS.forEach(k=>{try{localStorage.removeItem(k);sessionStorage.removeItem(k);}catch(e){}});
+    STORE_KEYS.forEach(k=>{
+      const v=read(k,null);
+      if(!v || typeof v !== 'object') return;
+      const cleaned=stripPhoto(JSON.parse(JSON.stringify(v)));
+      cleaned.photoRemoved=true;
+      cleaned.profilePhotoRemoved=true;
+      cleaned.profilePhotoVersion=Date.now();
+      if(cleaned.profile && typeof cleaned.profile==='object'){
+        cleaned.profile.photoRemoved=true;
+        cleaned.profile.profilePhotoRemoved=true;
+        cleaned.profile.profilePhotoVersion=Date.now();
+      }
+      if(cleaned.activeProfile && typeof cleaned.activeProfile==='object'){
+        cleaned.activeProfile.photoRemoved=true;
+        cleaned.activeProfile.profilePhotoRemoved=true;
+        cleaned.activeProfile.profilePhotoVersion=Date.now();
+      }
+      try{write(k,cleaned);}catch(e){}
+    });
+  }
+  function applyInitials(){
+    const profile = Object.assign({}, read('automartCurrentProfileV2',{}), read('automartUserProfileRealV4',{}), read('automartSettingsProfileV1',{}));
+    const name = profile.fullName || [profile.firstName, profile.lastName].filter(Boolean).join(' ') || profile.displayName || 'AutoMart User';
+    document.querySelectorAll('#globalProfileAvatar,.profile-avatar,.tb-av,.avatar,.avatar-inner,.settings-avatar,.avatar-preview,#adminProfilePhoto,.profile-avatar-lg').forEach(el=>{
+      el.classList.remove('has-photo');
+      el.style.removeProperty('--automart-avatar-photo');
+      el.style.removeProperty('--avatar-photo');
+      el.style.backgroundImage='';
+      el.textContent=initials(name);
+    });
+  }
+  function compress(file){
+    return new Promise((resolve,reject)=>{
+      if(!file || !file.type.startsWith('image/')) return reject(new Error('Please choose a valid image file.'));
+      const reader=new FileReader();
+      reader.onerror=()=>reject(new Error('Could not read image.'));
+      reader.onload=()=>{
+        const img=new Image();
+        img.onerror=()=>reject(new Error('Could not load image.'));
+        img.onload=()=>{
+          const max=360, quality=.72;
+          let w=img.width,h=img.height;
+          const ratio=Math.min(max/w,max/h,1);
+          w=Math.round(w*ratio); h=Math.round(h*ratio);
+          const canvas=document.createElement('canvas');
+          canvas.width=w; canvas.height=h;
+          canvas.getContext('2d').drawImage(img,0,0,w,h);
+          resolve(canvas.toDataURL('image/jpeg',quality));
+        };
+        img.src=reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  function pickAndSave(){
+    const input=document.createElement('input');
+    input.type='file';
+    input.accept='image/png,image/jpeg,image/webp,image/*';
+    input.style.display='none';
+    document.body.appendChild(input);
+    input.onchange=async()=>{
+      const file=input.files && input.files[0];
+      input.remove();
+      if(!file) return;
+      try{
+        const data=await compress(file);
+        popup('Confirm Changes','Do you want to save this profile picture?','Confirm',()=>{
+          hardClear(); // delete old first photo before new save
+          localStorage.setItem('automartMediaAvatarV2', data);
+          localStorage.setItem('automartMediaAvatarV1', data);
+          const light={photoRef:'automartMediaAvatarV2',profilePhotoRef:'automartMediaAvatarV2',photoRemoved:false,profilePhotoRemoved:false,profilePhotoVersion:Date.now()};
+          STORE_KEYS.forEach(k=>{
+            const v=stripPhoto(read(k,{})) || {};
+            if(k==='automartSettingsPremiumV4'){
+              v.profile=Object.assign(stripPhoto(v.profile||{}), light);
+            }else if(k==='automartSharedMarketplaceDataV2'){
+              v.activeProfile=Object.assign(stripPhoto(v.activeProfile||{}), light);
+              v.profile=Object.assign(stripPhoto(v.profile||{}), light);
+              v.buyerProfile=Object.assign(stripPhoto(v.buyerProfile||{}), light);
+              v.updatedAt=Date.now();
+            }else{
+              Object.assign(v, light);
+            }
+            try{write(k,v);}catch(e){}
+          });
+          document.querySelectorAll('#globalProfileAvatar,.profile-avatar,.tb-av,.avatar,.avatar-inner,.settings-avatar,.avatar-preview,#adminProfilePhoto,.profile-avatar-lg').forEach(el=>{
+            el.classList.add('has-photo');
+            el.style.setProperty('--automart-avatar-photo','url("'+data+'")');
+            el.style.setProperty('--avatar-photo','url("'+data+'")');
+            el.style.backgroundImage='url("'+data+'")';
+            el.style.backgroundSize='cover';
+            el.style.backgroundPosition='center';
+            el.textContent='';
+          });
+          window.dispatchEvent(new StorageEvent('storage',{key:'automartMediaAvatarV2',newValue:data}));
+          toast('Profile picture saved successfully');
+        },'📷');
+      }catch(err){toast(err.message||'Upload failed','error');}
+    };
+    input.click();
+  }
+  function removePhoto(){
+    popup('Confirm Changes','Are you sure you want to remove your profile picture?','Confirm',()=>{
+      hardClear();
+      applyInitials();
+      window.dispatchEvent(new StorageEvent('storage',{key:'automartCurrentProfileV2',newValue:'{}'}));
+      toast('Profile picture removed successfully');
+    },'🗑️');
+  }
+
+  // One-time cleanup of old added profile pictures when this fixed version first loads.
+  try{
+    if(!localStorage.getItem('automartSettingsOldPhotoClearedV2')){
+      hardClear();
+      localStorage.setItem('automartSettingsOldPhotoClearedV2','done');
+      if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyInitials);
+      else applyInitials();
+    }
+  }catch(e){}
+
+  // Capture BEFORE the old settings script, so these buttons always work.
+  document.addEventListener('click',function(e){
+    const btn=e.target.closest('[data-settings-action],button');
+    if(!btn) return;
+    const action=(btn.getAttribute('data-settings-action')||'').toLowerCase();
+    const text=(btn.textContent||btn.getAttribute('title')||btn.getAttribute('aria-label')||'').trim().toLowerCase();
+    if(action==='change-photo' || text.includes('change photo')){
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      pickAndSave();
+      return;
+    }
+    if(action==='remove-photo' || text.includes('remove photo')){
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      removePhoto();
+      return;
+    }
+  },true);
+})();
+</script>
+
+<script id="automart-settings-final-real-actions">
+(function(){
+  const SETTINGS_KEY='automartSettingsPremiumV4';
+  const PROFILE_KEY='automartUserProfileRealV4';
+  const BUYER_KEY='automartBuyerProfileRealV1';
+  const ADMIN_KEY='automartAdminProfileRealV2';
+  function read(k,f){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f));}catch{return f;}}
+  function write(k,v){localStorage.setItem(k,JSON.stringify(v));}
+  function toast(msg,type){const t=document.getElementById('toast'); if(t){t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}else if(window.AutoMartToast) window.AutoMartToast(msg);}
+  function confirmBox(title,msg,ok,cb){if(window.AutoMartConfirm)return window.AutoMartConfirm(title,msg,ok,cb); if(confirm(msg))cb&&cb();}
+  function initials(p){return ((p.firstName||'')[0]||'')+((p.lastName||'')[0]||'') || (p.displayName||'AM').slice(0,2).toUpperCase();}
+  function profile(){const st=read(SETTINGS_KEY,{}), p=Object.assign({},st.profile||{},read(PROFILE_KEY,{})); if(p.photoRemoved||p.profilePhotoRemoved){delete p.photo;delete p.profilePhoto;delete p.profileImage;delete p.avatar;delete p.photoURL;} else {p.photo=localStorage.getItem('automartMediaAvatarV2')||localStorage.getItem('automartMediaAvatarV1')||'';} return p;}
+  function saveProfile(p){const st=read(SETTINGS_KEY,{});const light=Object.assign({},p);delete light.photo;delete light.profilePhoto;delete light.profileImage;delete light.avatar;delete light.photoURL;light.photoRef=p.photo?'automartMediaAvatarV2':'';light.profilePhotoRef=light.photoRef;st.profile=Object.assign(st.profile||{},light);delete st.profilePhoto;write(SETTINGS_KEY,st);write(PROFILE_KEY,Object.assign(read(PROFILE_KEY,{}),light));write(BUYER_KEY,Object.assign(read(BUYER_KEY,{}),light));write(ADMIN_KEY,Object.assign(read(ADMIN_KEY,{}),{fullName:((p.firstName||'')+' '+(p.lastName||'')).trim()||p.displayName,email:p.email,phone:p.phone,photoRef:light.photoRef,profilePhotoRef:light.photoRef,photoRemoved:light.photoRemoved,profilePhotoRemoved:light.profilePhotoRemoved})); if(window.AutoMartUpdateSharedProfile)window.AutoMartUpdateSharedProfile(light); apply(profile());}
+  function apply(p=profile()){document.querySelectorAll('.profile-avatar-lg,.avatar,#globalProfileAvatar,.profile-avatar').forEach(el=>{if(p.photo){el.classList.add('has-photo');el.style.setProperty('--avatar-photo','url("'+p.photo+'")');el.textContent='';}else{el.classList.remove('has-photo');el.style.removeProperty('--avatar-photo');el.textContent=initials(p);}}); const meta=document.querySelector('#panel-profile .profile-meta'); if(meta){const h=meta.querySelector('h3'), q=meta.querySelector('p');const name=((p.firstName||'')+' '+(p.lastName||'')).trim()||p.displayName||'AutoMart User'; if(h)h.textContent=name; if(q)q.textContent=(p.email||'user@gmail.com')+' · Member since 2021';}}
+  function collect(){const p=profile();document.querySelectorAll('[data-profile-field]').forEach(el=>p[el.dataset.profileField]=el.value);p.phone=(p.phone||'').replace(/\D/g,'').slice(0,10);p.email=(p.email||'').toLowerCase().trim();return p;}
+  function selectImage(cb){const i=document.createElement('input');i.type='file';i.accept='image/*';i.style.display='none';document.body.appendChild(i);i.onchange=()=>{const f=i.files&&i.files[0];i.remove();if(!f)return;if(!f.type.startsWith('image/'))return toast('Please choose a valid image file','error');const r=new FileReader();r.onload=()=>cb(String(r.result||''));r.onerror=()=>toast('Could not read image','error');r.readAsDataURL(f);};i.click();}
+  function downloadData(){const payload={profile:profile(),settings:read(SETTINGS_KEY,{}),exportedAt:new Date().toISOString()};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='automart-my-data.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('Data downloaded successfully');}
+  document.addEventListener('DOMContentLoaded',()=>{apply();document.querySelectorAll('[data-profile-field]').forEach(el=>{const p=profile();if(p[el.dataset.profileField]!==undefined)el.value=p[el.dataset.profileField];});});
+  document.addEventListener('click',function(e){const btn=e.target.closest('[data-settings-action]');if(!btn)return;const a=btn.dataset.settingsAction;if(['change-photo','remove-photo','save-profile','download-data','delete-account','deactivate-account'].includes(a)){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();}
+    if(a==='change-photo')return selectImage(data=>confirmBox('Confirm Changes','Do you want to save this profile picture?','Confirm',()=>{const p=Object.assign(profile(),{photo:data});saveProfile(p);toast('Profile picture saved successfully');}));
+    if(a==='remove-photo')return confirmBox('Confirm Changes','Are you sure you want to remove your profile picture?','Confirm',()=>{const p=Object.assign(profile(),{photo:''});saveProfile(p);toast('Profile picture removed successfully');});
+    if(a==='save-profile')return confirmBox('Confirm Changes','Do you want to save these changes?','Confirm',()=>{const p=collect(); if(!/^\d{10}$/.test(p.phone||''))return toast('Phone number must be 10 digits','error'); if(!/^[a-z0-9._]+@gmail\.com$/.test(p.email||''))return toast('Enter a valid Gmail address','error'); saveProfile(p);toast('Changes saved successfully');});
+    if(a==='download-data')return downloadData();
+    if(a==='deactivate-account')return confirmBox('Confirm Changes','Are you sure you want to deactivate your account?','Confirm',()=>{const p=Object.assign(profile(),{deactivated:true,deactivatedAt:new Date().toISOString()});saveProfile(p);localStorage.removeItem('automart_session');location.href='/logout';});
+    if(a==='delete-account')return confirmBox('Confirm Changes','Are you sure you want to delete your account? This action cannot be undone.','Confirm',()=>{try{fetch('/profile/delete',{method:'POST'}).finally(()=>{localStorage.removeItem('automart_session');location.href='/auth';});}catch(err){location.href='/logout';}});
+  },true);
+})();
+</script>
+
+<script>
+  document.querySelectorAll('.sidebar-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+      document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
+      item.classList.add('active');
+      document.getElementById('panel-' + item.dataset.panel).classList.add('active');
+    });
+  });
+  function showToast() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+  function selectAccent(el, color) {
+    if (window.AutoMartSettingsFix && window.AutoMartSettingsFix.applyAccent) {
+      window.AutoMartSettingsFix.applyAccent(color, el, true);
+      return;
+    }
+    el.parentNode.querySelectorAll('[data-accent-color]').forEach(d => d.style.borderColor = 'transparent');
+    el.style.borderColor = color;
+  }
+
+  const menuBtn = document.getElementById('settingsMenuBtn');
+  const settingsSidebar = document.querySelector('.sidebar');
+  const settingsOverlay = document.getElementById('settingsOverlay');
+  function closeSettingsMenu(){ settingsSidebar?.classList.remove('open'); settingsOverlay?.classList.remove('show'); }
+  menuBtn?.addEventListener('click', () => { settingsSidebar?.classList.toggle('open'); settingsOverlay?.classList.toggle('show'); });
+  settingsOverlay?.addEventListener('click', closeSettingsMenu);
+  document.querySelectorAll('.sidebar-item').forEach(item => item.addEventListener('click', closeSettingsMenu));
+
+</script>
+
+<script id="settings-functionality-fix">
+(function(){
+  const STORE_KEY = 'automartSettingsStateV3';
+  const state = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+  const gmailRegex = /^[a-z0-9._]+@gmail\.com$/;
+  const saveState = () => localStorage.setItem(STORE_KEY, JSON.stringify(state));
+  function toast(message, type){
+    const t = document.getElementById('toast');
+    if (!t) return window.AutoMartToast ? window.AutoMartToast(message) : console.log(message);
+    t.innerHTML = '<span>' + (type === 'error' ? '⚠️' : '✓') + '</span> ' + message;
+    t.style.background = type === 'error' ? '#e25a5a' : 'var(--gold)';
+    t.style.color = type === 'error' ? '#fff' : '#071000';
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+  window.showToast = function(msg){ toast(msg || 'Changes saved successfully'); };
+  function messageFor(input){
+    let group = input.closest('.form-group') || input.parentElement;
+    let msg = group.querySelector('.field-message');
+    if (!msg) { msg = document.createElement('div'); msg.className = 'field-message'; group.appendChild(msg); }
+    return msg;
+  }
+  function setValidity(input, ok, message){
+    input.classList.remove('valid','invalid');
+    const msg = messageFor(input);
+    if (input.value.trim() === '') { input.classList.add('invalid'); msg.textContent = message || 'This field is required.'; msg.className = 'field-message error'; return false; }
+    input.classList.add(ok ? 'valid' : 'invalid');
+    msg.textContent = message || (ok ? 'Looks good.' : 'Invalid value.');
+    msg.className = 'field-message ' + (ok ? 'success' : 'error');
+    return ok;
+  }
+  function validatePhone(input){
+    input.value = input.value.replace(/\D/g, '').slice(0, 10);
+    input.placeholder = 'Enter 10-digit mobile number';
+    return setValidity(input, /^\d{10}$/.test(input.value), input.value.length === 10 ? 'Valid mobile number.' : 'Mobile number must be exactly 10 digits.');
+  }
+  function validateEmail(input){
+    input.value = input.value.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9._@]/g, '');
+    input.placeholder = 'Enter your Gmail address';
+    const ok = gmailRegex.test(input.value) && (input.value.match(/@/g) || []).length === 1 && input.value.split('@')[0].length > 0;
+    return setValidity(input, ok, ok ? 'Valid Gmail address.' : 'Use a valid Gmail address like example@gmail.com.');
+  }
+  function wireValidation(root=document){
+    root.querySelectorAll('input[type="tel"], input[name*="phone" i], input[id*="phone" i], [data-mobile-input]').forEach(input => {
+      input.setAttribute('inputmode','numeric'); input.setAttribute('maxlength','10'); input.placeholder = 'Enter 10-digit mobile number';
+      input.oninput = () => validatePhone(input);
+      input.onblur = () => validatePhone(input);
+      if (input.value) validatePhone(input);
+    });
+    root.querySelectorAll('input[type="email"], input[name*="email" i], input[id*="email" i], [data-gmail-input]').forEach(input => {
+      input.placeholder = 'Enter your Gmail address';
+      input.oninput = () => validateEmail(input);
+      input.onblur = () => validateEmail(input);
+      if (input.value) validateEmail(input);
+    });
+    root.querySelectorAll('form').forEach(form => {
+      form.addEventListener('submit', e => {
+        let ok = true;
+        form.querySelectorAll('input[type="tel"], input[name*="phone" i], [data-mobile-input]').forEach(i => { if (!validatePhone(i)) ok = false; });
+        form.querySelectorAll('input[type="email"], input[name*="email" i], [data-gmail-input]').forEach(i => { if (!validateEmail(i)) ok = false; });
+        if (!ok) { e.preventDefault(); toast('Please fix highlighted fields before saving.', 'error'); }
+      });
+    });
+  }
+  wireValidation();
+  function openModal(html){
+    const overlay = document.createElement('div'); overlay.className = 'settings-modal-overlay show';
+    overlay.innerHTML = '<div class="settings-modal" role="dialog" aria-modal="true">' + html + '</div>';
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', e => { if(e.target === overlay) overlay.remove(); });
+    overlay.querySelectorAll('[data-modal-close]').forEach(b => b.addEventListener('click', () => overlay.remove()));
+    wireValidation(overlay);
+    return overlay;
+  }
+  function confirmModal(title, message, confirmText, onConfirm, danger=true){
+    const overlay = openModal('<h3>'+title+'</h3><p>'+message+'</p><div class="modal-actions"><button class="btn btn-outline" type="button" data-modal-close>Cancel</button><button class="btn '+(danger?'btn-danger':'btn-primary')+'" type="button" data-confirm>'+confirmText+'</button></div>');
+    overlay.querySelector('[data-confirm]').onclick = () => { onConfirm && onConfirm(); overlay.remove(); };
+  }
+  const originals = new Map();
+  document.querySelectorAll('input, textarea, select').forEach(el => originals.set(el, el.value));
+  function discard(){ originals.forEach((v, el) => { if(el.type !== 'file') el.value = v; }); wireValidation(); toast('Changes discarded.'); }
+  function setTheme(theme){
+    document.body.classList.remove('theme-light','theme-system');
+    if(theme === 'light') document.body.classList.add('theme-light');
+    if(theme === 'system') document.body.classList.add('theme-system');
+    state.theme = theme; saveState(); toast((theme === 'light' ? 'Light Mode' : theme === 'system' ? 'System Default' : 'Dark Mode') + ' applied.');
+  }
+  if(state.theme) setTheme(state.theme);
+  document.querySelectorAll('.theme-option').forEach(opt => {
+    if(state.theme && opt.dataset.theme === state.theme){ document.querySelectorAll('.theme-option').forEach(x=>{x.classList.remove('selected'); const c=x.querySelector('.theme-check'); if(c)c.textContent='';}); opt.classList.add('selected'); const c=opt.querySelector('.theme-check'); if(c)c.textContent='✓'; }
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.theme-option').forEach(x => { x.classList.remove('selected'); const c=x.querySelector('.theme-check'); if(c)c.textContent=''; });
+      opt.classList.add('selected'); const c=opt.querySelector('.theme-check'); if(c)c.textContent='✓'; setTheme(opt.dataset.theme || 'dark');
+    });
+  });
+  function openPlans(){
+    const current = state.plan || 'Dealer Pro';
+    const overlay = openModal('<h3>Choose your plan</h3><p>Select the plan that fits your AutoMart selling workflow.</p><div class="plan-options"><div class="plan-option" data-plan="Basic"><strong>Basic</strong><small>Free · 3 listings · standard visibility</small></div><div class="plan-option" data-plan="Dealer Pro"><strong>Dealer Pro</strong><small>LKR 3,990 / month · 50 listings · boosts · analytics</small></div><div class="plan-option" data-plan="Premium"><strong>Premium</strong><small>LKR 7,990 / month · unlimited listings · priority support</small></div></div><div class="modal-actions"><button class="btn btn-outline" type="button" data-modal-close>Cancel</button><button class="btn btn-primary" type="button" data-select-plan>Select Plan</button></div>');
+    let selected = current;
+    overlay.querySelectorAll('.plan-option').forEach(card => { if(card.dataset.plan === current) card.classList.add('selected'); card.onclick = () => { overlay.querySelectorAll('.plan-option').forEach(c=>c.classList.remove('selected')); card.classList.add('selected'); selected = card.dataset.plan; }; });
+    overlay.querySelector('[data-select-plan]').onclick = () => { updatePlan(selected); overlay.remove(); };
+  }
+  function updatePlan(plan){
+    const price = plan === 'Basic' ? 'Free' : plan === 'Premium' ? 'LKR 7,990 / month' : 'LKR 3,990 / month';
+    state.plan = plan; state.planPrice = price; saveState();
+    const badge = document.querySelector('.plan-badge'); if(badge) badge.textContent = plan.toUpperCase();
+    const name = document.querySelector('.plan-name'); if(name) name.textContent = 'AutoMart ' + plan + ' Plan';
+    const sub = document.querySelector('.plan-sub'); if(sub) sub.textContent = 'Renews on 15 June 2026 · ' + price;
+    toast(plan + ' plan selected.');
+  }
+  if(state.plan) updatePlan(state.plan);
+  function openPassword(){
+    const overlay = openModal('<h3>Change Password</h3><p>Use a strong password with at least 8 characters.</p><div class="form-grid" style="grid-template-columns:1fr"><div class="form-group"><label class="form-label">Current Password</label><input class="form-input" type="password" id="curPw" placeholder="Current password"></div><div class="form-group"><label class="form-label">New Password</label><input class="form-input" type="password" id="newPw" placeholder="New password"></div><div class="form-group"><label class="form-label">Confirm New Password</label><input class="form-input" type="password" id="cfPw" placeholder="Confirm new password"></div></div><div class="modal-actions"><button class="btn btn-outline" type="button" data-modal-close>Cancel</button><button class="btn btn-primary" type="button" data-save-pw>Save Password</button></div>');
+    overlay.querySelector('[data-save-pw]').onclick = () => { const cur=overlay.querySelector('#curPw'), np=overlay.querySelector('#newPw'), cf=overlay.querySelector('#cfPw'); let ok=true; if(!cur.value.trim()){setValidity(cur,false,'Current password is required.'); ok=false;} if(np.value.length<8){setValidity(np,false,'New password must be at least 8 characters.'); ok=false;} else setValidity(np,true,'Strong enough.'); if(cf.value!==np.value || !cf.value){setValidity(cf,false,'Passwords do not match.'); ok=false;} else setValidity(cf,true,'Passwords match.'); if(ok){overlay.remove(); toast('Password updated successfully.');} };
+  }
+  function toggle2fa(btn){ state.twoFactor=!state.twoFactor; saveState(); const item=btn.closest('.security-item'); const pill=item && item.querySelector('.status-pill'); btn.textContent=state.twoFactor?'Disable':'Enable'; if(pill){pill.className='status-pill '+(state.twoFactor?'ok':'warn'); pill.innerHTML='<div class="status-dot"></div> '+(state.twoFactor?'On':'Off');} toast('Two-Factor Authentication '+(state.twoFactor?'enabled':'disabled')); }
+  function apply2fa(){ const btn=document.querySelector('[data-settings-action="enable-2fa"]'); if(!btn) return; btn.textContent=state.twoFactor?'Disable':'Enable'; const pill=btn.closest('.security-item')?.querySelector('.status-pill'); if(pill){pill.className='status-pill '+(state.twoFactor?'ok':'warn'); pill.innerHTML='<div class="status-dot"></div> '+(state.twoFactor?'On':'Off');} } apply2fa();
+  function addCardModal(){
+    const overlay = openModal('<h3>Add payment card</h3><p>Card details are validated before adding to your payment list.</p><div class="form-grid" style="grid-template-columns:1fr 1fr"><div class="form-group span2"><label class="form-label">Cardholder Name</label><input class="form-input" id="cardName" placeholder="Name on card"></div><div class="form-group span2"><label class="form-label">Card Number</label><input class="form-input" id="cardNumber" inputmode="numeric" maxlength="19" placeholder="1234 5678 9012 3456"></div><div class="form-group"><label class="form-label">Expiry Date</label><input class="form-input" id="cardExp" placeholder="MM/YY" maxlength="5"></div><div class="form-group"><label class="form-label">CVV</label><input class="form-input" id="cardCvv" inputmode="numeric" maxlength="4" placeholder="123"></div></div><div class="modal-actions"><button class="btn btn-outline" type="button" data-modal-close>Cancel</button><button class="btn btn-primary" type="button" data-add-card-confirm>Confirm</button></div>');
+    const number=overlay.querySelector('#cardNumber'), cvv=overlay.querySelector('#cardCvv'), exp=overlay.querySelector('#cardExp');
+    number.addEventListener('input',()=>{ number.value=number.value.replace(/\D/g,'').slice(0,16).replace(/(.{4})/g,'$1 ').trim(); }); cvv.addEventListener('input',()=> cvv.value=cvv.value.replace(/\D/g,'').slice(0,4)); exp.addEventListener('input',()=>{ let v=exp.value.replace(/\D/g,'').slice(0,4); if(v.length>2)v=v.slice(0,2)+'/'+v.slice(2); exp.value=v; });
+    overlay.querySelector('[data-add-card-confirm]').onclick=()=>{ const name=overlay.querySelector('#cardName'); let ok=true; const digits=number.value.replace(/\D/g,''); if(name.value.trim().length<2){setValidity(name,false,'Cardholder name is required.'); ok=false;} else setValidity(name,true,'Looks good.'); if(digits.length!==16){setValidity(number,false,'Card number must be 16 digits.'); ok=false;} else setValidity(number,true,'Valid card number.'); if(!/^(0[1-9]|1[0-2])\/\d{2}$/.test(exp.value)){setValidity(exp,false,'Use MM/YY format.'); ok=false;} else setValidity(exp,true,'Valid expiry date.'); if(!/^\d{3,4}$/.test(cvv.value)){setValidity(cvv,false,'CVV must be 3 or 4 digits.'); ok=false;} else setValidity(cvv,true,'Valid CVV.'); if(!ok)return; const list=document.querySelector('#panel-payments'); const last4=digits.slice(-4); const div=document.createElement('div'); div.className='payment-card'; div.innerHTML='<div class="card-chip">▪</div><div><div class="card-num">•••• •••• •••• '+last4+'</div><div class="card-exp">Visa · Expires '+exp.value+'</div></div><div style="margin-left:auto;display:flex;gap:10px;"><button class="btn btn-outline btn-sm" type="button" data-settings-action="set-default-card">Set Default</button><button class="btn btn-danger btn-sm" type="button" data-settings-action="remove-card">Remove</button></div>'; list.insertBefore(div, list.querySelector('.card')); overlay.remove(); toast('Card added successfully.'); };
+  }
+  function setDefaultCard(btn){ document.querySelectorAll('.payment-card').forEach(card=>{card.classList.remove('selected'); const pill=card.querySelector('.status-pill'); if(pill){pill.parentElement.innerHTML='<button class="btn btn-outline btn-sm" type="button" data-settings-action="set-default-card">Set Default</button><button class="btn btn-danger btn-sm" type="button" data-settings-action="remove-card">Remove</button>';}}); const card=btn.closest('.payment-card'); card.classList.add('selected'); btn.parentElement.innerHTML='<div class="status-pill ok" style="font-size:11px;"><div class="status-dot"></div> Default</div>'; toast('Default card updated.'); }
+  function removeCard(btn){ confirmModal('Remove card?', 'Are you sure you want to remove this payment card?', 'Remove Card', () => { btn.closest('.payment-card')?.remove(); toast('Card removed successfully.'); }); }
+  document.addEventListener('click', function(e){ const btn=e.target.closest('[data-settings-action]'); if(!btn)return; const action=btn.dataset.settingsAction; if(action==='change-photo'){document.getElementById('profilePhotoInput')?.click();return;} if(action==='remove-photo'){document.querySelectorAll('.profile-avatar-lg,.avatar').forEach(a=>{a.textContent='AM';a.style.background='linear-gradient(135deg,#7EC820,#2f4f12)';});toast('Profile photo removed.');return;} if(action==='discard'){discard();return;} if(action==='new-listing'){window.location.href='/sell';return;} if(action==='change-plan'||action==='upgrade-plan'){openPlans();return;} if(action==='cancel-subscription'){confirmModal('Cancel subscription?', 'Are you sure you want to cancel your subscription?', 'Confirm Cancel', ()=>{state.subscriptionCancelled=true;saveState();btn.textContent='Cancelled';btn.disabled=true;toast('Subscription cancelled successfully.');});return;} if(action==='change-password'){openPassword();return;} if(action==='enable-2fa'){toggle2fa(btn);return;} if(action==='signout-devices'){confirmModal('Sign out all devices?', 'Are you sure you want to sign out from all devices?', 'Confirm Sign Out', ()=>toast('Signed out from all other devices.'));return;} if(action==='revoke-session'){confirmModal('Revoke this session?', 'This device session will be removed from your account.', 'Revoke', ()=>{btn.closest('[style*="display:flex"]')?.remove();toast('Session revoked.');});return;} if(action==='add-card'){addCardModal();return;} if(action==='set-default-card'){setDefaultCard(btn);return;} if(action==='remove-card'){removeCard(btn);return;} if(action==='download-data'){const blob=new Blob(['AutoMart settings data export\nGenerated locally\n'],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='automart-settings-data.txt';a.click();URL.revokeObjectURL(a.href);toast('Data export downloaded.');return;} if(action==='delete-account'){confirmModal('Delete account?', 'Are you sure you want to delete your account? This action cannot be undone.', 'Confirm Delete', ()=>toast('Account deletion confirmed.'));return;} });
+  document.querySelectorAll('.toggle').forEach(t=>{ t.addEventListener('click', function(){ setTimeout(()=>{ const name=t.closest('.toggle-row,.notif-channel')?.querySelector('.toggle-name,.channel-name')?.textContent || 'Option'; toast(name + (t.classList.contains('on') ? ' enabled.' : ' disabled.')); },0); }); });
+  const photoInput=document.getElementById('profilePhotoInput'); if(photoInput) photoInput.addEventListener('change', function(){ const file=this.files&&this.files[0]; if(!file)return; if(!file.type.startsWith('image/')){toast('Please choose a valid image file.','error');return;} const url=URL.createObjectURL(file); document.querySelectorAll('.profile-avatar-lg,.avatar').forEach(a=>{a.textContent='';a.style.background='url('+url+') center/cover';}); toast('Profile photo updated successfully.'); });
+})();
+</script>
+
+<script id="settings-final-real-actions-fix">
+(function(){
+  const STORE_KEY = 'automartSettingsStateV4';
+  const old = JSON.parse(localStorage.getItem('automartSettingsStateV3') || '{}');
+  const state = Object.assign(old, JSON.parse(localStorage.getItem(STORE_KEY) || '{}'));
+  const gmailRegex = /^[a-z0-9._]+@gmail\.com$/;
+  function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+  function toast(message, type){
+    const t = document.getElementById('toast');
+    if(!t){ if(window.AutoMartToast) window.AutoMartToast(message); else console.log(message); return; }
+    t.innerHTML = '<span>' + (type === 'error' ? '⚠️' : '✓') + '</span> ' + message;
+    t.style.background = type === 'error' ? '#e25a5a' : 'var(--gold)';
+    t.style.color = type === 'error' ? '#fff' : '#071000';
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+  function messageFor(input){
+    const group = input.closest('.form-group') || input.parentElement;
+    let msg = group.querySelector('.field-message');
+    if(!msg){ msg = document.createElement('div'); msg.className = 'field-message'; group.appendChild(msg); }
+    return msg;
+  }
+  function mark(input, ok, msg){
+    input.classList.remove('valid','invalid','is-valid','is-invalid');
+    input.classList.add(ok ? 'valid' : 'invalid');
+    input.classList.add(ok ? 'is-valid' : 'is-invalid');
+    const m = messageFor(input);
+    m.textContent = msg;
+    m.className = 'field-message ' + (ok ? 'success' : 'error');
+    return ok;
+  }
+  function validatePhone(input){
+    input.value = (input.value || '').replace(/\D/g,'').slice(0,10);
+    input.placeholder = 'Enter 10-digit mobile number';
+    const ok = /^\d{10}$/.test(input.value);
+    return mark(input, ok, ok ? 'Valid mobile number.' : 'Mobile number must contain exactly 10 digits.');
+  }
+  function validateGmail(input){
+    input.value = (input.value || '').toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9._@]/g,'');
+    input.placeholder = 'Enter your Gmail address';
+    const oneAt = (input.value.match(/@/g) || []).length === 1;
+    const user = input.value.split('@')[0] || '';
+    const ok = oneAt && user.length > 0 && gmailRegex.test(input.value);
+    return mark(input, ok, ok ? 'Valid Gmail address.' : 'Enter a valid Gmail address like example@gmail.com.');
+  }
+  function wireStrictValidation(root=document){
+    root.querySelectorAll('input[type="tel"], input[name*="phone" i], input[id*="phone" i], [data-mobile-input]').forEach(input => {
+      input.setAttribute('inputmode','numeric');
+      input.setAttribute('maxlength','10');
+      input.placeholder = 'Enter 10-digit mobile number';
+      input.addEventListener('beforeinput', e => { if(e.data && /\D/.test(e.data)) e.preventDefault(); });
+      input.addEventListener('paste', e => { e.preventDefault(); input.value = (e.clipboardData.getData('text') || '').replace(/\D/g,'').slice(0,10); validatePhone(input); });
+      input.addEventListener('input', () => validatePhone(input));
+      input.addEventListener('blur', () => validatePhone(input));
+      validatePhone(input);
+    });
+    root.querySelectorAll('input[type="email"], input[name*="email" i], input[id*="email" i], [data-gmail-input]').forEach(input => {
+      input.placeholder = 'Enter your Gmail address';
+      input.addEventListener('input', () => validateGmail(input));
+      input.addEventListener('blur', () => validateGmail(input));
+      validateGmail(input);
+    });
+  }
+  wireStrictValidation();
+  function validateProfileBeforeSave(){
+    let ok = true;
+    const panel = document.getElementById('panel-profile') || document;
+    panel.querySelectorAll('[data-mobile-input], input[type="tel"], input[name*="phone" i]').forEach(i => { if(!validatePhone(i)) ok = false; });
+    panel.querySelectorAll('[data-gmail-input], input[type="email"], input[name*="email" i]').forEach(i => { if(!validateGmail(i)) ok = false; });
+    panel.querySelectorAll('input[type="text"], textarea').forEach(i => {
+      const label = (i.closest('.form-group')?.querySelector('.form-label')?.textContent || '').toLowerCase();
+      if ((label.includes('first name') || label.includes('last name') || label.includes('display name')) && !i.value.trim()) {
+        mark(i, false, 'This field is required.'); ok = false;
+      }
+    });
+    return ok;
+  }
+  function getProfileFields(){
+    return {
+      firstName: document.querySelector('[data-profile-field="firstName"]'),
+      lastName: document.querySelector('[data-profile-field="lastName"]'),
+      displayName: document.querySelector('[data-profile-field="displayName"]'),
+      phone: document.querySelector('[data-profile-field="phone"]'),
+      email: document.querySelector('[data-profile-field="email"]'),
+      city: document.querySelector('[data-profile-field="city"]'),
+      province: document.querySelector('[data-profile-field="province"]'),
+      bio: document.querySelector('[data-profile-field="bio"]')
+    };
+  }
+  function updateProfileHeader(profile){
+    const first = (profile.firstName || '').trim();
+    const last = (profile.lastName || '').trim();
+    const fullName = (first + ' ' + last).trim() || profile.displayName || 'AutoMart User';
+    const email = profile.email || 'user@gmail.com';
+    const meta = document.querySelector('#panel-profile .profile-meta');
+    if(meta){
+      const h3 = meta.querySelector('h3');
+      const p = meta.querySelector('p');
+      if(h3) h3.textContent = fullName;
+      if(p) p.textContent = email + ' · Member since 2021';
+    }
+    const initials = ((first[0] || '') + (last[0] || '')).toUpperCase() || (profile.displayName || 'AM').slice(0,2).toUpperCase();
+    document.querySelectorAll('.profile-avatar-lg,.avatar').forEach(a => {
+      if(!a.style.background || !a.style.background.includes('url(')) a.textContent = initials;
+    });
+  }
+  function loadSavedProfile(){
+    if(!state.profile) return;
+    const fields = getProfileFields();
+    Object.entries(fields).forEach(([key, el]) => { if(el && state.profile[key] !== undefined) el.value = state.profile[key]; });
+    updateProfileHeader(state.profile);
+  }
+  function saveProfile(){
+    if(!validateProfileBeforeSave()) { toast('Please fix the highlighted profile fields before saving.', 'error'); return; }
+    try {
+      const fields = getProfileFields();
+      const profile = {};
+      Object.entries(fields).forEach(([key, el]) => { profile[key] = el ? String(el.value || '').trim() : ''; });
+      if(!profile.firstName || !profile.lastName || !profile.displayName){
+        toast('Please fill First Name, Last Name, and Display Name before saving.', 'error');
+        return;
+      }
+      if(!/^\d{10}$/.test(profile.phone)){
+        toast('Phone number must be exactly 10 digits.', 'error');
+        return;
+      }
+      if(!gmailRegex.test(profile.email)){
+        toast('Enter a valid Gmail address like kasun.perera@gmail.com.', 'error');
+        return;
+      }
+      state.profile = profile;
+      saveState();
+      const saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}').profile;
+      if(!saved || saved.email !== profile.email || saved.phone !== profile.phone){
+        toast('Saving failed. Please try again.', 'error');
+        return;
+      }
+      updateProfileHeader(profile);
+      toast('Changes saved successfully.');
+    } catch(err) {
+      toast('Saving failed. Please try again.', 'error');
+    }
+  }
+  loadSavedProfile();
+  function applyTheme(theme, showToast){
+    document.body.classList.remove('theme-light','theme-system');
+    if(theme === 'light') document.body.classList.add('theme-light');
+    if(theme === 'system') document.body.classList.add('theme-system');
+    state.theme = theme; saveState();
+    document.querySelectorAll('.theme-option').forEach(opt => {
+      const chosen = (opt.dataset.theme || 'dark') === theme;
+      opt.classList.toggle('selected', chosen);
+      const check = opt.querySelector('.theme-check');
+      if(check) check.textContent = chosen ? '✓' : '';
+    });
+    if(showToast) toast((theme === 'light' ? 'Light Mode' : theme === 'system' ? 'System Default' : 'Dark Mode') + ' applied.');
+  }
+  function applyAccent(color, selectedEl, showToast){
+    if(!color) return;
+    document.documentElement.style.setProperty('--gold', color);
+    document.documentElement.style.setProperty('--gold-light', color);
+    document.documentElement.style.setProperty('--gold-dim', color + '22');
+    state.accentColor = color; saveState();
+    document.querySelectorAll('[data-accent-color]').forEach(el => {
+      const selected = el === selectedEl || el.dataset.accentColor === color;
+      el.style.borderColor = selected ? color : 'transparent';
+      el.style.boxShadow = selected ? '0 0 0 2px var(--bg-card), 0 0 0 4px ' + color + '55, 0 0 22px ' + color + '55' : '0 0 0 2px var(--bg-card)';
+    });
+    if(showToast) toast('Accent colour updated.');
+  }
+  window.AutoMartSettingsFix = { applyAccent };
+  document.querySelectorAll('.theme-option').forEach(opt => opt.addEventListener('click', e => {
+    e.preventDefault(); e.stopImmediatePropagation(); applyTheme(opt.dataset.theme || 'dark', true);
+  }, true));
+  document.querySelectorAll('[data-accent-color]').forEach(el => el.addEventListener('click', e => {
+    e.preventDefault(); e.stopImmediatePropagation(); applyAccent(el.dataset.accentColor, el, true);
+  }, true));
+  const languageSelect = document.querySelector('[data-language-select]');
+  if(languageSelect){
+    if(state.language) languageSelect.value = state.language;
+    languageSelect.addEventListener('change', () => { state.language = languageSelect.value; saveState(); toast('Language saved: ' + languageSelect.value); });
+  }
+  if(state.theme) applyTheme(state.theme, false);
+  if(state.accentColor) applyAccent(state.accentColor, null, false);
+  function postAndRedirect(action, target, extraFields){
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = target || '/settings/action';
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'action';
+    input.value = action;
+    form.appendChild(input);
+    if (extraFields) {
+      Object.entries(extraFields).forEach(([key, value]) => {
+        const hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.name = key;
+        hidden.value = value;
+        form.appendChild(hidden);
+      });
+    }
+    document.body.appendChild(form);
+    form.submit();
+  }
+  function openRealConfirm(title, message, confirmText, onConfirm){
+    const overlay = document.createElement('div');
+    overlay.className = 'settings-modal-overlay show';
+    overlay.innerHTML = '<div class="settings-modal" role="dialog" aria-modal="true"><h3>'+title+'</h3><p>'+message+'</p><div class="modal-actions"><button class="btn btn-outline" type="button" data-cancel>Cancel</button><button class="btn btn-danger" type="button" data-ok>'+confirmText+'</button></div></div>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('[data-cancel]').onclick = () => overlay.remove();
+    overlay.querySelector('[data-ok]').onclick = () => { onConfirm(); };
+  }
+  document.addEventListener('click', function(e){
+    const actionEl = e.target.closest('[data-settings-action]');
+    if(!actionEl) return;
+    const action = actionEl.dataset.settingsAction;
+    if(['save-profile','apply-appearance','signout-devices','delete-account'].includes(action)){
+      e.preventDefault(); e.stopImmediatePropagation();
+      if(action === 'save-profile') return openRealConfirm('Save profile changes?', 'Do you want to save these profile changes?', 'Confirm Save', () => { const modal = document.querySelector('.settings-modal-overlay.show'); if(modal) modal.remove(); saveProfile(); });
+      if(action === 'apply-appearance') { state.language = languageSelect ? languageSelect.value : (state.language || 'English'); saveState(); return toast('Appearance settings saved.'); }
+      if(action === 'signout-devices') return openRealConfirm('Sign out all devices?', 'Are you sure you want to sign out from all devices?', 'Confirm Sign Out', () => postAndRedirect('logout-devices'));
+      if(action === 'delete-account') return openRealConfirm('Delete account?', 'Are you sure you want to delete your account? This action cannot be undone.', 'Confirm Delete', () => postAndRedirect('delete-account', '/settings/action', { confirmDelete: '1' }));
+    }
+  }, true);
+})();
+</script>
+
+
+
+<script id="profile-settings-upload-crop-final-fix">
+(function(){
+  const STORE_KEY = 'automartSettingsStateV4';
+  const DISTRICT_TO_PROVINCE = {
+    'Colombo':'Western Province','Gampaha':'Western Province','Kalutara':'Western Province',
+    'Kandy':'Central Province','Matale':'Central Province','Nuwara Eliya':'Central Province',
+    'Galle':'Southern Province','Matara':'Southern Province','Hambantota':'Southern Province',
+    'Jaffna':'Northern Province','Kilinochchi':'Northern Province','Mannar':'Northern Province','Vavuniya':'Northern Province','Mullaitivu':'Northern Province',
+    'Batticaloa':'Eastern Province','Ampara':'Eastern Province','Trincomalee':'Eastern Province',
+    'Kurunegala':'North Western Province','Puttalam':'North Western Province',
+    'Anuradhapura':'North Central Province','Polonnaruwa':'North Central Province',
+    'Badulla':'Uva Province','Monaragala':'Uva Province',
+    'Ratnapura':'Sabaragamuwa Province','Kegalle':'Sabaragamuwa Province'
+  };
+  const getState = () => {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); }
+    catch(e){ return {}; }
+  };
+  const setState = (state) => localStorage.setItem(STORE_KEY, JSON.stringify(state));
+  function toast(message, type){
+    const t = document.getElementById('toast');
+    if(!t){ if(window.AutoMartToast) window.AutoMartToast(message); else console.log(message); return; }
+    t.innerHTML = '<span>' + (type === 'error' ? '⚠️' : '✓') + '</span> ' + message;
+    t.style.background = type === 'error' ? '#e25a5a' : 'var(--gold)';
+    t.style.color = type === 'error' ? '#fff' : '#071000';
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+  function initialsFromProfile(profile){
+    const f = (profile && profile.firstName || '').trim();
+    const l = (profile && profile.lastName || '').trim();
+    const d = (profile && profile.displayName || 'AM').trim();
+    return ((f[0] || '') + (l[0] || '')).toUpperCase() || d.slice(0,2).toUpperCase() || 'AM';
+  }
+  function updateHeader(profile){
+    const fullName = ((profile.firstName || '').trim() + ' ' + (profile.lastName || '').trim()).trim() || profile.displayName || 'AutoMart User';
+    const meta = document.querySelector('#panel-profile .profile-meta');
+    if(meta){
+      const h3 = meta.querySelector('h3');
+      const p = meta.querySelector('p');
+      if(h3) h3.textContent = fullName;
+      if(p) p.textContent = (profile.email || 'user@gmail.com') + ' · Member since 2021';
+    }
+  }
+  function applyPhoto(photoData){
+    const state = getState();
+    const initials = initialsFromProfile(state.profile || {});
+    document.querySelectorAll('.profile-avatar-lg,.avatar').forEach(el => {
+      if(photoData){
+        el.textContent = '';
+        el.style.background = 'url(' + photoData + ') center/cover no-repeat';
+      } else {
+        el.style.background = 'linear-gradient(135deg, #7EC820 0%, #8b6914 100%)';
+        el.textContent = initials;
+      }
+    });
+  }
+  function loadSavedUI(){
+    const state = getState();
+    if(state.profile){
+      Object.entries(state.profile).forEach(([key, value]) => {
+        const el = document.querySelector('[data-profile-field="' + key + '"]');
+        if(el && value !== undefined) el.value = value;
+      });
+      updateHeader(state.profile);
+    }
+    applyPhoto(state.profilePhoto || '');
+  }
+  function openModal(html){
+    const overlay = document.createElement('div');
+    overlay.className = 'settings-modal-overlay show';
+    overlay.innerHTML = '<div class="settings-modal" role="dialog" aria-modal="true">' + html + '</div>';
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', e => { if(e.target === overlay) overlay.remove(); });
+    overlay.querySelectorAll('[data-modal-close]').forEach(btn => btn.addEventListener('click', () => overlay.remove()));
+    return overlay;
+  }
+  function confirmModal(title, message, confirmText, onConfirm){
+    const overlay = openModal('<h3>'+title+'</h3><p>'+message+'</p><div class="modal-actions"><button class="btn btn-outline" type="button" data-modal-close>Cancel</button><button class="btn btn-primary" type="button" data-confirm>'+confirmText+'</button></div>');
+    overlay.querySelector('[data-confirm]').addEventListener('click', () => { overlay.remove(); onConfirm(); });
+  }
+  function openPhotoCropModal(){
+    let image = new Image();
+    let imgLoaded = false;
+    let sourceData = '';
+    const overlay = openModal(`
+      <h3>Change Profile Photo</h3>
+      <p>Select an image, adjust the crop, then save it to your AutoMart profile.</p>
+      <div class="profile-crop-tools">
+        <label class="btn btn-outline" style="justify-content:center;cursor:pointer">Select Image<input id="cropFileInput" type="file" accept="image/*" style="display:none"></label>
+        <div class="crop-preview-wrap"><canvas id="cropCanvas" width="320" height="320"></canvas></div>
+        <div class="form-grid" style="grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+          <div class="form-group"><label class="form-label">Zoom</label><input id="cropZoom" class="form-input" type="range" min="1" max="3" step="0.05" value="1"></div>
+          <div class="form-group"><label class="form-label">Rotate</label><input id="cropRotate" class="form-input" type="range" min="-180" max="180" step="1" value="0"></div>
+        </div>
+        <p class="form-hint" id="cropHint" style="margin-top:10px">Tip: square crop is used for the profile avatar.</p>
+      </div>
+      <div class="modal-actions"><button class="btn btn-outline" type="button" data-modal-close>Cancel</button><button class="btn btn-primary" type="button" id="saveCroppedPhoto">Save Photo</button></div>
+    `);
+    const fileInput = overlay.querySelector('#cropFileInput');
+    const canvas = overlay.querySelector('#cropCanvas');
+    const ctx = canvas.getContext('2d');
+    const zoom = overlay.querySelector('#cropZoom');
+    const rotate = overlay.querySelector('#cropRotate');
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = '#111827';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      if(!imgLoaded){
+        ctx.fillStyle = '#9a9898';
+        ctx.font = '14px DM Sans, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Select image to preview crop', canvas.width/2, canvas.height/2);
+        return;
+      }
+      const z = parseFloat(zoom.value || '1');
+      const angle = parseFloat(rotate.value || '0') * Math.PI / 180;
+      const size = Math.max(canvas.width / image.width, canvas.height / image.height) * z;
+      const w = image.width * size;
+      const h = image.height * size;
+      ctx.save();
+      ctx.translate(canvas.width/2, canvas.height/2);
+      ctx.rotate(angle);
+      ctx.drawImage(image, -w/2, -h/2, w, h);
+      ctx.restore();
+      ctx.strokeStyle = 'rgba(126,200,32,.9)';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(8,8,canvas.width-16,canvas.height-16);
+    }
+    draw();
+    zoom.addEventListener('input', draw);
+    rotate.addEventListener('input', draw);
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files && fileInput.files[0];
+      if(!file) return;
+      if(!file.type.startsWith('image/')){ toast('Please select a valid image file.', 'error'); return; }
+      if(file.size > 3 * 1024 * 1024){ toast('Image is too large. Use an image under 3MB.', 'error'); return; }
+      const reader = new FileReader();
+      reader.onload = () => {
+        sourceData = String(reader.result || '');
+        image.onload = () => { imgLoaded = true; zoom.value = '1'; rotate.value = '0'; draw(); };
+        image.src = sourceData;
+      };
+      reader.onerror = () => toast('Could not read that image.', 'error');
+      reader.readAsDataURL(file);
+    });
+    overlay.querySelector('#saveCroppedPhoto').addEventListener('click', () => {
+      if(!imgLoaded){ toast('Please select an image before saving.', 'error'); return; }
+      const cropped = canvas.toDataURL('image/png', 0.92);
+      confirmModal('Save profile picture?', 'Do you want to save this profile picture?', 'Confirm Save', () => {
+        try {
+          const state = getState();
+          state.profilePhoto = cropped;
+          setState(state);
+          const saved = getState().profilePhoto;
+          if(!saved){ toast('Photo save failed. Please try again.', 'error'); return; }
+          applyPhoto(saved);
+          overlay.remove();
+          toast('Profile photo saved successfully.');
+        } catch(err){ toast('Photo save failed. Please try again.', 'error'); }
+      });
+    });
+  }
+  function removePhoto(){
+    confirmModal('Remove profile photo?', 'Are you sure you want to remove your profile photo?', 'Confirm Remove', () => {
+      try {
+        const state = getState();
+        delete state.profilePhoto;
+        setState(state);
+        applyPhoto('');
+        toast('Profile photo removed successfully.');
+      } catch(err){ toast('Could not remove profile photo.', 'error'); }
+    });
+  }
+  function autoProvince(){
+    const city = document.querySelector('[data-district-select]');
+    const province = document.querySelector('[data-province-select]');
+    if(!city || !province) return;
+    const mapped = DISTRICT_TO_PROVINCE[city.value];
+    if(mapped) province.value = mapped;
+  }
+  function enhanceDistricts(){
+    const city = document.querySelector('[data-district-select]');
+    const province = document.querySelector('[data-province-select]');
+    if(city){ city.addEventListener('change', () => { autoProvince(); }); }
+    if(province){ province.addEventListener('change', () => { const s=getState(); s.profile = s.profile || {}; s.profile.province = province.value; setState(s); }); }
+    autoProvince();
+  }
+  function interceptSaveProfile(){
+    const saveBtn = document.querySelector('[data-settings-action="save-profile"]');
+    if(!saveBtn) return;
+    saveBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+    }, false);
+  }
+  document.addEventListener('click', function(e){
+    const actionEl = e.target.closest('[data-settings-action]');
+    if(!actionEl) return;
+    const action = actionEl.dataset.settingsAction;
+    if(action === 'change-photo'){
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      openPhotoCropModal();
+    }
+    if(action === 'remove-photo'){
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      removePhoto();
+    }
+  }, true);
+  enhanceDistricts();
+  loadSavedUI();
+})();
+</script>
+
+<style id="profile-crop-modal-polish">
+.profile-crop-tools{display:flex;flex-direction:column;gap:12px}.crop-preview-wrap{width:min(100%,340px);margin:6px auto 0;border-radius:18px;padding:10px;background:rgba(20,24,34,.9);border:1px solid rgba(126,200,32,.22);box-shadow:0 18px 48px rgba(0,0,0,.35),0 0 28px rgba(126,200,32,.08)}#cropCanvas{width:100%;height:auto;display:block;border-radius:14px;background:#111827}.settings-modal .form-input[type=range]{padding:0;height:38px;accent-color:var(--gold)}@media(max-width:560px){.crop-preview-wrap{width:100%}.settings-modal{padding:18px}}
+</style>
+
+
+
+<script src="/assets/js/automart-shared-profile.js"></script>
+<script src="/assets/js/automart-location-plan-fix.js"></script>
+<script src="/assets/js/automart-profile-remaining-fixes.js"></script>
+</body>
+</html>
