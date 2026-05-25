@@ -34,18 +34,13 @@ public class Car {
     public void setPrice(double price)         { this.price     = price;     }
     public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
 
-    /**
-     * Converts the car object to a comma-separated line for saving in cars.txt
-     * Format: C001,Toyota,Prius,2020,6500000.0,Kasun
-     */
+
     public String toFileString() {
         return carId + "," + brand + "," + model + "," +
                year  + "," + price + "," + ownerName;
     }
 
-    /**
-     * Creates a Car object from a comma-separated line read from cars.txt
-     */
+
     public static Car fromFileString(String line) {
         String[] parts = line.split(",");
         String carId     = parts[0].trim();
@@ -57,9 +52,7 @@ public class Car {
         return new Car(carId, brand, model, year, price, ownerName);
     }
 
-    /**
-     * Neatly displays a car's details on the console.
-     */
+
     public void displayCar() {
         System.out.println("┌─────────────────────────────────────────┐");
         System.out.printf ("│  Car ID   : %-27s │%n", carId);
