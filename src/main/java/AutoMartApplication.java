@@ -81,7 +81,7 @@ public class AutoMartApplication {
         }
 
         printGoodbye();
-        scanner.close(); // always close the Scanner on exit
+        scanner.close(); // always close the Scanner on exi
     }
 
 
@@ -90,7 +90,7 @@ public class AutoMartApplication {
     // ══════════════════════════════════════════════════════════════════════
 
     /**
-     * Prints the welcome banner shown once on application star.
+     * Prints the welcome banner shown once on application sta.
      */
     private static void printWelcomeBanner() {
         System.out.println();
