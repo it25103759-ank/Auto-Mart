@@ -296,7 +296,9 @@ final class AdminCrud {
             }
         }
 
-        
+        if (!found) {
+            System.out.println("\n  ✘ Request ID '" + requestId + "' not found.");
+            return;
         }
 
         writeFile(REQUESTS_FILE, updated);
