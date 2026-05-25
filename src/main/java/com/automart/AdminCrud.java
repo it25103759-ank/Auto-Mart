@@ -327,7 +327,10 @@ final class AdminCrud {
         }
     }
 
-   
+    // ===============================================================
+    // VIEW HELPERS (used by AdminDashboard menu)
+    // ===============================================================
+
     /** Displays all car listings */
     public void getAllCars() {
         System.out.println("\n========== ALL CAR LISTINGS ==========");
