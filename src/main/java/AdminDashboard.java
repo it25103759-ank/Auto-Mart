@@ -255,7 +255,7 @@ public class AdminDashboard {
                 writer.println(line);
             }
         } catch (IOException e) {
-            System.out.println("  [Error] Could not write to file: " + filename);
+           
         }
     }
 }
