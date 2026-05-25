@@ -41,9 +41,10 @@ public class AdminDashboard {
     // ===============================================================
 
     /**
+     
      * Reads and displays all users from users.txt
      * Format: UserID, Name, Email, Phone
-     * Example line: U001,Kasun,kasun@gmail.com,0771234567
+
      */
     public void viewUsers() {
         System.out.println("\n========== REGISTERED USERS ==========");
