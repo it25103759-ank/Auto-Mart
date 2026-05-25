@@ -21,3 +21,4 @@
 2026-05-23T17:17:00.708365	LISTING_DELETED	Deleted listing M04 (m04-1779535324926)
 2026-05-23T21:50:33.4035127	USER_REGISTERED	google_demo_seller registered as seller
 2026-05-23T22:46:43.5259332	USER_DELETED	google_demo_seller deleted their account
+2026-05-23T23:21:12.2541348	USER_REGISTERED	google_demo_seller registered as seller
