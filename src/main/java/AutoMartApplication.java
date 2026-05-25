@@ -81,7 +81,7 @@ public class AutoMartApplication {
         }
 
         printGoodbye();
-        scanner.close(); // alw
+        scanner.close(); // 
     }
 
 
