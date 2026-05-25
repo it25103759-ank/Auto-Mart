@@ -146,7 +146,11 @@ public class AdminDashboard {
     //  MONITOR REQUESTS
     // ===============================================================
 
-    
+    /**
+     * Reads and displays all purchase requests from requests.txt
+     * Format: RequestID, UserID, CarID, Status
+     * Example line: R001,U001,C001,Pending
+     */
     public void viewRequests() {
         System.out.println("\n========== PURCHASE REQUESTS ==========");
         List<String> lines = readFile(REQUESTS_FILE);
