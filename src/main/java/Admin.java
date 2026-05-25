@@ -5,7 +5,7 @@ public class Admin {
     private String password;
 
     // -------------------------------------------------------
-   
+    // Constructor: Initializes Admin with username and password
     // -------------------------------------------------------
     public Admin(String username, String password) {
         this.username = username;
