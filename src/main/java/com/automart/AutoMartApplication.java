@@ -4,42 +4,42 @@ import java.util.Scanner;
 
 /**
  * ============================================================
- *  AutoMartApplication.java  (Profile Settings Entry Point)
- *  Component 05 — Profile Settings
+ *  AutoMartApplication.java  (com.automart.Profile Settings Entry Point)
+ *  Component 05 — com.automart.Profile Settings
  *  Student : Siriwardana A.K.L.B.  |  IT25103761
  * ============================================================
  *
  *  PURPOSE
  *  -------
- *  This file is the main entry point for the Profile Settings
+ *  This file is the main entry point for the com.automart.Profile Settings
  *  component of the AutoMart Second-Hand Car Marketplace.
  *
  *  It presents a console menu that connects every CRUD operation
- *  in ProfileSettingsManager to the user through Scanner input.
+ *  in com.automart.ProfileSettingsManager to the user through Scanner input.
  *
  *  MENU STRUCTURE
  *  --------------
- *  1. Create Profile Settings   → ProfileSettingsManager.createProfile()
- *  2. View Profile Information  → ProfileSettingsManager.viewProfile()
- *  3. Update Username           → ProfileSettingsManager.updateUsername()
- *  4. Update Appearance         → ProfileSettingsManager.updateAppearance()
- *  5. Update Password           → ProfileSettingsManager.updatePassword()
- *  6. Delete Profile            → ProfileSettingsManager.deleteProfile()
+ *  1. Create com.automart.Profile Settings   → com.automart.ProfileSettingsManager.createProfile()
+ *  2. View com.automart.Profile Information  → com.automart.ProfileSettingsManager.viewProfile()
+ *  3. Update Username           → com.automart.ProfileSettingsManager.updateUsername()
+ *  4. Update Appearance         → com.automart.ProfileSettingsManager.updateAppearance()
+ *  5. Update Password           → com.automart.ProfileSettingsManager.updatePassword()
+ *  6. Delete com.automart.Profile            → com.automart.ProfileSettingsManager.deleteProfile()
  *  0. Exit
  *
  *  OOP CONCEPTS USED
  *  -----------------
  *  Encapsulation  : Menu logic is isolated inside printMenu() and
  *                   handleChoice(); no logic leaks into main().
- *  Abstraction    : main() only knows about ProfileSettingsManager —
- *                   it has no knowledge of files or Profile internals.
+ *  Abstraction    : main() only knows about com.automart.ProfileSettingsManager —
+ *                   it has no knowledge of files or com.automart.Profile internals.
  *  Composition    : AutoMartApplication uses (has-a) a
- *                   ProfileSettingsManager object.
+ *                   com.automart.ProfileSettingsManager object.
  *
  *  HOW TO RUN (from project root)
  *  --------------------------------
- *  javac -d out src/main/java/com/automart/Profile.java \
- *               src/main/java/com/automart/ProfileSettingsManager.java \
+ *  javac -d out src/main/java/com/automart/com.automart.Profile.java \
+ *               src/main/java/com/automart/com.automart.ProfileSettingsManager.java \
  *               src/main/java/com/automart/AutoMartApplication.java
  *
  *  java -cp out com.automart.AutoMartApplication
@@ -48,7 +48,7 @@ import java.util.Scanner;
 public class AutoMartApplication {
 
     // ── Shared Scanner (one instance for the whole application) ──────────
-    // We create it once here and pass it to ProfileSettingsManager so
+    // We create it once here and pass it to com.automart.ProfileSettingsManager so
     // we never accidentally open two Scanners on System.in at the same time.
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -96,7 +96,7 @@ public class AutoMartApplication {
         System.out.println();
         System.out.println("╔══════════════════════════════════════════════════════╗");
         System.out.println("║          AUTO MART — Second-Hand Car Marketplace     ║");
-        System.out.println("║            Component 05 : Profile Settings           ║");
+        System.out.println("║            Component 05 : com.automart.Profile Settings           ║");
         System.out.println("║         Siriwardana A.K.L.B.  |  IT25103761          ║");
         System.out.println("╠══════════════════════════════════════════════════════╣");
         System.out.println("║  Data file : src/main/resources/data/profiles.txt   ║");
@@ -115,10 +115,10 @@ public class AutoMartApplication {
         System.out.println("│               PROFILE SETTINGS MENU                 │");
         System.out.println("├──────────────────────────────────────────────────────┤");
         System.out.println("│  [C]  CREATE                                         │");
-        System.out.println("│   1.  Create Profile Settings                        │");
+        System.out.println("│   1.  Create com.automart.Profile Settings                        │");
         System.out.println("│                                                      │");
         System.out.println("│  [R]  READ                                           │");
-        System.out.println("│   2.  View Profile Information                       │");
+        System.out.println("│   2.  View com.automart.Profile Information                       │");
         System.out.println("│                                                      │");
         System.out.println("│  [U]  UPDATE                                         │");
         System.out.println("│   3.  Update Username                                │");
@@ -126,7 +126,7 @@ public class AutoMartApplication {
         System.out.println("│   5.  Update Password                                │");
         System.out.println("│                                                      │");
         System.out.println("│  [D]  DELETE                                         │");
-        System.out.println("│   6.  Delete Profile                                 │");
+        System.out.println("│   6.  Delete com.automart.Profile                                 │");
         System.out.println("│                                                      │");
         System.out.println("│   0.  Exit                                           │");
         System.out.println("└──────────────────────────────────────────────────────┘");
@@ -134,7 +134,7 @@ public class AutoMartApplication {
 
 
     // ══════════════════════════════════════════════════════════════════════
-    //  Menu routing — connects menu choices to ProfileSettingsManager
+    //  Menu routing — connects menu choices to com.automart.ProfileSettingsManager
     // ══════════════════════════════════════════════════════════════════════
 
     /**
@@ -196,7 +196,7 @@ public class AutoMartApplication {
     private static void printGoodbye() {
         System.out.println();
         System.out.println("╔══════════════════════════════════════════════════════╗");
-        System.out.println("║    Thank you for using AutoMart Profile Settings!    ║");
+        System.out.println("║    Thank you for using AutoMart com.automart.Profile Settings!    ║");
         System.out.println("║          All changes saved to profiles.txt           ║");
         System.out.println("╚══════════════════════════════════════════════════════╝");
         System.out.println();
