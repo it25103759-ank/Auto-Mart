@@ -22,7 +22,7 @@
  */
 public class Profile {
 
- 
+
 
     /** Unique profile ID, e.g. "P001" */
     private String profileId;
@@ -39,7 +39,7 @@ public class Profile {
     private String password;
 
 
-    // ── Constructor ───────────────────────────────────────────────────────
+
 
     /**
      * Creates a fully populated Profile object.
@@ -57,7 +57,7 @@ public class Profile {
     }
 
 
-    // ── Getters ───────────────────────────────────────────────────────────
+
 
     /** @return The unique profile ID */
     public String getProfileId() {
@@ -103,7 +103,7 @@ public class Profile {
     }
 
 
-    // ── File serialization helpers ────────────────────────────────────────
+
 
 
     public String toRecord() {
@@ -141,7 +141,7 @@ public class Profile {
              + "└─────────────────────────────────────┘";
     }
 
-    /** Masks all but the first character of the password for display. */
+   
     private String maskPassword() {
         if (password == null || password.isEmpty()) return "(none)";
         return password.charAt(0) + "*".repeat(password.length() - 1);
