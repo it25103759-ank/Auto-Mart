@@ -425,11 +425,7 @@ final class AdminCrud {
         }
     }
 
-    // ===============================================================
-    // FILE HANDLING HELPERS (private)
-    // ===============================================================
-
-    /** Reads all non-empty lines from a file into a List */
+    
     private List<String> readFile(String filename) {
         List<String> lines = new ArrayList<>();
         File file = new File(filename);
