@@ -6,13 +6,13 @@ import java.util.Scanner;
 
 public class AutoMartApplication {
 
-    // Shared Scanner — one instance for the whole application
+
     private static final Scanner scanner = new Scanner(System.in);
 
-    // CarManager handles all CRUD logic and file I/O
+
     private static final CarManager carManager = new CarManager();
 
-    // ── Program entry point ──────────────────────────────────────────────────
+    // Program entry point
     public static void main(String[] args) {
 
         printBanner();
