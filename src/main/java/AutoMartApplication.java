@@ -45,7 +45,7 @@ public class AutoMartApplication {
         while (running) {
             printMainMenu();
 
-            int choice = readMenuChoice(0, 9); // valid range: 0 – 9
+            int choice = readMenuChoice(0, 9);
 
             switch (choice) {
                 case 1 -> handleSubmitFeedback();          // CREATE
