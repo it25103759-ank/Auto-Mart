@@ -13,4 +13,4 @@ final class ActivityLog {
     String getAction() { return action; }
     String getCreatedAt() { return createdAt; }
     String toLine() { return "[" + createdAt + "] " + actor + ": " + action; }
-}
+
