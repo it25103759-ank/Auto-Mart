@@ -42,7 +42,7 @@ public class Admin {
     }
 
     // -------------------------------------------------------
-   
+    // toString: Useful for debugging
     // -------------------------------------------------------
     @Override
     public String toString() {
