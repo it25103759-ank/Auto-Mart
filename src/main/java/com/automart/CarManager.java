@@ -211,7 +211,7 @@ public class CarManager {
         return true;
     }
 
-    //  DELETE
+    //  DELET
 
     public boolean deleteCar(String carId) {
         Car car = findById(carId);
