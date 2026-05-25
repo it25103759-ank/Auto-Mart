@@ -36,7 +36,7 @@ public class Car {
     public void setPrice(double price)         { this.price     = price; }
     public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
 
-    // ── Convert Car → one CSV line for storage
+    // Convert Car → one CSV line for storage
     // Format:  C001,Toyota,Prius,2020,6500000.0,Kasun
     public String toFileString() {
         return carId + "," + brand + "," + model + "," + year + "," + price + "," + ownerName;
