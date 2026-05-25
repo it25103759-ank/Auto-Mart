@@ -40,9 +40,6 @@ public class AutoMartApplication {
         scanner.close();
     }
 
-    // =========================================================================
-    //  MENU SCREENS
-    // =========================================================================
 
 
     private static void printBanner() {
@@ -71,9 +68,7 @@ public class AutoMartApplication {
         System.out.println("  └─────────────────────────────────────────┘");
     }
 
-    // =========================================================================
-    //  1. ADD CAR
-    // =========================================================================
+
     private static void addCarMenu() {
         System.out.println("\n  ── Add New Car Listing ──────────────────────");
 
@@ -102,17 +97,13 @@ public class AutoMartApplication {
         carManager.addCar(newCar);
     }
 
-    // =========================================================================
-    //  2. VIEW ALL CARS
-    // =========================================================================
+
     private static void viewAllCars() {
         System.out.println("\n  ── All Car Listings ─────────────────────────");
         carManager.displayAllCars();
     }
 
-    // =========================================================================
-    //  3. SEARCH BY BRAND
-    // =========================================================================
+
     private static void searchByBrandMenu() {
         System.out.println("\n  ── Search by Brand ──────────────────────────");
         String brand = readString("  Enter brand to search: ");
@@ -120,9 +111,7 @@ public class AutoMartApplication {
         carManager.displaySearchResults(results, "Brand = \"" + brand + "\"");
     }
 
-    // =========================================================================
-    //  4. SEARCH BY MODEL
-    // =========================================================================
+
     private static void searchByModelMenu() {
         System.out.println("\n  ── Search by Model ──────────────────────────");
         String model = readString("  Enter model to search: ");
@@ -130,9 +119,7 @@ public class AutoMartApplication {
         carManager.displaySearchResults(results, "Model = \"" + model + "\"");
     }
 
-    // =========================================================================
-    //  5. SEARCH BY MAX PRICE
-    // =========================================================================
+
     private static void searchByPriceMenu() {
         System.out.println("\n  ── Search by Maximum Price ──────────────────");
         double maxPrice = readDouble("  Enter maximum price (LKR): ");
@@ -145,9 +132,7 @@ public class AutoMartApplication {
             "Price ≤ LKR " + String.format("%,.2f", maxPrice));
     }
 
-    // =========================================================================
-    //  6. UPDATE CAR
-    // =========================================================================
+
     private static void updateCarMenu() {
         System.out.println("\n  ── Update Car Details ───────────────────────");
 
@@ -182,9 +167,7 @@ public class AutoMartApplication {
         carManager.updateCar(carId, brand, model, year, price, ownerName);
     }
 
-    // =========================================================================
-    //  7. DELETE CAR
-    // =========================================================================
+
     private static void deleteCarMenu() {
         System.out.println("\n  ── Delete Car Listing ───────────────────────");
         carManager.displayAllCars();
@@ -200,7 +183,7 @@ public class AutoMartApplication {
 
         carManager.deleteCar(carId);
     }
-    
+
 
 
     private static String readString(String prompt) {
