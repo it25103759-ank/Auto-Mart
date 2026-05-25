@@ -145,12 +145,9 @@ public class Profile {
     }
 
 
-    // ── Human-readable display ────────────────────────────────────────────
 
-    /**
-     * Returns a nicely formatted string for printing to the console.
-     * Used by ProfileSettingsManager.viewProfile().
-     */
+
+    
     @Override
     public String toString() {
         return "┌─────────────────────────────────────┐\n"
