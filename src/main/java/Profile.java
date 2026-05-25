@@ -112,7 +112,7 @@ public class Profile {
 
 
     public static Profile fromRecord(String line) {
-        // Split on commas — we expect exactly 4 fields
+        
         String[] parts = line.split(",", -1);
         if (parts.length < 4) {
             return null; // malformed line — skip it
@@ -141,7 +141,7 @@ public class Profile {
              + "└─────────────────────────────────────┘";
     }
 
-   
+
     private String maskPassword() {
         if (password == null || password.isEmpty()) return "(none)";
         return password.charAt(0) + "*".repeat(password.length() - 1);
