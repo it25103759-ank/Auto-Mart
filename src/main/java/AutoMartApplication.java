@@ -1,17 +1,5 @@
 import java.util.Scanner;
 
-/**
- * AutoMartApplication.java
- * ─────────────────────────────────────────────────────────────────
- * MAIN entry point for the AutoMart Admin Dashboard Application.
- *
- * Responsibilities:
- *  1. Greet the admin and prompt for login credentials
- *  2. Authenticate using the Admin class
- *  3. On success, launch the AdminDashboard menu loop
- *  4. Handle invalid menu choices and graceful exit
- * ─────────────────────────────────────────────────────────────────
- */
 public class AutoMartApplication {
 
     // Maximum login attempts before locking out
@@ -71,8 +59,6 @@ public class AutoMartApplication {
     // ===============================================================
 
     /**
-     * Prompts the admin for credentials and verifies them.
-     * Allows up to MAX_LOGIN_ATTEMPTS tries.
      *
      * @param admin   - The Admin object holding valid credentials
      * @param scanner - Scanner for reading console input
