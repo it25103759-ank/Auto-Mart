@@ -200,12 +200,9 @@ public class AutoMartApplication {
 
         carManager.deleteCar(carId);
     }
+    
 
-    // =========================================================================
-    //  INPUT HELPERS  (beginner-friendly, no crashes on bad input)
-    // =========================================================================
 
-    /** Read a trimmed, non-null String. */
     private static String readString(String prompt) {
         System.out.print(prompt);
         return scanner.nextLine().trim();
@@ -239,7 +236,7 @@ public class AutoMartApplication {
     private static int parseIntSafe(String s) {
         try { return Integer.parseInt(s); } catch (NumberFormatException e) { return 0; }
     }
-    
+
     private static double parseDoubleSafe(String s) {
         try { return Double.parseDouble(s); } catch (NumberFormatException e) { return 0; }
     }
