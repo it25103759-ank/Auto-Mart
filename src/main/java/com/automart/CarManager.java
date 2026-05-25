@@ -214,11 +214,7 @@ public class CarManager {
     // =========================================================================
     //  DELETE
     // =========================================================================
-
-    /**
-     * Remove a car listing permanently.
-     * Returns false if the ID is not found.
-     */
+    
     public boolean deleteCar(String carId) {
         Car car = findById(carId);
         if (car == null) {
@@ -231,9 +227,6 @@ public class CarManager {
         return true;
     }
 
-    // =========================================================================
-    //  HELPERS
-    // =========================================================================
 
     private void printTableHeader() {
         System.out.println();
