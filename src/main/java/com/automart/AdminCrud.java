@@ -355,7 +355,10 @@ final class AdminCrud {
     }
 
     /** Displays all purchase requests */
-    
+    public void getAllRequests() {
+        System.out.println("\n========== PURCHASE REQUESTS ==========");
+        List<String> lines = readFile(REQUESTS_FILE);
+
         if (lines.isEmpty()) {
             System.out.println("  No requests found.");
             return;
