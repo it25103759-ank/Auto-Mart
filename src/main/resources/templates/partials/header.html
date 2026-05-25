@@ -1,0 +1,54 @@
+<header class="site-header automart-common-header {{role_class}}">
+  <div class="automart-common-bar">
+    <a class="automart-common-brand" href="/" data-show-loader>
+      <span class="automart-common-logo"><img src="/assets/img/full-project-logo.png" alt="AutoMart logo"></span>
+      <span class="automart-common-word">AutoMart</span>
+    </a>
+
+    <nav class="automart-common-nav">
+      <a class="top-nav-link {{home_active}}" href="/"><span>Home</span></a>
+      <a class="top-nav-link {{inventory_active}}" href="/inventory"><span>Inventory</span></a>
+      <a class="top-nav-link {{wishlist_active}}" href="/wishlist"><span>Wishlist</span></a>
+      {{sell_nav_html}}
+      <a class="top-nav-link {{requests_active}}" href="/requests"><span>Requests</span></a>
+      <a class="top-nav-link {{reviews_active}}" href="/reviews"><span>Reviews</span></a>
+      {{profile_nav_html}}
+    </nav>
+
+    <div class="automart-common-actions">
+      <label class="automart-common-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+        <input type="search" placeholder="Search cars..." data-header-search>
+      </label>
+      <button class="icon-btn premium-icon-btn automart-live-icon" type="button" data-live-panel-toggle="notifications" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"></path>
+          <path d="M10 20a2 2 0 0 0 4 0"></path>
+        </svg>
+        <span class="icon-count" data-notification-count>0</span>
+      </button>
+      <button class="icon-btn premium-icon-btn automart-live-icon" type="button" data-live-panel-toggle="messages" aria-label="Messages">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
+          <path d="M8 9h8M8 13h5"></path>
+        </svg>
+        <span class="icon-count" data-message-count>0</span>
+      </button>
+
+      <div class="profile-dropdown">
+        <button class="profile-toggle automart-round-profile" type="button" aria-expanded="false">
+          <span class="profile-avatar" id="globalProfileAvatar">{{user_initials}}</span>
+          <span class="profile-meta">
+            <strong id="globalProfileName">{{user_name}}</strong>
+            <small id="globalProfileRole">{{user_role}}</small>
+          </span>
+          <span class="profile-caret">⌄</span>
+        </button>
+        <div class="profile-menu">
+          {{profile_menu_links}}
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

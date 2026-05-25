@@ -1,0 +1,12 @@
+# AutoMart Reviews File
+# Format: reviewId,userId,carName,rating,comment,reviewType,timestamp
+# Example: RV001,U001,Toyota Prius,5,Excellent Condition,VerifiedReview,2025-05-24 10:30:00
+
+RV001,U001,Toyota Prius,5,Excellent condition and smooth ride. The seller was honest and responsive.,VerifiedReview,2025-05-20 09:15:00
+RV002,U002,Toyota Land Cruiser Prado TX,4,Great SUV with solid build quality. Minor scratch on the rear bumper.,PublicReview,2025-05-20 11:30:00
+RV003,U003,BMW 320i,5,Premium feel inside and out. Engine runs perfectly. Highly recommend this seller.,VerifiedReview,2025-05-21 14:00:00
+RV004,U001,Honda Vezel Hybrid,4,Fuel-efficient and well maintained. Seller provided full service history.,VerifiedReview,2025-05-21 16:45:00
+RV005,U004,Suzuki Wagon R Stingray,3,Good city car but interior shows some wear. Fair price for the condition.,PublicReview,2025-05-22 08:20:00
+RV006,U002,Mercedes-Benz CLA 180,5,Luxury at a great price. Paint and interior both in excellent condition.,VerifiedReview,2025-05-22 13:10:00
+RV007,U005,Subaru WRX STI,4,Thrilling drive. Some stone chips on bonnet but overall in great shape.,PublicReview,2025-05-23 10:00:00
+RV008,U003,Toyota Prius,4,Reliable hybrid with good fuel economy. Seller was prompt and professional.,PublicReview,2025-05-23 15:30:00
