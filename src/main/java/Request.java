@@ -4,6 +4,8 @@
 //  Model class representing a single purchase request.
 // ============================================================
 
+package com.automart;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 

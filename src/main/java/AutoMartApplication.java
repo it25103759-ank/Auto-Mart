@@ -4,6 +4,8 @@
 //  Main entry point: displays menu, reads input, calls manager.
 // ============================================================
 
+package com.automart;
+
 import java.util.List;
 import java.util.Scanner;
 

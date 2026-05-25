@@ -1,1 +1,5 @@
-REQ-1774722467687	suv-1	Land Rover Defender 110	admin	test	Pending	2026-03-28T18:27:47.693911024
+R001	suv-1	Land Rover Defender 110	buyer1	I would like to inspect this car this weekend.	Pending	2026-05-20T09:15:30.123456
+R002	sedan-1	BMW 320i	buyer2	Is the price negotiable? Please call me.	Approved	2026-05-21T11:00:00.000000
+R003	crossover-1	Jeep Renegade Limited	buyer1	Can I arrange a test drive on Saturday morning?	Pending	2026-05-22T14:30:45.789012
+R004	hybrid-3	Toyota Prius S Touring	buyer3	Very interested. Does it come with a service history?	Rejected	2026-05-23T08:45:00.000000
+R005	pickup-2	Ford F-150 Raptor Night Edition	buyer2	Please confirm mileage and availability.	Cancelled	2026-05-24T16:20:10.654321

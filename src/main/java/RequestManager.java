@@ -4,6 +4,8 @@
 //  Handles all CRUD operations and file I/O for requests.
 // ============================================================
 
+package com.automart;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
