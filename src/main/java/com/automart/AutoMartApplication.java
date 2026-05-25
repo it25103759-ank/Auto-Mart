@@ -1,14 +1,3 @@
-/**
- * AutoMartApplication.java
- * ------------------------
- * Entry point for the AutoMart Car Listing Management System.
- * Displays an interactive console menu and delegates work to CarManager.
- *
- * How to compile and run:
- *   javac Car.java CarManager.java AutoMartApplication.java
- *   java  AutoMartApplication
- */
-
 import java.util.Scanner;
 
 public class AutoMartApplication {
@@ -260,9 +249,7 @@ public class AutoMartApplication {
         }
     }
 
-    /**
-     * Reads a double from the user. Keeps asking until a valid number is entered.
-     */
+
     private static double readDouble(String prompt) {
         while (true) {
             System.out.print(prompt);
