@@ -455,7 +455,10 @@ final class AdminCrud {
         }
     }
 
-   
+    /**
+     * Deletes the first record whose first CSV field matches the given ID.
+     * @return true if deleted, false if not found
+     */
     private boolean deleteRecordById(String filename, String id) {
         List<String> lines = readFile(filename);
         List<String> updated = new ArrayList<>();
