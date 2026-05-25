@@ -1,6 +1,6 @@
 public class Admin {
 
-   
+    // --- Fields (Private for encapsulation) ---
     private String username;
     private String password;
 
