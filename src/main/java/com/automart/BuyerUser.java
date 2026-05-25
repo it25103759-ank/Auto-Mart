@@ -1,41 +1,55 @@
 package com.automart;
 
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.UUID;
-import java.util.regex.Pattern;
-import java.util.concurrent.Executors;
-
-
-import static com.automart.AutoMartApplication.*;
+// ============================================================
+//  AutoMart Application  —  Component 01: User Management
+//  FILE    : BuyerUser.java
+//  PURPOSE : Represents a buyer account.
+//            A buyer can browse the inventory, submit purchase
+//            requests, and leave reviews on listings.
+//
+//  OOP CONCEPTS USED:
+//    • Inheritance  – extends AppUser, inherits all shared fields
+//    • Polymorphism – overrides roleMessage() with buyer-specific text
+//    • Encapsulation – no additional fields exposed beyond AppUser
+// ============================================================
 
 final class BuyerUser extends AppUser {
-    BuyerUser(String username, String email, String phone, String password) { super(username, email, phone, password, "buyer"); }
-    @Override String roleMessage() { return "Buyer profile: use this account to request vehicles and leave reviews."; }
+
+    // ----------------------------------------------------------
+    //  Constructor
+    //  Calls super() with role = "buyer"
+    // ----------------------------------------------------------
+    /**
+     * Creates a buyer account.
+     *
+     * @param username chosen login handle
+     * @param email    Gmail address
+     * @param phone    10-digit mobile number
+     * @param password plain-text password (hashed inside AppUser)
+     */
+    BuyerUser(String username, String email, String phone, String password) {
+        super(username, email, phone, password, "buyer");
+    }
+
+    // ----------------------------------------------------------
+    //  Polymorphism — abstract method implementation
+    // ----------------------------------------------------------
+    /**
+     * Returns a buyer-specific role description.
+     * This method is required by the abstract AppUser contract.
+     */
+    @Override
+    String roleMessage() {
+        return "Buyer account: browse inventory, submit purchase requests, and leave reviews.";
+    }
+
+    // ----------------------------------------------------------
+    //  toString  – useful for debugging
+    // ----------------------------------------------------------
+    @Override
+    public String toString() {
+        return "BuyerUser{username=" + getUsername()
+             + ", email=" + getEmail()
+             + ", status=" + getStatus() + "}";
+    }
 }
