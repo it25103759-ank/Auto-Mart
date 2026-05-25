@@ -148,10 +148,7 @@ public class CarManager {
     //  UPDATE  –  Edit Car Details
     // ════════════════════════════════════════════════════════════════════════
 
-    /**
-     * Updates an existing car record identified by carId.
-     * Pass null / 0 for any field you do NOT want to change.
-     */
+
     public boolean updateCar(String carId, String newBrand, String newModel,
                              int newYear, double newPrice, String newOwnerName) {
 
@@ -177,9 +174,7 @@ public class CarManager {
     //  DELETE  –  Remove Car Listing
     // ════════════════════════════════════════════════════════════════════════
 
-    /**
-     * Removes the car with the given carId from the list and the file.
-     */
+
     public boolean deleteCar(String carId) {
         Car car = findCarById(carId);
         if (car == null) {
@@ -196,9 +191,7 @@ public class CarManager {
     //  HELPER METHODS
     // ════════════════════════════════════════════════════════════════════════
 
-    /**
-     * Finds a car by its ID. Returns null if not found.
-     */
+
     public Car findCarById(String carId) {
         for (Car car : carList) {
             if (car.getCarId().equalsIgnoreCase(carId)) {
@@ -208,9 +201,7 @@ public class CarManager {
         return null;
     }
 
-    /**
-     * Prints a list of search results with a heading.
-     */
+
     private void printSearchResults(List<Car> results, String criteria) {
         System.out.println("\n══════════  SEARCH RESULTS – " + criteria + "  ══════════");
         if (results.isEmpty()) {
