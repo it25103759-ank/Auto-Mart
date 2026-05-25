@@ -1,9 +1,3 @@
-/**
- * Car.java
- * --------
- * Represents a single car listing in the AutoMart system.
- * Uses OOP principles: encapsulation via private fields + getters/setters.
- */
 public class Car {
 
     // ── Fields ──────────────────────────────────────────────────────────────
