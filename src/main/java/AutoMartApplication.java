@@ -86,11 +86,11 @@ public class AutoMartApplication {
 
 
     // ══════════════════════════════════════════════════════════════════════
-    
+
     // ══════════════════════════════════════════════════════════════════════
 
     /**
-     * Prints the welcome banner shown once on application start.
+     * Prints the welcome banner shown once on application star.
      */
     private static void printWelcomeBanner() {
         System.out.println();
