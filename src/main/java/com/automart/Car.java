@@ -1,13 +1,9 @@
 package com.automart;
 
-/**
- * Car.java
- * Represents a single car listing in the AutoMart system.
- * Demonstrates OOP concepts: encapsulation, constructors, getters/setters.
- */
+
 public class Car {
 
-    // ── Fields (private for encapsulation) ──────────────────────────────────
+    //  Fields (private for encapsulation)
     private String carId;       // Unique identifier, e.g. C001
     private String brand;       // e.g. Toyota
     private String model;       // e.g. Prius
@@ -15,7 +11,7 @@ public class Car {
     private double price;       // Price in LKR
     private String ownerName;   // e.g. Kasun
 
-    // ── Constructor (used when creating a new Car object) ────────────────────
+    // Constructor (used when creating a new Car object)
     public Car(String carId, String brand, String model, int year, double price, String ownerName) {
         this.carId     = carId;
         this.brand     = brand;
@@ -25,7 +21,7 @@ public class Car {
         this.ownerName = ownerName;
     }
 
-    // ── Getters (read the private fields from outside) ───────────────────────
+    // Getters (read the private fields from outside)
     public String getCarId()     { return carId; }
     public String getBrand()     { return brand; }
     public String getModel()     { return model; }
@@ -33,20 +29,20 @@ public class Car {
     public double getPrice()     { return price; }
     public String getOwnerName() { return ownerName; }
 
-    // ── Setters (update the private fields from outside) ─────────────────────
+    // Setters (update the private fields from outside)
     public void setBrand(String brand)         { this.brand     = brand; }
     public void setModel(String model)         { this.model     = model; }
     public void setYear(int year)              { this.year      = year; }
     public void setPrice(double price)         { this.price     = price; }
     public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
 
-    // ── Convert Car → one CSV line for storage ───────────────────────────────
+    // ── Convert Car → one CSV line for storage
     // Format:  C001,Toyota,Prius,2020,6500000.0,Kasun
     public String toFileString() {
         return carId + "," + brand + "," + model + "," + year + "," + price + "," + ownerName;
     }
 
-    // ── Rebuild a Car from one CSV line read from the file ───────────────────
+    // Rebuild a Car from one CSV line read from the file
     public static Car fromFileString(String line) {
         // Split on commas; expect exactly 6 parts
         String[] parts = line.split(",", -1);
@@ -62,7 +58,7 @@ public class Car {
         return new Car(carId, brand, model, year, price, ownerName);
     }
 
-    // ── Pretty-print for console display ─────────────────────────────────────
+    // Pretty-print for console display
     @Override
     public String toString() {
         return String.format(
