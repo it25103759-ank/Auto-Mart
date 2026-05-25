@@ -21,19 +21,17 @@
 
 public abstract class Review {
 
-    // ── Private fields (Encapsulation) ─────────────────────────────────────────
-    // All fields are private so only this class (and subclasses via getters)
-    // can directly read or change them.
+    // ── Private fields (Encapsulation)
 
-    private String reviewId;       // Unique review ID   e.g. "RV001"
-    private String userId;         // User who wrote the review e.g. "U001"
-    private String carName;        // Name of the car being reviewed e.g. "Toyota Prius"
+    private String reviewId;       // Unique review ID
+    private String userId;         // User who wrote the review
+    private String carName;        // Name of the car being reviewed
     private int    rating;         // Star rating from 1 to 5
     private String comment;        // The written feedback text
     private String reviewType;     // "VerifiedReview" or "PublicReview"
     private String timestamp;      // Date/time string when review was created
 
-    // ── Constructor ─────────────────────────────────────────────────────────────
+    // ── Constructor
     // Called when a new Review object is created.
     // Subclasses call super(...) to fill in all fields.
     public Review(String reviewId, String userId, String carName,
@@ -47,12 +45,12 @@ public abstract class Review {
         this.timestamp  = timestamp;
     }
 
-    // ── Abstract method (Abstraction + Polymorphism) ───────────────────────────
+    // ── Abstract method (Abstraction + Polymorphism)
     // Every subclass MUST override this method and return its own badge label.
     // This is Polymorphism: same method name, different behaviour per subclass.
     public abstract String getReviewTypeBadge();
 
-    // ── Getters (Encapsulation – read access to private fields) ───────────────
+    // ── Getters (Encapsulation – read access to private fields)
 
     public String getReviewId()   { return reviewId;   }
     public String getUserId()     { return userId;     }
@@ -62,7 +60,7 @@ public abstract class Review {
     public String getReviewType() { return reviewType; }
     public String getTimestamp()  { return timestamp;  }
 
-    // ── Setters (Encapsulation – controlled write access) ─────────────────────
+    // ── Setters (Encapsulation – controlled write access)
     // Only comment and rating can be updated (for the Update feature).
 
     public void setComment(String comment) {
@@ -78,7 +76,7 @@ public abstract class Review {
         }
     }
 
-    // ── toFileString() ──────────────────────────────────────────────────────────
+    // ── toFileString()
     // Converts the Review object into a comma-separated line for saving
     // to the reviews.txt file.
     // Format: reviewId,userId,carName,rating,comment,reviewType,timestamp
@@ -87,7 +85,7 @@ public abstract class Review {
                rating  + "," + comment + "," + reviewType + "," + timestamp;
     }
 
-    // ── generateStars() ─────────────────────────────────────────────────────────
+    // ── generateStars()
     // Returns a visual star string like "★★★★☆" based on the rating.
     public String generateStars() {
         StringBuilder stars = new StringBuilder();
@@ -97,7 +95,7 @@ public abstract class Review {
         return stars.toString();
     }
 
-    // ── displayReview() ─────────────────────────────────────────────────────────
+    // ── displayReview()
     // Prints a nicely formatted summary of this review to the console.
     public void displayReview() {
         System.out.println("  ┌─────────────────────────────────────────────────");
@@ -111,8 +109,7 @@ public abstract class Review {
         System.out.println("  └─────────────────────────────────────────────────");
     }
 
-    // ── toString() ──────────────────────────────────────────────────────────────
-    // A compact one-line summary (used in listings).
+    // ── toString()
     @Override
     public String toString() {
         return "[" + reviewId + "] " + carName + " | " +
