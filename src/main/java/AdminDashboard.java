@@ -41,7 +41,7 @@ public class AdminDashboard {
     // ===============================================================
 
     /**
-     
+
      * Reads and displays all users from users.txt
      * Format: UserID, Name, Email, Phone
 
