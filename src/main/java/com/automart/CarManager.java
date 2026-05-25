@@ -117,9 +117,7 @@ public class CarManager {
         printSearchResults(results, "Brand: " + brand);
     }
 
-    /**
-     * Searches for cars whose model contains the given keyword (case-insensitive).
-     */
+
     public void searchByModel(String model) {
         List<Car> results = new ArrayList<>();
         for (Car car : carList) {
@@ -130,9 +128,7 @@ public class CarManager {
         printSearchResults(results, "Model: " + model);
     }
 
-    /**
-     * Searches for cars within a price range [minPrice, maxPrice].
-     */
+
     public void searchByPrice(double minPrice, double maxPrice) {
         List<Car> results = new ArrayList<>();
         for (Car car : carList) {
