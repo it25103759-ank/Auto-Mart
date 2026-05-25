@@ -112,7 +112,7 @@ public class Profile {
 
 
     public static Profile fromRecord(String line) {
-        
+
         String[] parts = line.split(",", -1);
         if (parts.length < 4) {
             return null; // malformed line — skip it
