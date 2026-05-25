@@ -191,7 +191,7 @@ public class AutoMartApplication {
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            return -1; // Signal invalid input
+            return -1; 
         }
     }
 }
