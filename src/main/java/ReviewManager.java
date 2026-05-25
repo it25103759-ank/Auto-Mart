@@ -30,18 +30,18 @@ import java.util.List;
 
 public class ReviewManager {
 
-    // ── Constants ───────────────────────────────────────────────────────────────
+    // ── Constants
     private static final String FILE_NAME      = "reviews.txt"; // file where reviews are stored
     private static final String SEPARATOR      = ",";           // delimiter used in the file
     private static final DateTimeFormatter FMT =               // timestamp format
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    // ── Internal list of reviews (Encapsulation) ─────────────────────────────
+    // ── Internal list of reviews (Encapsulation)
     // All reviews are kept in memory in this list.
     // The list is populated from file on start-up, and synced back on every change.
     private List<Review> reviews = new ArrayList<>();
 
-    // ── Counter used to auto-generate unique review IDs ───────────────────────
+    // ── Counter used to auto-generate unique review IDs
     private int idCounter = 1;
 
     // ══════════════════════════════════════════════════════════════════════════
@@ -116,7 +116,7 @@ public class ReviewManager {
                 reviews.add(review);
 
                 // Keep the ID counter ahead of existing IDs to avoid duplicates
-                // Extract number from IDs like "RV001" → 1
+                // Extract number from IDs
                 try {
                     int num = Integer.parseInt(reviewId.replaceAll("[^0-9]", ""));
                     if (num >= idCounter) idCounter = num + 1;
