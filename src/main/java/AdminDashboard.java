@@ -40,12 +40,7 @@ public class AdminDashboard {
     //  MANAGE USERS
     // ===============================================================
 
-    /**
-
-     * Reads and displays all users from users.txt
-     * Format: UserID, Name, Email, Phone
-
-     */
+    
     public void viewUsers() {
         System.out.println("\n========== REGISTERED USERS ==========");
         List<String> lines = readFile(USERS_FILE);
