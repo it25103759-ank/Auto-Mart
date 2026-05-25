@@ -180,13 +180,7 @@ public class AutoMartApplication {
     //  UTILITY: Parse integer from string safely
     // ===============================================================
 
-    /**
-     * Safely parses an integer from a String input.
-     * Returns -1 if the input is not a valid integer.
-     *
-     * @param input - Raw string from console
-     * @return Parsed integer or -1 on failure
-     */
+   
     private static int parseChoice(String input) {
         try {
             return Integer.parseInt(input);
