@@ -81,7 +81,7 @@ insert_after='''                if ("/settings/export".equals(path) && "GET".equ
 '''
 add_routes='''                if ("/profile".equals(path) && "GET".equalsIgnoreCase(exchange.getRequestMethod())) {
                     Map<String, String> query = parseQuery(exchange.getRequestURI().getRawQuery());
-                    html(exchange, page("Profile", profileContent(exchange, profileMessage(query)), true));
+                    html(exchange, page("com.automart.Profile", profileContent(exchange, profileMessage(query)), true));
                     return;
                 }
                 if ("/profile".equals(path) && "POST".equalsIgnoreCase(exchange.getRequestMethod())) {
@@ -158,7 +158,7 @@ s=s.replace('''    private static String header() {
         return "<header class='site-header'><div class='container nav'><a class='brand' href='/'><img src='/assets/img/auto-mart-logo.svg' alt='Auto Mart logo'><div><strong>Auto Mart</strong><span>Premium second-hand cars in Sri Lanka</span></div></a><nav class='top-nav'><a class='top-nav-link' href='/'><span>Home</span></a><a class='top-nav-link' href='/inventory'><span>Inventory</span></a><a class='top-nav-link' href='/sell'><span>Sell Your Car</span></a><a class='top-nav-link' href='/uploads'><span>Recent Uploads</span></a><a class='top-nav-link' href='/why-trust-us'><span>Why Trust Us</span></a><a class='top-nav-link' href='/settings'><span>Settings</span></a><a class='logout-link' href='/logout'><span>Logout</span></a></nav></div></header>";
     }
 ''','''    private static String header() {
-        return "<header class='site-header'><div class='container nav'><a class='brand' href='/'><img src='/assets/img/auto-mart-logo.svg' alt='Auto Mart logo'><div><strong>Auto Mart</strong><span>Premium second-hand cars in Sri Lanka</span></div></a><nav class='top-nav'><a class='top-nav-link' href='/'><span>Home</span></a><a class='top-nav-link' href='/inventory'><span>Inventory</span></a><a class='top-nav-link' href='/sell'><span>Sell Your Car</span></a><a class='top-nav-link' href='/requests'><span>Requests</span></a><a class='top-nav-link' href='/reviews'><span>Reviews</span></a><a class='top-nav-link' href='/profile'><span>Profile</span></a><a class='top-nav-link' href='/uploads'><span>Recent Uploads</span></a><a class='top-nav-link' href='/settings'><span>Settings</span></a>" + adminLink() + "<a class='logout-link' href='/logout'><span>Logout</span></a></nav></div></header>";
+        return "<header class='site-header'><div class='container nav'><a class='brand' href='/'><img src='/assets/img/auto-mart-logo.svg' alt='Auto Mart logo'><div><strong>Auto Mart</strong><span>Premium second-hand cars in Sri Lanka</span></div></a><nav class='top-nav'><a class='top-nav-link' href='/'><span>Home</span></a><a class='top-nav-link' href='/inventory'><span>Inventory</span></a><a class='top-nav-link' href='/sell'><span>Sell Your Car</span></a><a class='top-nav-link' href='/requests'><span>Requests</span></a><a class='top-nav-link' href='/reviews'><span>Reviews</span></a><a class='top-nav-link' href='/profile'><span>com.automart.Profile</span></a><a class='top-nav-link' href='/uploads'><span>Recent Uploads</span></a><a class='top-nav-link' href='/settings'><span>Settings</span></a>" + adminLink() + "<a class='logout-link' href='/logout'><span>Logout</span></a></nav></div></header>";
     }
 ''')
 
@@ -246,13 +246,13 @@ insert='''
         }
         String alert = message.isBlank() ? "" : "<div class='alert'>" + esc(message) + "</div>";
         String roleNote = user.roleMessage();
-        return "<section class='container section'><p class='eyebrow'>USER MANAGEMENT</p><h1>Profile Management</h1>" + alert
+        return "<section class='container section'><p class='eyebrow'>USER MANAGEMENT</p><h1>com.automart.Profile Management</h1>" + alert
                 + "<div class='panel'><p>" + esc(roleNote) + "</p><form class='sell-form' method='post' action='/profile'>"
                 + fieldWithValue("Username", "username", "username", user.getUsername())
                 + fieldWithValue("Email", "email", "name@example.com", user.getEmail())
                 + fieldWithValue("Phone", "phone", "+94 77 123 4567", user.getPhone())
                 + fieldWithValue("Password", "password", "Enter new password", user.getPassword())
-                + "<button class='btn btn-primary' type='submit'>Update Profile</button></form>"
+                + "<button class='btn btn-primary' type='submit'>Update com.automart.Profile</button></form>"
                 + "<form method='post' action='/profile/delete' onsubmit=\"return confirm('Delete this account?');\"><button class='btn btn-danger' type='submit'>Delete Account</button></form></div></section>";
     }
 
@@ -409,10 +409,10 @@ insert='''
                 users.get(i).setPassword(safe(form.getOrDefault("password", current.getPassword())).trim());
                 Files.write(USERS_FILE, users.stream().map(AppUser::toRecord).toList(), StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
                 startSession(exchange, users.get(i).getUsername());
-                return "Profile updated successfully.";
+                return "com.automart.Profile updated successfully.";
             }
         }
-        return "Profile update failed.";
+        return "com.automart.Profile update failed.";
     }
 
     private static void deleteCurrentUser(HttpExchange exchange) throws IOException {
