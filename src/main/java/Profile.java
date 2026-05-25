@@ -22,7 +22,7 @@
  */
 public class Profile {
 
-    // ── Private fields (Encapsulation) ────────────────────────────────────
+ 
 
     /** Unique profile ID, e.g. "P001" */
     private String profileId;
@@ -36,12 +36,6 @@ public class Profile {
      */
     private String appearance;
 
-    /**
-     * Plain-text password stored for the profile settings record.
-     * NOTE: In production you would store a hash (see AutoMartApplication.hashPassword).
-     *       For this beginner-friendly component we keep it readable so students
-     *       can verify the file contents easily.
-     */
     private String password;
 
 
@@ -111,25 +105,12 @@ public class Profile {
 
     // ── File serialization helpers ────────────────────────────────────────
 
-    /**
-     * Converts this Profile to a single comma-separated line suitable for
-     * writing to profiles.txt.
-     *
-     * Format:  profileId,username,appearance,password
-     *
-     * @return The CSV line (no trailing newline)
-     */
+
     public String toRecord() {
         return profileId + "," + username + "," + appearance + "," + password;
     }
 
-    /**
-     * Parses one line from profiles.txt and returns a Profile object.
-     * Returns null if the line is malformed (wrong number of fields).
-     *
-     * @param line A raw line read from profiles.txt
-     * @return     A Profile, or null if the line cannot be parsed
-     */
+
     public static Profile fromRecord(String line) {
         // Split on commas — we expect exactly 4 fields
         String[] parts = line.split(",", -1);
@@ -147,7 +128,7 @@ public class Profile {
 
 
 
-    
+
     @Override
     public String toString() {
         return "┌─────────────────────────────────────┐\n"
