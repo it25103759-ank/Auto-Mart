@@ -214,13 +214,7 @@ public class AdminDashboard {
         return lines;
     }
 
-    /**
-     * Deletes a record from a file by matching the first field (ID).
-     * Rewrites the file without the deleted line.
-     * @param filename - File to modify
-     * @param id       - The record ID to delete (e.g., U001, C002)
-     * @return true if a record was deleted, false if not found
-     */
+    
     private boolean deleteRecordById(String filename, String id) {
         List<String> lines = readFile(filename);
         List<String> updatedLines = new ArrayList<>();
