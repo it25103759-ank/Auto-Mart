@@ -1,4 +1,4 @@
-# Auto Mart Frontend Structure
++# Auto Mart Frontend Structure
 
 The authentication UI and shared layout are now separated from Java string blocks so they are easier to edit.
 
