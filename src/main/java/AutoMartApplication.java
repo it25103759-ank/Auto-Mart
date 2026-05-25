@@ -81,7 +81,7 @@ public class AutoMartApplication {
         }
 
         printGoodbye();
-        scanner.close(); // always close the Scanner 
+        scanner.close(); // always close the Sca
     }
 
 
