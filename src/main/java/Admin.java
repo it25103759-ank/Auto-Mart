@@ -32,10 +32,7 @@ public class Admin {
         this.password = password;
     }
 
-    // -------------------------------------------------------
-    // Method: Authenticate - checks entered credentials
-    // Returns true if both username and password match
-    // -------------------------------------------------------
+    
     public boolean authenticate(String enteredUsername, String enteredPassword) {
         return this.username.equals(enteredUsername) && this.password.equals(enteredPassword);
     }
