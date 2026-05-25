@@ -1,41 +1,62 @@
 package com.automart;
 
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.UUID;
-import java.util.regex.Pattern;
-import java.util.concurrent.Executors;
-
-
-import static com.automart.AutoMartApplication.*;
+// ============================================================
+//  AutoMart Application  —  Component 01: User Management
+//  FILE    : AdminUser.java
+//  PURPOSE : Represents an administrator account.
+//            Admins have elevated privileges:
+//              • View all users in the admin dashboard
+//              • Edit any user's contact details
+//              • Ban / unban user accounts
+//              • Monitor activity logs
+//
+//  OOP CONCEPTS USED:
+//    • Inheritance  – extends AppUser, inherits all shared fields
+//    • Polymorphism – overrides roleMessage() with admin-specific text
+//    • Encapsulation – isAdmin() check inherited from AppUser
+//
+//  SIGNUP NOTE:
+//    Admin accounts require a special invite code at registration
+//    ("AUTO-MART-ADMIN" by default). This is enforced in UserManager.
+// ============================================================
 
 final class AdminUser extends AppUser {
-    AdminUser(String username, String email, String phone, String password) { super(username, email, phone, password, "admin"); }
-    @Override String roleMessage() { return "Admin profile: monitor users, listings, requests, and reviews from the dashboard."; }
+
+    // ----------------------------------------------------------
+    //  Constructor
+    //  Calls super() with role = "admin"
+    // ----------------------------------------------------------
+    /**
+     * Creates an admin account.
+     *
+     * @param username chosen admin login handle
+     * @param email    Gmail address
+     * @param phone    10-digit mobile number
+     * @param password plain-text password (hashed inside AppUser)
+     */
+    AdminUser(String username, String email, String phone, String password) {
+        super(username, email, phone, password, "admin");
+    }
+
+    // ----------------------------------------------------------
+    //  Polymorphism — abstract method implementation
+    // ----------------------------------------------------------
+    /**
+     * Returns an admin-specific role description.
+     * Required by the abstract AppUser contract.
+     */
+    @Override
+    String roleMessage() {
+        return "Admin account: monitor users, listings, requests, and reviews from the control panel.";
+    }
+
+    // ----------------------------------------------------------
+    //  toString  – useful for debugging
+    // ----------------------------------------------------------
+    @Override
+    public String toString() {
+        return "AdminUser{username=" + getUsername()
+             + ", email=" + getEmail()
+             + ", status=" + getStatus() + "}";
+    }
 }
