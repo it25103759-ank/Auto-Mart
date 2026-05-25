@@ -378,7 +378,7 @@ final class AdminCrud {
         System.out.println("========================================");
     }
 
-    /** Displays all reviews */
+    
     public void getAllReviews() {
         System.out.println("\n========== ALL REVIEWS ==========");
         List<String> lines = readFile(REVIEWS_FILE);
