@@ -1,277 +1,226 @@
-/**
- * AutoMartApplication.java
- * ------------------------
- * Entry point for the AutoMart Car Listing Management System.
- * Displays an interactive console menu and delegates work to CarManager.
- *
- * How to compile and run:
- *   javac Car.java CarManager.java AutoMartApplication.java
- *   java  AutoMartApplication
- */
+package com.automart;
 
+import java.util.List;
 import java.util.Scanner;
+
 
 public class AutoMartApplication {
 
-    // Shared Scanner – one instance used throughout the program
+
     private static final Scanner scanner = new Scanner(System.in);
+
+
     private static final CarManager carManager = new CarManager();
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  MAIN
-    // ════════════════════════════════════════════════════════════════════════
+    // Program entry point
     public static void main(String[] args) {
 
-        System.out.println("╔══════════════════════════════════════════════╗");
-        System.out.println("║      🚗  Welcome to AutoMart System  🚗      ║");
-        System.out.println("║       Car Listing Management Platform        ║");
-        System.out.println("╚══════════════════════════════════════════════╝");
+        printBanner();
 
         boolean running = true;
 
         while (running) {
-            printMainMenu();
-            int choice = readInt("  Enter your choice: ");
+            printMenu();
+
+            int choice = readInt("  Your choice: ");
 
             switch (choice) {
-                case 1:
-                    handleAddCar();
-                    break;
-                case 2:
-                    handleSearchMenu();
-                    break;
-                case 3:
-                    carManager.viewAllCars();
-                    break;
-                case 4:
-                    handleUpdateCar();
-                    break;
-                case 5:
-                    handleDeleteCar();
-                    break;
-                case 6:
-                    System.out.println("\n  Thank you for using AutoMart! Goodbye 👋");
-                    running = false;
-                    break;
-                default:
-                    System.out.println("⚠  Invalid choice. Please enter a number from 1 to 6.");
+                case 1  -> addCarMenu();
+                case 2  -> viewAllCars();
+                case 3  -> searchByBrandMenu();
+                case 4  -> searchByModelMenu();
+                case 5  -> searchByPriceMenu();
+                case 6  -> updateCarMenu();
+                case 7  -> deleteCarMenu();
+                case 0  -> { System.out.println("\n  Goodbye! Thank you for using AutoMart.\n"); running = false; }
+                default -> System.out.println("  [!] Invalid choice. Please enter 0-7.");
             }
         }
 
         scanner.close();
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  MENU DISPLAY
-    // ════════════════════════════════════════════════════════════════════════
 
-    private static void printMainMenu() {
-        System.out.println("\n╔══════════════════════════════════╗");
-        System.out.println("║         MAIN MENU                ║");
-        System.out.println("╠══════════════════════════════════╣");
-        System.out.println("║  1. Add New Car Listing          ║");
-        System.out.println("║  2. Search Cars                  ║");
-        System.out.println("║  3. View All Cars                ║");
-        System.out.println("║  4. Update Car Details           ║");
-        System.out.println("║  5. Delete Car Listing           ║");
-        System.out.println("║  6. Exit                         ║");
-        System.out.println("╚══════════════════════════════════╝");
+
+    private static void printBanner() {
+        System.out.println();
+        System.out.println("  ╔══════════════════════════════════════════╗");
+        System.out.println("  ║     🚗  AutoMart — Car Listing System    ║");
+        System.out.println("  ║     Colombo, Sri Lanka                   ║");
+        System.out.println("  ╚══════════════════════════════════════════╝");
+        System.out.println();
     }
 
-    private static void printSearchMenu() {
-        System.out.println("\n  ── Search Options ──");
-        System.out.println("  1. Search by Brand");
-        System.out.println("  2. Search by Model");
-        System.out.println("  3. Search by Price Range");
-        System.out.println("  4. Back to Main Menu");
+
+    private static void printMenu() {
+        System.out.println();
+        System.out.println("  ┌─────────────────────────────────────────┐");
+        System.out.println("  │           MAIN MENU                     │");
+        System.out.println("  ├─────────────────────────────────────────┤");
+        System.out.println("  │  1. Add New Car Listing                 │");
+        System.out.println("  │  2. View All Cars                       │");
+        System.out.println("  │  3. Search by Brand                     │");
+        System.out.println("  │  4. Search by Model                     │");
+        System.out.println("  │  5. Search by Max Price                 │");
+        System.out.println("  │  6. Update Car Details                  │");
+        System.out.println("  │  7. Delete Car Listing                  │");
+        System.out.println("  │  0. Exit                                │");
+        System.out.println("  └─────────────────────────────────────────┘");
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  HANDLER  –  1. ADD CAR
-    // ════════════════════════════════════════════════════════════════════════
 
-    private static void handleAddCar() {
-        System.out.println("\n══════════  ADD NEW CAR LISTING  ══════════");
+    private static void addCarMenu() {
+        System.out.println("\n  ── Add New Car Listing ──────────────────────");
 
-        System.out.print("  Car ID      (e.g. C001) : ");
-        String carId = scanner.nextLine().trim();
-
-        System.out.print("  Brand       (e.g. Toyota): ");
-        String brand = scanner.nextLine().trim();
-
-        System.out.print("  Model       (e.g. Prius) : ");
-        String model = scanner.nextLine().trim();
-
-        int year = readInt("  Year        (e.g. 2020) : ");
-
-        double price = readDouble("  Price (Rs.) (e.g. 6500000): ");
-
-        System.out.print("  Owner Name  (e.g. Kasun) : ");
-        String ownerName = scanner.nextLine().trim();
+        String carId     = readString("  Car ID       (e.g. C001)      : ");
+        String brand     = readString("  Brand        (e.g. Toyota)    : ");
+        String model     = readString("  Model        (e.g. Prius)     : ");
+        int    year      = readInt   ("  Year         (e.g. 2020)      : ");
+        double price     = readDouble("  Price in LKR (e.g. 6500000)   : ");
+        String ownerName = readString("  Owner Name   (e.g. Kasun)     : ");
 
         // Basic validation
-        if (carId.isEmpty() || brand.isEmpty() || model.isEmpty() || ownerName.isEmpty()) {
-            System.out.println("❌  All fields are required. Please try again.");
+        if (carId.isBlank() || brand.isBlank() || model.isBlank()) {
+            System.out.println("  [!] Car ID, Brand, and Model cannot be empty.");
             return;
         }
-        if (year < 1886 || year > 2100) {          // 1886 = first car ever made
-            System.out.println("❌  Please enter a valid year.");
+        if (year < 1900 || year > 2100) {
+            System.out.println("  [!] Please enter a valid year.");
             return;
         }
         if (price <= 0) {
-            System.out.println("❌  Price must be greater than zero.");
+            System.out.println("  [!] Price must be greater than zero.");
             return;
         }
 
-        carManager.addCar(carId, brand, model, year, price, ownerName);
+        Car newCar = new Car(carId, brand, model, year, price, ownerName);
+        carManager.addCar(newCar);
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  HANDLER  –  2. SEARCH CARS
-    // ════════════════════════════════════════════════════════════════════════
 
-    private static void handleSearchMenu() {
-        printSearchMenu();
-        int choice = readInt("  Enter search option: ");
+    private static void viewAllCars() {
+        System.out.println("\n  ── All Car Listings ─────────────────────────");
+        carManager.displayAllCars();
+    }
 
-        switch (choice) {
-            case 1:
-                System.out.print("  Enter Brand to search: ");
-                String brand = scanner.nextLine().trim();
-                carManager.searchByBrand(brand);
-                break;
 
-            case 2:
-                System.out.print("  Enter Model keyword to search: ");
-                String model = scanner.nextLine().trim();
-                carManager.searchByModel(model);
-                break;
+    private static void searchByBrandMenu() {
+        System.out.println("\n  ── Search by Brand ──────────────────────────");
+        String brand = readString("  Enter brand to search: ");
+        List<Car> results = carManager.searchByBrand(brand);
+        carManager.displaySearchResults(results, "Brand = \"" + brand + "\"");
+    }
 
-            case 3:
-                double minPrice = readDouble("  Enter Minimum Price (Rs.): ");
-                double maxPrice = readDouble("  Enter Maximum Price (Rs.): ");
-                if (minPrice > maxPrice) {
-                    System.out.println("❌  Minimum price cannot be greater than maximum price.");
-                } else {
-                    carManager.searchByPrice(minPrice, maxPrice);
-                }
-                break;
 
-            case 4:
-                // Go back
-                break;
+    private static void searchByModelMenu() {
+        System.out.println("\n  ── Search by Model ──────────────────────────");
+        String model = readString("  Enter model to search: ");
+        List<Car> results = carManager.searchByModel(model);
+        carManager.displaySearchResults(results, "Model = \"" + model + "\"");
+    }
 
-            default:
-                System.out.println("⚠  Invalid search option.");
+
+    private static void searchByPriceMenu() {
+        System.out.println("\n  ── Search by Maximum Price ──────────────────");
+        double maxPrice = readDouble("  Enter maximum price (LKR): ");
+        if (maxPrice <= 0) {
+            System.out.println("  [!] Price must be greater than zero.");
+            return;
         }
+        List<Car> results = carManager.searchByMaxPrice(maxPrice);
+        carManager.displaySearchResults(results,
+            "Price ≤ LKR " + String.format("%,.2f", maxPrice));
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  HANDLER  –  4. UPDATE CAR
-    // ════════════════════════════════════════════════════════════════════════
 
-    private static void handleUpdateCar() {
-        System.out.println("\n══════════  UPDATE CAR DETAILS  ══════════");
-        System.out.print("  Enter Car ID to update: ");
-        String carId = scanner.nextLine().trim();
+    private static void updateCarMenu() {
+        System.out.println("\n  ── Update Car Details ───────────────────────");
 
-        // Show existing details first
-        var existing = carManager.findCarById(carId);
+        // First show the list so the user knows which IDs exist
+        carManager.displayAllCars();
+
+        String carId = readString("  Enter Car ID to update: ");
+        Car existing = carManager.findById(carId);
         if (existing == null) {
-            System.out.println("❌  Car ID '" + carId + "' not found.");
+            System.out.println("  [!] Car ID '" + carId + "' not found.");
             return;
         }
 
-        System.out.println("\n  Current details:");
-        existing.displayCar();
-        System.out.println("  (Press ENTER to keep the current value for any field)\n");
+        System.out.println("  (Leave blank to keep the current value)");
+        System.out.printf ("  Current brand      : %s%n", existing.getBrand());
+        String brand     = readString("  New brand          : ");
 
-        // Collect new values – blank input means "keep existing"
-        System.out.print("  New Brand       [" + existing.getBrand() + "]: ");
-        String newBrand = scanner.nextLine().trim();
+        System.out.printf ("  Current model      : %s%n", existing.getModel());
+        String model     = readString("  New model          : ");
 
-        System.out.print("  New Model       [" + existing.getModel() + "]: ");
-        String newModel = scanner.nextLine().trim();
+        System.out.printf ("  Current year       : %d%n", existing.getYear());
+        String yearStr   = readString("  New year (0 = skip): ");
+        int year         = yearStr.isBlank() ? 0 : parseIntSafe(yearStr);
 
-        System.out.print("  New Year        [" + existing.getYear() + "]: ");
-        String yearInput = scanner.nextLine().trim();
-        int newYear = yearInput.isEmpty() ? 0 : Integer.parseInt(yearInput);
+        System.out.printf ("  Current price (LKR): %.2f%n", existing.getPrice());
+        String priceStr  = readString("  New price (0 = skip): ");
+        double price     = priceStr.isBlank() ? 0 : parseDoubleSafe(priceStr);
 
-        System.out.print("  New Price (Rs.) [" + existing.getPrice() + "]: ");
-        String priceInput = scanner.nextLine().trim();
-        double newPrice = priceInput.isEmpty() ? 0 : Double.parseDouble(priceInput);
+        System.out.printf ("  Current owner      : %s%n", existing.getOwnerName());
+        String ownerName = readString("  New owner name     : ");
 
-        System.out.print("  New Owner Name  [" + existing.getOwnerName() + "]: ");
-        String newOwnerName = scanner.nextLine().trim();
-
-        carManager.updateCar(carId, newBrand, newModel, newYear, newPrice, newOwnerName);
-
-        // Show the updated record
-        System.out.println("\n  Updated details:");
-        carManager.findCarById(carId).displayCar();
+        carManager.updateCar(carId, brand, model, year, price, ownerName);
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  HANDLER  –  5. DELETE CAR
-    // ════════════════════════════════════════════════════════════════════════
 
-    private static void handleDeleteCar() {
-        System.out.println("\n══════════  DELETE CAR LISTING  ══════════");
-        System.out.print("  Enter Car ID to delete: ");
-        String carId = scanner.nextLine().trim();
+    private static void deleteCarMenu() {
+        System.out.println("\n  ── Delete Car Listing ───────────────────────");
+        carManager.displayAllCars();
 
-        // Show the record before deleting
-        var car = carManager.findCarById(carId);
-        if (car == null) {
-            System.out.println("❌  Car ID '" + carId + "' not found.");
-            return;
-        }
+        String carId = readString("  Enter Car ID to delete: ");
 
-        System.out.println("\n  Car to be deleted:");
-        car.displayCar();
-
-        // Confirm before deleting
-        System.out.print("  Are you sure you want to delete this listing? (yes/no): ");
-        String confirm = scanner.nextLine().trim();
-
-        if (confirm.equalsIgnoreCase("yes") || confirm.equalsIgnoreCase("y")) {
-            carManager.deleteCar(carId);
-        } else {
+        // Confirmation prompt
+        String confirm = readString("  Are you sure you want to delete '" + carId + "'? (yes/no): ");
+        if (!"yes".equalsIgnoreCase(confirm.trim())) {
             System.out.println("  Deletion cancelled.");
+            return;
         }
+
+        carManager.deleteCar(carId);
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    //  UTILITY HELPERS  –  Safe input reading
-    // ════════════════════════════════════════════════════════════════════════
 
-    /**
-     * Reads an integer from the user. Keeps asking until a valid int is entered.
-     */
+
+    private static String readString(String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine().trim();
+    }
+
+
     private static int readInt(String prompt) {
         while (true) {
             System.out.print(prompt);
-            String input = scanner.nextLine().trim();
+            String line = scanner.nextLine().trim();
             try {
-                return Integer.parseInt(input);
+                return Integer.parseInt(line);
             } catch (NumberFormatException e) {
-                System.out.println("⚠  Please enter a valid whole number.");
+                System.out.println("  [!] Please enter a whole number.");
             }
         }
     }
 
-    /**
-     * Reads a double from the user. Keeps asking until a valid number is entered.
-     */
     private static double readDouble(String prompt) {
         while (true) {
             System.out.print(prompt);
-            String input = scanner.nextLine().trim();
+            String line = scanner.nextLine().trim();
             try {
-                return Double.parseDouble(input);
+                return Double.parseDouble(line);
             } catch (NumberFormatException e) {
-                System.out.println("⚠  Please enter a valid number.");
+                System.out.println("  [!] Please enter a valid number.");
             }
         }
+    }
+
+    private static int parseIntSafe(String s) {
+        try { return Integer.parseInt(s); } catch (NumberFormatException e) { return 0; }
+    }
+
+    private static double parseDoubleSafe(String s) {
+        try { return Double.parseDouble(s); } catch (NumberFormatException e) { return 0; }
     }
 }
