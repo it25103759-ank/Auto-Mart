@@ -1,13 +1,6 @@
 import java.io.*;
 import java.util.*;
 
-/**
- * AdminDashboard.java
- * Handles all Admin Dashboard operations:
- *  - Viewing users, car listings, and requests from text files
- *  - Deleting user and car listing records
- * Uses file handling: File, Scanner, PrintWriter
- */
 public class AdminDashboard {
 
     // --- File paths for data storage ---
