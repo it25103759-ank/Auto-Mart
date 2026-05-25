@@ -3,22 +3,7 @@ package com.automart;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * AutoMartApplication.java
- * ─────────────────────────────────────────────────────────────────────────────
- * Entry point for the AutoMart Car Listing Management System.
- *
- * Menu options
- *   1. Add New Car Listing
- *   2. View All Cars
- *   3. Search by Brand
- *   4. Search by Model
- *   5. Search by Max Price
- *   6. Update Car Details
- *   7. Delete Car Listing
- *   0. Exit
- * ─────────────────────────────────────────────────────────────────────────────
- */
+
 public class AutoMartApplication {
 
     // Shared Scanner — one instance for the whole application
@@ -59,7 +44,7 @@ public class AutoMartApplication {
     //  MENU SCREENS
     // =========================================================================
 
-    /** Welcome banner printed once at startup. */
+
     private static void printBanner() {
         System.out.println();
         System.out.println("  ╔══════════════════════════════════════════╗");
@@ -69,7 +54,7 @@ public class AutoMartApplication {
         System.out.println();
     }
 
-    /** Main navigation menu. */
+
     private static void printMenu() {
         System.out.println();
         System.out.println("  ┌─────────────────────────────────────────┐");
@@ -226,7 +211,7 @@ public class AutoMartApplication {
         return scanner.nextLine().trim();
     }
 
-    /** Read an integer; reprompts on invalid input. */
+
     private static int readInt(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -239,7 +224,6 @@ public class AutoMartApplication {
         }
     }
 
-    /** Read a double; reprompts on invalid input. */
     private static double readDouble(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -252,12 +236,10 @@ public class AutoMartApplication {
         }
     }
 
-    /** Parse an int safely; returns 0 on failure. */
     private static int parseIntSafe(String s) {
         try { return Integer.parseInt(s); } catch (NumberFormatException e) { return 0; }
     }
-
-    /** Parse a double safely; returns 0 on failure. */
+    
     private static double parseDoubleSafe(String s) {
         try { return Double.parseDouble(s); } catch (NumberFormatException e) { return 0; }
     }
