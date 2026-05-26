@@ -168,9 +168,7 @@ public class AutoMartApplication {
         manager.updateReview(reviewId, newComment, newRating);
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  MENU HANDLER — Option 4: Delete a Review (DELETE)
-    // ══════════════════════════════════════════════════════════════════════════
     private static void handleDeleteReview() {
         System.out.println("\n  ── DELETE A REVIEW ──────────────────────────────");
 
@@ -196,9 +194,7 @@ public class AutoMartApplication {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  MENU HANDLER — Option 5: View Ratings (Cars & Sellers)
-    // ══════════════════════════════════════════════════════════════════════════
     private static void handleRatingsMenu() {
         boolean inRatingsMenu = true;
 
@@ -215,9 +211,7 @@ public class AutoMartApplication {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  MENU HANDLER — Option 6: Find Review by ID (READ)
-    // ══════════════════════════════════════════════════════════════════════════
     private static void handleViewReviewById() {
         System.out.println("\n  ── FIND REVIEW BY ID ────────────────────────────");
         System.out.print("  Enter Review ID (e.g. RV001): ");
@@ -225,9 +219,7 @@ public class AutoMartApplication {
         manager.viewReviewById(reviewId);
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  MENU HANDLER — Option 7: Search Reviews by Car Name (READ)
-    // ══════════════════════════════════════════════════════════════════════════
     private static void handleSearchByCar() {
         System.out.println("\n  ── SEARCH REVIEWS BY CAR NAME ───────────────────");
         System.out.print("  Enter car name or keyword (e.g. Prius): ");
