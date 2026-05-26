@@ -27,18 +27,10 @@ public class ReviewManager {
     // Counter used to auto-generate unique review IDs
     private int idCounter = 1;
 
-    // ══════════════════════════════════════════════════════════════════════════
-    //  CONSTRUCTOR — called once when AutoMartApplication starts up
-    // ══════════════════════════════════════════════════════════════════════════
     public ReviewManager() {
         loadFromFile(); // load any existing reviews from reviews.txt
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    //  FILE HANDLING — loadFromFile()
-    //  Reads reviews.txt line by line and rebuilds Review objects in memory.
-    //  Called automatically in the constructor.
-    // ══════════════════════════════════════════════════════════════════════════
     public void loadFromFile() {
         reviews.clear(); // reset the list before loading
 
@@ -112,12 +104,9 @@ public class ReviewManager {
             System.out.println("  [ERROR] Could not read " + FILE_NAME + ": " + e.getMessage());
         }
     }
-
-    // ══════════════════════════════════════════════════════════════════════════
     //  FILE HANDLING — saveToFile()
     //  Writes all in-memory reviews back to reviews.txt.
     //  Called after every Create / Update / Delete operation.
-    // ══════════════════════════════════════════════════════════════════════════
     public void saveToFile() {
         // PrintWriter overwrites the file entirely each time (simple approach)
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_NAME, false))) {
@@ -140,10 +129,8 @@ public class ReviewManager {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  HELPER — generateId()
     //  Creates a unique review ID like "RV001", "RV002", etc.
-    // ══════════════════════════════════════════════════════════════════════════
     private String generateId() {
         // String.format pads the number with leading zeros to 3 digits
         String id = String.format("RV%03d", idCounter);
@@ -151,19 +138,15 @@ public class ReviewManager {
         return id;
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  HELPER — currentTimestamp()
     //  Returns the current date and time as a formatted string.
-    // ══════════════════════════════════════════════════════════════════════════
     private String currentTimestamp() {
         return LocalDateTime.now().format(FMT);
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  HELPER — findById()
     //  Searches the list for a Review with a matching ID.
     //  Returns null if not found.
-    // ══════════════════════════════════════════════════════════════════════════
     private Review findById(String reviewId) {
         for (Review review : reviews) {
             // Case-insensitive comparison
@@ -174,17 +157,8 @@ public class ReviewManager {
         return null; // not found
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  CREATE — submitReview()
-    //  Adds a brand-new review. Called from the main menu option 1.
-    //
-    //  Parameters:
-    //    userId     – who is submitting (e.g. "U001")
-    //    carName    – which car is being reviewed (e.g. "Toyota Prius")
-    //    rating     – star rating 1–5
-    //    comment    – written feedback
-    //    isVerified – true = VerifiedReview, false = PublicReview
-    // ══════════════════════════════════════════════════════════════════════════
+    
     public void submitReview(String userId, String carName, int rating,
                              String comment, boolean isVerified) {
 
