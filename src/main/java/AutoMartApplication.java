@@ -13,15 +13,11 @@ import java.util.Scanner;
 
 public class AutoMartApplication {
 
-    // ── Shared Scanner (one instance throughout the program) ──────────────────
     private static final Scanner scanner = new Scanner(System.in);
 
-    // ── ReviewManager handles all business logic and file I/O ─────────────────
+    // ReviewManager handles all business logic and file I/O 
     private static final ReviewManager manager = new ReviewManager();
 
-    // ══════════════════════════════════════════════════════════════════════════
-    //  ENTRY POINT
-    // ══════════════════════════════════════════════════════════════════════════
     public static void main(String[] args) {
         printWelcomeBanner();
 
@@ -54,16 +50,12 @@ public class AutoMartApplication {
         scanner.close();
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    //  MENU DISPLAY METHODS
-    // ══════════════════════════════════════════════════════════════════════════
-
     // Prints the welcome banner shown once on startup
     private static void printWelcomeBanner() {
         System.out.println();
         System.out.println("  ╔══════════════════════════════════════════════════╗");
-        System.out.println("  ║         🚗  AUTO MART APPLICATION  🚗            ║");
-        System.out.println("  ║        Feedback & Review System v1.0            ║");
+        System.out.println("  ║         🚗  AUTO MART APPLICATION  🚗           ║");
+        System.out.println("  ║        Feedback & Review System v1.0             ║");
         System.out.println("  ╚══════════════════════════════════════════════════╝");
         System.out.println("  Loaded " + manager.getTotalReviews() + " existing review(s) from file.");
         System.out.println();
@@ -112,9 +104,7 @@ public class AutoMartApplication {
         System.out.println();
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  MENU HANDLER — Option 1: Submit Feedback (CREATE)
-    // ══════════════════════════════════════════════════════════════════════════
     private static void handleSubmitFeedback() {
         System.out.println("\n  ── SUBMIT NEW FEEDBACK ──────────────────────────");
 
@@ -147,16 +137,11 @@ public class AutoMartApplication {
         manager.submitReview(userId, carName, rating, comment, isVerified);
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  MENU HANDLER — Option 2: View All Reviews (READ)
-    // ══════════════════════════════════════════════════════════════════════════
     private static void handleViewReviews() {
         manager.viewAllReviews();
     }
-
-    // ══════════════════════════════════════════════════════════════════════════
     //  MENU HANDLER — Option 3: Update a Review (UPDATE)
-    // ══════════════════════════════════════════════════════════════════════════
     private static void handleUpdateReview() {
         System.out.println("\n  ── UPDATE A REVIEW ──────────────────────────────");
 
