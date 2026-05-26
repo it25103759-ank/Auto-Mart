@@ -208,11 +208,9 @@ public class ReviewManager {
         review.displayReview();
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  READ — viewAllReviews()
     //  Displays every review in the list.
     //  Called from main menu option 2.
-    // ══════════════════════════════════════════════════════════════════════════
     public void viewAllReviews() {
         if (reviews.isEmpty()) {
             System.out.println("\n  No reviews found. Be the first to submit feedback!");
@@ -226,10 +224,8 @@ public class ReviewManager {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  READ — viewReviewById()
     //  Finds and displays a single review by its ID.
-    // ══════════════════════════════════════════════════════════════════════════
     public void viewReviewById(String reviewId) {
         Review review = findById(reviewId);
         if (review == null) {
@@ -240,10 +236,8 @@ public class ReviewManager {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  READ — viewReviewsByCar()
     //  Displays all reviews for a specific car name.
-    // ══════════════════════════════════════════════════════════════════════════
     public void viewReviewsByCar(String carName) {
         boolean found = false;
         System.out.println("\n  ── Reviews for: " + carName + " ──");
@@ -262,16 +256,9 @@ public class ReviewManager {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  UPDATE — updateReview()
-    //  Edits the comment and/or rating of an existing review.
     //  Called from main menu option 3.
-    //
-    //  Parameters:
-    //    reviewId   – the ID of the review to update
-    //    newComment – new feedback text (pass null to keep existing)
-    //    newRating  – new star rating (pass 0 to keep existing)
-    // ══════════════════════════════════════════════════════════════════════════
+    
     public void updateReview(String reviewId, String newComment, int newRating) {
         Review review = findById(reviewId);
 
@@ -309,11 +296,8 @@ public class ReviewManager {
         review.displayReview();
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    
     //  DELETE — deleteReview()
-    //  Removes a review from the list and updates the file.
-    //  Called from main menu option 4.
-    // ══════════════════════════════════════════════════════════════════════════
     public void deleteReview(String reviewId) {
         Review toRemove = findById(reviewId);
 
@@ -335,12 +319,8 @@ public class ReviewManager {
         System.out.println("  🗑️  Review " + reviewId + " deleted successfully.");
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    
     //  RATINGS — showCarRatings()
-    //  Calculates and displays the average star rating for each car.
-    //  This satisfies the "Add Ratings for Cars" requirement.
-    //  Called from main menu option 5.
-    // ══════════════════════════════════════════════════════════════════════════
     public void showCarRatings() {
         if (reviews.isEmpty()) {
             System.out.println("\n  No reviews yet. Submit some reviews first!");
@@ -385,13 +365,8 @@ public class ReviewManager {
         System.out.println("  ═════════════════════════════════════════");
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    
     //  RATINGS — showSellerRatings()
-    //  Calculates and displays the average star rating for each seller/user.
-    //  This satisfies the "Add Ratings for Sellers" requirement.
-    //  Sellers are identified by their userId.
-    //  Called from main menu option 5.
-    // ══════════════════════════════════════════════════════════════════════════
     public void showSellerRatings() {
         if (reviews.isEmpty()) {
             System.out.println("\n  No reviews yet. Submit some reviews first!");
@@ -436,18 +411,12 @@ public class ReviewManager {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  UTILITY — getTotalReviews()
-    //  Returns the number of reviews currently in memory.
-    // ══════════════════════════════════════════════════════════════════════════
     public int getTotalReviews() {
         return reviews.size();
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  UTILITY — showSummaryStats()
-    //  Shows a quick overview: total reviews, breakdown by type, overall avg.
-    // ══════════════════════════════════════════════════════════════════════════
     public void showSummaryStats() {
         System.out.println("\n  ══════════ REVIEW SYSTEM STATS ══════════");
         System.out.println("  Total Reviews    : " + reviews.size());
