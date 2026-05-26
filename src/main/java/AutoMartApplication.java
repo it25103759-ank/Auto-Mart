@@ -1,17 +1,4 @@
-// ============================================================
-//  AutoMart Application — Feedback & Review System
-//  FILE: AutoMartApplication.java
-//
-//  PURPOSE:
-//    This is the ENTRY POINT of the console program.
-//    It displays the interactive menu, reads user input,
-//    and connects every option to the correct ReviewManager method.
-//
-//  HOW TO COMPILE & RUN:
-//    1. Open a terminal in the folder containing these 3 files.
-//    2. Compile:  javac AutoMartApplication.java
-//    3. Run:      java AutoMartApplication
-//
+
 //  OOP CONCEPTS USED:
 //    • Encapsulation  – menu logic is separated into helper methods
 //    • Abstraction    – main() stays clean; details are hidden in helpers
@@ -21,7 +8,6 @@
 //    • Review.java         (Review + VerifiedReview + PublicReview classes)
 //    • ReviewManager.java  (CRUD + file handling logic)
 //    • reviews.txt         (data file — auto-created if missing)
-// ============================================================
 
 import java.util.Scanner;
 
