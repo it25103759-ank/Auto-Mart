@@ -20,8 +20,7 @@ package com.automart;
  *  profileId , username , appearance , password
  *  Example:
  *  P001,Kasun,DarkMode,1234
- * ============================================================
- */
+ * ============================================================*/
 public class Profile {
 
 
@@ -34,7 +33,7 @@ public class Profile {
 
     /**
      * Appearance / theme preference.
-     * Valid values: "DarkMode" | "LightMode" | "SystemDefault"
+     * Valid values: "DarkMode" | "LightMode" | "SystemDefau"
      */
     private String appearance;
 

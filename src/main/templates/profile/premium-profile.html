@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AutoMart — My Profile</title>
+<title>AutoMart — My com.automart.Profile</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -386,7 +386,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   <nav class="nav-links">
     <a class="nav-link" href="/" style="text-decoration:none">Home</a>
     <a class="nav-link" href="/inventory" style="text-decoration:none">Inventory</a>
-    <a class="nav-link active" href="/profile" style="text-decoration:none">Profile</a>
+    <a class="nav-link active" href="/profile" style="text-decoration:none">com.automart.Profile</a>
     <a class="nav-link" href="/sell" style="text-decoration:none">Sell Car</a>
     <a class="nav-link" href="/requests" style="text-decoration:none">Requests</a>
     <a class="nav-link" href="/reviews" style="text-decoration:none">Reviews</a>
@@ -475,9 +475,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             View Public
           </button>
-          <button class="btn btn-gold btn-sm" onclick="showToast('Profile saved!')">
+          <button class="btn btn-gold btn-sm" onclick="showToast('com.automart.Profile saved!')">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-            Save Profile
+            Save com.automart.Profile
           </button>
         </div>
       </div>
@@ -488,7 +488,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;heigh
   <div class="complete-bar">
     <div class="complete-pct">82%</div>
     <div class="complete-info">
-      <div class="complete-label">Profile Strength — <span style="color:var(--warn)">Good</span></div>
+      <div class="complete-label">com.automart.Profile Strength — <span style="color:var(--warn)">Good</span></div>
       <div class="complete-track"><div class="complete-fill" style="width:82%"></div></div>
       <div class="complete-hint">Add a profile bio and inspection city to reach <strong style="color:var(--gold-l)">100% — Premium</strong></div>
     </div>
@@ -1163,7 +1163,7 @@ window.addEventListener('load', () => {
     write(PROFILE_KEY,next);
     write(ADMIN_PROFILE_KEY,Object.assign(read(ADMIN_PROFILE_KEY,{}),{fullName:(next.firstName+' '+next.lastName).trim(),username:next.displayName,email:next.email,phone:next.phone,photo:next.photo}));
     applyProfile();
-    log('Profile updated: '+next.displayName);
+    log('com.automart.Profile updated: '+next.displayName);
     toast('Changes saved successfully');
   }
   function log(msg){
@@ -1199,7 +1199,7 @@ window.addEventListener('load', () => {
     document.querySelectorAll('.form-actions .btn-gold').forEach(btn=>{btn.onclick=(e)=>{e.preventDefault(); saveProfile();};});
     const topSave=[...document.querySelectorAll('.hero-actions .btn-gold')][0]; if(topSave) topSave.onclick=(e)=>{e.preventDefault(); saveProfile();};
     const file=document.getElementById('premiumProfilePhotoInput');
-    if(file)file.onchange=()=>{const f=file.files&&file.files[0]; if(!f)return; if(!f.type.startsWith('image/'))return toast('Please choose a valid image.'); const r=new FileReader(); r.onload=()=>{const p=Object.assign(profile(),{photo:r.result}); write(PROFILE_KEY,p); write(ADMIN_PROFILE_KEY,Object.assign(read(ADMIN_PROFILE_KEY,{}),{photo:r.result,fullName:(p.firstName+' '+p.lastName).trim(),username:p.displayName,email:p.email,phone:p.phone})); applyProfile(); log('Profile photo updated'); toast('Profile photo saved');}; r.readAsDataURL(f);};
+    if(file)file.onchange=()=>{const f=file.files&&file.files[0]; if(!f)return; if(!f.type.startsWith('image/'))return toast('Please choose a valid image.'); const r=new FileReader(); r.onload=()=>{const p=Object.assign(profile(),{photo:r.result}); write(PROFILE_KEY,p); write(ADMIN_PROFILE_KEY,Object.assign(read(ADMIN_PROFILE_KEY,{}),{photo:r.result,fullName:(p.firstName+' '+p.lastName).trim(),username:p.displayName,email:p.email,phone:p.phone})); applyProfile(); log('com.automart.Profile photo updated'); toast('com.automart.Profile photo saved');}; r.readAsDataURL(f);};
   }
   window.addEventListener('storage',e=>{ if([PROFILE_KEY,ADMIN_PROFILE_KEY,SHARED_KEY,PANEL_KEY].includes(e.key)) applyProfile(); });
   document.addEventListener('DOMContentLoaded',()=>{wire(); applyProfile();});
@@ -1220,12 +1220,12 @@ window.addEventListener('load', () => {
   function rewriteSaveButtons(){
     document.querySelectorAll('.form-actions .btn-gold,.hero-actions .btn-gold').forEach(btn=>{
       if(btn.dataset.realConfirm==='1')return; btn.dataset.realConfirm='1';
-      btn.onclick=function(e){e.preventDefault(); confirmSave('Do you want to save these changes?',()=>{ if(typeof saveProfile==='function') saveProfile(); else toast('Changes saved successfully'); log('Profile settings saved'); });};
+      btn.onclick=function(e){e.preventDefault(); confirmSave('Do you want to save these changes?',()=>{ if(typeof saveProfile==='function') saveProfile(); else toast('Changes saved successfully'); log('com.automart.Profile settings saved'); });};
     });
     document.querySelectorAll('.listing-actions .btn-danger').forEach(btn=>{ if(btn.dataset.realConfirm==='1')return; btn.dataset.realConfirm='1'; btn.onclick=function(e){e.preventDefault(); const card=btn.closest('.listing-card'); confirmRemove('Do you want to remove this listing?',()=>{card&&card.remove(); log('Listing removed from profile'); toast('Listing removed');});}; });
     document.querySelectorAll('.session-item .btn-danger,.session-item .btn-outline').forEach(btn=>{ if(btn.dataset.sessionConfirm==='1')return; if(/revoke/i.test(btn.textContent)){btn.dataset.sessionConfirm='1';btn.onclick=function(e){e.preventDefault();confirmRemove('Do you want to revoke this session?',()=>{btn.closest('.session-item')?.remove();toast('Session revoked');log('Security session revoked')});};}});
   }
-  function wireBanner(){ const b=document.getElementById('profileBannerBtn'); if(!b||b.dataset.real==='1')return; b.dataset.real='1'; b.onclick=function(e){e.preventDefault(); confirmSave('Do you want to save this banner change?',()=>{const p=read(PROFILE_KEY,{});p.bannerUpdatedAt=Date.now();write(PROFILE_KEY,p);toast('Banner saved');log('Profile banner changed');});};}
+  function wireBanner(){ const b=document.getElementById('profileBannerBtn'); if(!b||b.dataset.real==='1')return; b.dataset.real='1'; b.onclick=function(e){e.preventDefault(); confirmSave('Do you want to save this banner change?',()=>{const p=read(PROFILE_KEY,{});p.bannerUpdatedAt=Date.now();write(PROFILE_KEY,p);toast('Banner saved');log('com.automart.Profile banner changed');});};}
   document.addEventListener('DOMContentLoaded',()=>{rewriteSaveButtons();wireBanner();setTimeout(rewriteSaveButtons,500);});
 })();
 </script>
@@ -1392,7 +1392,7 @@ window.addEventListener('load', () => {
             el.textContent='';
           });
           window.dispatchEvent(new StorageEvent('storage',{key:'automartMediaAvatarV2',newValue:data}));
-          toast('Profile picture saved successfully');
+          toast('com.automart.Profile picture saved successfully');
         },'📷');
       }catch(err){toast(err.message||'Upload failed','error');}
     };
@@ -1403,7 +1403,7 @@ window.addEventListener('load', () => {
       hardClear();
       applyInitials();
       window.dispatchEvent(new StorageEvent('storage',{key:'automartCurrentProfileV2',newValue:'{}'}));
-      toast('Profile picture removed successfully');
+      toast('com.automart.Profile picture removed successfully');
     },'🗑️');
   }
 

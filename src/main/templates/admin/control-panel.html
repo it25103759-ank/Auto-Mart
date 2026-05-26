@@ -1831,7 +1831,7 @@ body.dim-admin{--bg:#0d1220;--bg2:#121a2a;--bg3:#182133;--bg4:#202b42;}
 
     <div class="settings-layout">
       <div class="settings-nav">
-        <div class="settings-nav-item active" onclick="switchSettingsTab('profile', this)"><i class="fa-solid fa-user"></i> Profile</div>
+        <div class="settings-nav-item active" onclick="switchSettingsTab('profile', this)"><i class="fa-solid fa-user"></i> com.automart.Profile</div>
         <div class="settings-nav-item" onclick="switchSettingsTab('security', this)"><i class="fa-solid fa-shield"></i> Security</div>
         <div class="settings-nav-item" onclick="switchSettingsTab('notifications', this)"><i class="fa-solid fa-bell"></i> Notifications</div>
         <div class="settings-nav-item" onclick="switchSettingsTab('appearance', this)"><i class="fa-solid fa-palette"></i> Appearance</div>
@@ -1840,12 +1840,12 @@ body.dim-admin{--bg:#0d1220;--bg2:#121a2a;--bg3:#182133;--bg4:#202b42;}
       </div>
 
       <div class="settings-content">
-        <!-- Profile -->
+        <!-- com.automart.Profile -->
         <div class="settings-panel active" id="spanel-profile">
           <div class="card" style="margin-bottom:16px;">
             <div class="card-header">
               <div class="card-icon" style="background:var(--gold-dim); color:var(--gold);"><i class="fa-solid fa-user"></i></div>
-              <div><div class="card-title">Profile Information</div><div class="card-subtitle">Update your admin account details</div></div>
+              <div><div class="card-title">com.automart.Profile Information</div><div class="card-subtitle">Update your admin account details</div></div>
             </div>
             <div class="card-body">
               <div style="display:flex; align-items:center; gap:18px; margin-bottom:24px; padding-bottom:22px; border-bottom:1px solid var(--border);">
@@ -2102,12 +2102,12 @@ body.dim-admin{--bg:#0d1220;--bg2:#121a2a;--bg3:#182133;--bg4:#202b42;}
   </div>
 </div>
 
-<!-- Profile Modal -->
+<!-- com.automart.Profile Modal -->
 <div class="modal-overlay" id="profileModal" onclick="if(event.target===this)closeModal('profileModal')">
   <div class="modal">
     <div class="modal-header">
       <div>
-        <div class="modal-title">Admin Profile</div>
+        <div class="modal-title">Admin com.automart.Profile</div>
         <div class="modal-subtitle">Admin User · admin.automart@gmail.com</div>
       </div>
       <div class="modal-close" onclick="closeModal('profileModal')"><i class="fa-solid fa-xmark"></i></div>
@@ -2121,7 +2121,7 @@ body.dim-admin{--bg:#0d1220;--bg2:#121a2a;--bg3:#182133;--bg4:#202b42;}
       </div>
     </div>
     <div style="display:flex; flex-direction:column; gap:8px;">
-      <button class="btn btn-ghost" style="justify-content:flex-start;" onclick="navigate('settings'); switchSettingsTab('profile', null); closeModal('profileModal');"><i class="fa-solid fa-user-pen"></i> Edit Profile</button>
+      <button class="btn btn-ghost" style="justify-content:flex-start;" onclick="navigate('settings'); switchSettingsTab('profile', null); closeModal('profileModal');"><i class="fa-solid fa-user-pen"></i> Edit com.automart.Profile</button>
       <button class="btn btn-ghost" style="justify-content:flex-start;" onclick="navigate('settings'); switchSettingsTab('security', null); closeModal('profileModal');"><i class="fa-solid fa-shield"></i> Security Settings</button>
       <button class="btn btn-ghost" style="justify-content:flex-start;" onclick="showToast('Downloading users.txt…', 'info'); closeModal('profileModal');"><i class="fa-solid fa-download"></i> Download Data</button>
     </div>
@@ -3430,14 +3430,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if(!ok) return toast('Fix highlighted admin profile fields before saving.','error');
     loader(true); const previous=read(ADMIN_PROFILE_KEY,{}); const profile={fullName:f.fullName.value.trim(),username:f.username.value.trim(),email:f.email.value.trim(),phone:f.phone.value.trim(),adminCode:f.adminCode.value.trim(),photo:previous.photo||''};
     try{write(ADMIN_PROFILE_KEY,profile); updateAdminHeader(profile); if(Array.isArray(USERS)){let admin=USERS.find(u=>u.role==='admin')||USERS[0]; if(admin){admin.name=profile.fullName;admin.username=profile.username;admin.email=profile.email;admin.phone=profile.phone;admin.status='active';}} if(typeof addLog==='function')addLog('Admin profile saved: '+profile.username); if(typeof persist==='function')persist(); setTimeout(()=>toast('Saved successfully.','success'),280);}
-    catch(e){toast('Profile save failed: '+e.message,'error');}
+    catch(e){toast('com.automart.Profile save failed: '+e.message,'error');}
   };
   function setupProfileActions(){
     loadAdminProfile(); const f=profileInputs(); [f.email].forEach(i=>i&&i.addEventListener('input',()=>validGmail(i))); [f.phone].forEach(i=>{if(!i)return;i.setAttribute('maxlength','10');i.setAttribute('inputmode','numeric');i.addEventListener('beforeinput',e=>{if(e.data&&/\D/.test(e.data))e.preventDefault()});i.addEventListener('input',()=>validPhone(i));});
     const p=document.getElementById('spanel-profile'); const saveBtn=[...p.querySelectorAll('button')].find(b=>/Save Changes/i.test(b.textContent)); if(saveBtn) saveBtn.onclick=window.saveAdminProfileReal;
     const cancel=[...p.querySelectorAll('button')].find(b=>/^\s*Cancel\s*$/i.test(b.textContent)); if(cancel) cancel.onclick=()=>{loadAdminProfile();toast('Unsaved profile changes discarded.','info')};
-    const photo=document.getElementById('adminPhotoInput'); if(photo) photo.onchange=()=>{const file=photo.files&&photo.files[0]; if(!file)return; if(!file.type.startsWith('image/'))return toast('Please select a valid image file.','error'); const reader=new FileReader(); reader.onload=()=>{const profile=Object.assign(loadAdminProfile(),{photo:reader.result}); write(ADMIN_PROFILE_KEY,profile); updateAdminHeader(profile); if(typeof addLog==='function')addLog('Admin changed profile photo'); toast('Profile photo saved.','success')}; reader.onerror=()=>toast('Photo upload failed.','error'); reader.readAsDataURL(file);};
-    const remove=document.getElementById('removeAdminPhotoBtn'); if(remove) remove.onclick=()=>{const profile=Object.assign(loadAdminProfile(),{photo:''}); write(ADMIN_PROFILE_KEY,profile); updateAdminHeader(profile); toast('Profile photo removed.','success');};
+    const photo=document.getElementById('adminPhotoInput'); if(photo) photo.onchange=()=>{const file=photo.files&&photo.files[0]; if(!file)return; if(!file.type.startsWith('image/'))return toast('Please select a valid image file.','error'); const reader=new FileReader(); reader.onload=()=>{const profile=Object.assign(loadAdminProfile(),{photo:reader.result}); write(ADMIN_PROFILE_KEY,profile); updateAdminHeader(profile); if(typeof addLog==='function')addLog('Admin changed profile photo'); toast('com.automart.Profile photo saved.','success')}; reader.onerror=()=>toast('Photo upload failed.','error'); reader.readAsDataURL(file);};
+    const remove=document.getElementById('removeAdminPhotoBtn'); if(remove) remove.onclick=()=>{const profile=Object.assign(loadAdminProfile(),{photo:''}); write(ADMIN_PROFILE_KEY,profile); updateAdminHeader(profile); toast('com.automart.Profile photo removed.','success');};
   }
   window.clearLogs=function(){confirmBox('Clear All Activity Logs','Are you sure you want to clear all activity logs? This action cannot be undone.','Clear Logs',()=>{try{LOGS.splice(0,LOGS.length); if(typeof persist==='function')persist(); if(typeof renderLogs==='function')renderLogs(); toast('Activity logs cleared.','success');}catch(e){toast('Could not clear logs.','error')}})};
   window.resetPlatformData=function(){confirmBox('Reset Platform Data','Are you sure you want to reset all platform data? This action cannot be undone. Admin account will be preserved.','Reset Data',()=>{try{const admins=USERS.filter(u=>u.role==='admin'); USERS.splice(0,USERS.length,...admins); LISTINGS.splice(0,LISTINGS.length); REQUESTS.splice(0,REQUESTS.length); REVIEWS.splice(0,REVIEWS.length); LOGS.unshift('['+new Date().toLocaleString()+'] Admin reset platform data; admin account preserved'); if(typeof persist==='function')persist(); ['renderUsers','renderListings','renderRequests','renderReviews','renderLogs','buildPendingTable','renderBackup'].forEach(fn=>{try{window[fn]&&window[fn]()}catch{}}); try{closeModal('confirmResetModal')}catch{} toast('Platform data reset completed.','success');}catch(e){toast('Reset failed: '+e.message,'error')}})};
@@ -3548,7 +3548,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const avatarBtn = document.querySelector('.avatar-btn');
     if (avatarBtn) avatarBtn.title = profile.fullName + ' · ' + profile.email;
 
-    // Profile modal: remove old hard-coded text
+    // com.automart.Profile modal: remove old hard-coded text
     const profileModal = document.getElementById('profileModal');
     if (profileModal) {
       const subtitle = profileModal.querySelector('.modal-subtitle');
@@ -3796,7 +3796,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Real save profile with instant sync everywhere.
   window.saveAdminProfileReal = function(){
     const panel = document.getElementById('spanel-profile');
-    if (!panel) return toast('Profile panel not found.', 'error');
+    if (!panel) return toast('com.automart.Profile panel not found.', 'error');
     const inputs = panel.querySelectorAll('.form-input');
     const profile = {
       fullName: inputs[0]?.value.trim() || '',
@@ -3821,7 +3821,7 @@ document.addEventListener('DOMContentLoaded', () => {
       realLog('Admin profile updated: ' + profile.username);
       toast('Saved successfully', 'success');
     } catch(e) {
-      toast('Profile save failed: ' + e.message, 'error');
+      toast('com.automart.Profile save failed: ' + e.message, 'error');
     }
   };
 
@@ -3848,7 +3848,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateAdminEverywhere(profile);
             persistAll(false);
             realLog('Admin profile photo updated');
-            toast('Profile photo saved successfully.', 'success');
+            toast('com.automart.Profile photo saved successfully.', 'success');
           }, false);
         };
         r.onerror = () => toast('Photo upload failed.', 'error');
@@ -3864,7 +3864,7 @@ document.addEventListener('DOMContentLoaded', () => {
           updateAdminEverywhere(profile);
           persistAll(false);
           realLog('Admin profile photo removed');
-          toast('Profile photo removed.', 'success');
+          toast('com.automart.Profile photo removed.', 'success');
         });
       };
     }

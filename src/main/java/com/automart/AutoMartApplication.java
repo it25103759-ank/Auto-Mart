@@ -2,49 +2,7 @@ package com.automart;
 
 import java.util.Scanner;
 
-/**
- * ============================================================
- *  AutoMartApplication.java  (com.automart.Profile Settings Entry Point)
- *  Component 05 — com.automart.Profile Settings
- *  Student : Siriwardana A.K.L.B.  |  IT25103761
- * ============================================================
- *
- *  PURPOSE
- *  -------
- *  This file is the main entry point for the com.automart.Profile Settings
- *  component of the AutoMart Second-Hand Car Marketplace.
- *
- *  It presents a console menu that connects every CRUD operation
- *  in com.automart.ProfileSettingsManager to the user through Scanner input.
- *
- *  MENU STRUCTURE
- *  --------------
- *  1. Create com.automart.Profile Settings   → com.automart.ProfileSettingsManager.createProfile()
- *  2. View com.automart.Profile Information  → com.automart.ProfileSettingsManager.viewProfile()
- *  3. Update Username           → com.automart.ProfileSettingsManager.updateUsername()
- *  4. Update Appearance         → com.automart.ProfileSettingsManager.updateAppearance()
- *  5. Update Password           → com.automart.ProfileSettingsManager.updatePassword()
- *  6. Delete com.automart.Profile            → com.automart.ProfileSettingsManager.deleteProfile()
- *  0. Exit
- *
- *  OOP CONCEPTS USED
- *  -----------------
- *  Encapsulation  : Menu logic is isolated inside printMenu() and
- *                   handleChoice(); no logic leaks into main().
- *  Abstraction    : main() only knows about com.automart.ProfileSettingsManager —
- *                   it has no knowledge of files or com.automart.Profile internals.
- *  Composition    : AutoMartApplication uses (has-a) a
- *                   com.automart.ProfileSettingsManager object.
- *
- *  HOW TO RUN (from project root)
- *  --------------------------------
- *  javac -d out src/main/java/com/automart/com.automart.Profile.java \
- *               src/main/java/com/automart/com.automart.ProfileSettingsManager.java \
- *               src/main/java/com/automart/AutoMartApplication.java
- *
- *  java -cp out com.automart.AutoMartApplication
- * ============================================================
- */
+
 public class AutoMartApplication {
 
     // ── Shared Scanner (one instance for the whole application) ──────────
