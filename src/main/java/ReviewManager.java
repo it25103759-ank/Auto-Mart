@@ -1,26 +1,9 @@
-// ============================================================
-//  AutoMart Application — Feedback & Review System
-//  FILE: ReviewManager.java
-//
-//  PURPOSE:
-//    This class manages ALL review operations:
-//      • Create  – add a new review and save to file
-//      • Read    – load reviews from file and display them
-//      • Update  – edit comment/rating of an existing review
-//      • Delete  – remove a review from file
-//      • Ratings – show average ratings per car and per seller
-//
+
 //  OOP CONCEPTS USED:
 //    • Encapsulation  – private list of reviews; accessed via public methods
 //    • Abstraction    – caller doesn't need to know HOW file I/O works
 //    • Inheritance    – uses Review, VerifiedReview, PublicReview
 //    • Polymorphism   – calls getReviewTypeBadge() without knowing subclass type
-//
-//  FILE HANDLING:
-//    • Reads from  reviews.txt  on startup (loadFromFile)
-//    • Writes to   reviews.txt  after every change (saveToFile)
-//    • Format: reviewId,userId,carName,rating,comment,reviewType,timestamp
-// ============================================================
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -30,18 +13,18 @@ import java.util.List;
 
 public class ReviewManager {
 
-    // ── Constants
+    // Constants
     private static final String FILE_NAME      = "reviews.txt"; // file where reviews are stored
     private static final String SEPARATOR      = ",";           // delimiter used in the file
     private static final DateTimeFormatter FMT =               // timestamp format
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    // ── Internal list of reviews (Encapsulation)
+    //  Internal list of reviews (Encapsulation)
     // All reviews are kept in memory in this list.
     // The list is populated from file on start-up, and synced back on every change.
     private List<Review> reviews = new ArrayList<>();
 
-    // ── Counter used to auto-generate unique review IDs
+    // Counter used to auto-generate unique review IDs
     private int idCounter = 1;
 
     // ══════════════════════════════════════════════════════════════════════════
