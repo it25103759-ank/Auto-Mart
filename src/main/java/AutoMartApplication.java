@@ -227,21 +227,17 @@ public class AutoMartApplication {
         manager.viewReviewsByCar(carName);
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  MENU HANDLER — Option 9: Reload from File
-    //  Useful if reviews.txt was edited externally.
-    // ══════════════════════════════════════════════════════════════════════════
+    //  Useful if reviews.txt was edited externally
     private static void handleReloadFromFile() {
         System.out.println("\n  ── RELOAD FROM FILE ─────────────────────────────");
         manager.loadFromFile();
         System.out.println("  Reviews reloaded. Current count: " + manager.getTotalReviews());
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  INPUT HELPER — readMenuChoice()
     //  Safely reads an integer from the user within [min, max].
     //  Keeps prompting until valid input is entered.
-    // ══════════════════════════════════════════════════════════════════════════
     private static int readMenuChoice(int min, int max) {
         while (true) {
             try {
@@ -257,10 +253,8 @@ public class AutoMartApplication {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
     //  INPUT HELPER — readIntInRange()
     //  Similar to readMenuChoice but prints no extra prompt.
-    // ══════════════════════════════════════════════════════════════════════════
     private static int readIntInRange(int min, int max) {
         while (true) {
             try {
