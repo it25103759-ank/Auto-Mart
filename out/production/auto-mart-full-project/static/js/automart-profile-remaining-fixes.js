@@ -228,7 +228,11 @@
 
   /* LISTINGS */
   function defaultListings(){
-    return [];
+    return [
+      {id:'l1',model:'Toyota Aqua G 2019',location:'Colombo',mileage:'42,000 km',transmission:'Auto',fuel:'Hybrid',price:'LKR 5,800,000',views:847,enquiries:12,status:'active',image:'',boosted:false,createdAt:new Date(Date.now()-2*86400000).toISOString()},
+      {id:'l2',model:'BMW 318i F30 2017',location:'Colombo',mileage:'72,000 km',transmission:'Auto',fuel:'Petrol',price:'LKR 12,500,000',views:1204,enquiries:28,status:'active',image:'',boosted:false,createdAt:new Date(Date.now()-5*86400000).toISOString()},
+      {id:'l3',model:'Honda Vezel RS 2018',location:'Kandy',mileage:'55,000 km',transmission:'Auto',fuel:'Hybrid',price:'LKR 10,200,000',views:0,enquiries:0,status:'pending',image:'',boosted:false,createdAt:new Date(Date.now()-86400000).toISOString()}
+    ];
   }
   function listings(){let list=read(LISTINGS_KEY,null); if(!Array.isArray(list)){list=defaultListings(); write(LISTINGS_KEY,list);} return migrateListingImages(list);}
   function saveListings(list){write(LISTINGS_KEY,list); const shared=read(SHARED_KEY,{}); shared.listings=list; shared.updatedAt=Date.now(); write(SHARED_KEY,shared); updateListingCount(list); renderListings(false);}
@@ -423,6 +427,26 @@
   }
 
 
+  function appendLocalListingsToInventory(){
+    if(!location.pathname.includes('/inventory')) return;
+    const grid=document.querySelector('.grid.cards');
+    if(!grid || grid.dataset.automartLocalListingsAppended) return;
+    grid.dataset.automartLocalListingsAppended='1';
+    const list=listings().filter(l=>l.status!=='removed');
+    if(!list.length) return;
+    const html=list.map(l=>{
+      const img=getListingImage(l);
+      return `<article class="card vehicle-card automart-local-inventory-card" data-listing-id="${esc(l.id)}">
+        <div class="card-image" style="height:190px;border-radius:18px;background:url('${img}') center/cover;margin-bottom:14px"></div>
+        <p class="eyebrow">${esc((l.status||'pending').toUpperCase())}</p>
+        <h3>${esc(l.model||'Vehicle Listing')}</h3>
+        <p class="price">${esc(l.price||'LKR 0')}</p>
+        <p>${esc(l.year||'')} · ${esc(l.mileage||'0 km')} · ${esc(l.fuel||'Fuel')} · ${esc(l.transmission||'Transmission')}</p>
+        <div class="actions"><a class="btn btn-primary" href="/profile">View Seller Listing</a></div>
+      </article>`;
+    }).join('');
+    grid.insertAdjacentHTML('afterbegin', html);
+  }
 
   /* SECURITY */
   function openPasswordModal(){
@@ -496,9 +520,48 @@
     form.dataset.automartSellFixed='1';
     const file=form.querySelector('#sellImageFile');
     const preview=document.getElementById('sellImagePreview');
+    if(file && !file.dataset.automartPreviewFixed){
+      file.dataset.automartPreviewFixed='1';
+      file.addEventListener('change',async()=>{
+        try{
+          const data=await compressListingFile(file.files&&file.files[0]);
+          if(data && preview){ preview.style.display='block'; preview.style.backgroundImage=`url('${data}')`; preview.textContent=''; form.dataset.image=data; }
+        }catch(e){toast(e.message,'error'); file.value='';}
+      }, true);
+    }
+    form.addEventListener('submit',e=>{
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      if(!canList()) return toast('Buyer accounts cannot submit vehicle listings.','error');
+      const title=form.querySelector('[name="title"]')?.value.trim()||'';
+      const price=form.querySelector('[name="price"]')?.value.trim()||'';
+      if(!title || !price) return toast('Vehicle title and price are required.','error');
+      popup('Confirm Changes','Do you want to submit this listing as Pending?','Confirm',()=>{
+        const id='listing_'+Date.now();
+        const imageRef=form.dataset.image ? saveListingImage(id, form.dataset.image) : '';
+        const item={
+          id, model:title, category:form.querySelector('[name="category"]')?.value||'',
+          price: price.toUpperCase().includes('LKR') ? price : 'LKR '+price,
+          year:form.querySelector('[name="year"]')?.value.trim()||'',
+          mileage:form.querySelector('[name="mileage"]')?.value.trim()||'',
+          fuel:form.querySelector('[name="fuel"]')?.value.trim()||'',
+          transmission:form.querySelector('[name="transmission"]')?.value.trim()||'',
+          description:form.querySelector('[name="description"]')?.value.trim()||'',
+          location:(getProfile().city||getProfile().district||'Sri Lanka'),
+          imageRef, image:'', status:'pending', boosted:false, views:0, enquiries:0, createdAt:new Date().toISOString()
+        };
+        const list=listings(); list.unshift(item); saveListings(list);
+        const notifications=read(NOTIF_KEY,[]); notifications.unshift({id:'listing_'+Date.now(),title:'Listing submitted',body:'Your vehicle listing is pending admin approval.',time:'Now',read:false}); write(NOTIF_KEY,notifications);
+        toast('Listing saved as Pending');
+        setTimeout(()=>{location.href='/profile';},650);
+      },'🚗');
+    }, true);
+  }
+
   function wire(){
     fixSearchInputs();
     wireBudget();
+    appendLocalListingsToInventory();
+    wireSellCarForm();
     renderListings(false);
     wireReviewSort();
 

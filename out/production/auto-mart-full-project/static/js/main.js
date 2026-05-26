@@ -692,23 +692,12 @@ document.getElementById('year') && (document.getElementById('year').textContent 
   }
 
   if (avatarInput) {
-    avatarInput.addEventListener('change', function (event) {
-      const file = event.target.files && event.target.files[0];
+    avatarInput.addEventListener('change', function () {
+      const file = avatarInput.files && avatarInput.files[0];
       if (!file) return;
-      const tempUrl = URL.createObjectURL(file);
-      if (avatarImage) {
-        avatarImage.src = tempUrl;
-        avatarImage.classList.add('is-visible');
-        avatarImage.style.display = 'block';
-      }
-      if (avatarFallback) {
-        avatarFallback.style.display = 'none';
-      }
-      setHeaderAvatar(tempUrl);
-
       const reader = new FileReader();
-      reader.onload = function (e) {
-        const result = e.target && e.target.result;
+      reader.onload = function (event) {
+        const result = event.target && event.target.result;
         if (typeof result !== 'string') return;
         setAvatar(result);
         saveFormState();
@@ -1337,7 +1326,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function write(k,v){localStorage.setItem(k,JSON.stringify(v));}
   function seed(){
     if(!localStorage.getItem(NOTIF_KEY)) write(NOTIF_KEY,[
-      {id:'n1',title:'Listing update',body:'Your saved vehicle listing received a new price update.',time:'Just now',read:false},
+      {id:'n1',title:'Listing update',body:'Your saved Toyota Aqua listing received a new price update.',time:'Just now',read:false},
       {id:'n2',title:'Request approved',body:'A buyer request was approved by the AutoMart team.',time:'Today',read:false},
       {id:'n3',title:'Profile tip',body:'Add a profile photo to improve trust score.',time:'Yesterday',read:true}
     ]);
