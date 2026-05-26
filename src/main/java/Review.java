@@ -1,23 +1,14 @@
-// ============================================================
-//  AutoMart Application — Feedback & Review System
-//  FILE: Review.java
-//
-//  PURPOSE:
-//    This file defines the Review class, which is the core
-//    data model (blueprint) for a single review entry.
-//
+
 //  OOP CONCEPTS USED:
 //    • Class & Objects        – Review is a blueprint; each review is an object
 //    • Encapsulation          – fields are private; accessed via getters/setters
 //    • Inheritance            – VerifiedReview and PublicReview extend Review
 //    • Polymorphism           – getReviewTypeBadge() is overridden in subclasses
-//    • Abstraction            – getReviewTypeBadge() forces subclasses to define
-//                               their own badge label
+//    • Abstraction            – getReviewTypeBadge() forces subclasses to define their own badge label
 //
 //  FILE FORMAT (reviews.txt):
 //    reviewId,userId,carName,rating,comment,reviewType,timestamp
-//    Example: RV001,U001,Toyota Prius,5,Excellent Condition,VerifiedReview,2025-05-24T10:30:00
-// ============================================================
+
 
 public abstract class Review {
 
@@ -31,8 +22,6 @@ public abstract class Review {
     private String reviewType;     // "VerifiedReview" or "PublicReview"
     private String timestamp;      // Date/time string when review was created
 
-    // ── Constructor
-    // Called when a new Review object is created.
     // Subclasses call super(...) to fill in all fields.
     public Review(String reviewId, String userId, String carName,
                   int rating, String comment, String reviewType, String timestamp) {
@@ -76,7 +65,7 @@ public abstract class Review {
         }
     }
 
-    // ── toFileString()
+    // ── toFileString
     // Converts the Review object into a comma-separated line for saving
     // to the reviews.txt file.
     // Format: reviewId,userId,carName,rating,comment,reviewType,timestamp
@@ -95,7 +84,7 @@ public abstract class Review {
         return stars.toString();
     }
 
-    // ── displayReview()
+    // displayReview()
     // Prints a nicely formatted summary of this review to the console.
     public void displayReview() {
         System.out.println("  ┌─────────────────────────────────────────────────");
@@ -118,11 +107,8 @@ public abstract class Review {
 }
 
 
-// ╔══════════════════════════════════════════════════════════════╗
 //  VerifiedReview — subclass of Review (Inheritance)
-//  Represents a review written by a buyer who actually purchased
-//  or formally inspected the vehicle.
-// ╚══════════════════════════════════════════════════════════════╝
+//  Represents a review written by a buyer who actually purchased or formally inspected the vehicle.
 class VerifiedReview extends Review {
 
     // Constructor — calls the parent constructor via super()
@@ -139,10 +125,8 @@ class VerifiedReview extends Review {
 }
 
 
-// ╔══════════════════════════════════════════════════════════════╗
 //  PublicReview — subclass of Review (Inheritance)
 //  Represents an open community review that anyone can submit.
-// ╚══════════════════════════════════════════════════════════════╝
 class PublicReview extends Review {
 
     // Constructor — calls the parent constructor via super()
