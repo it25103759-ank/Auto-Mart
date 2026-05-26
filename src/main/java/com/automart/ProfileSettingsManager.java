@@ -65,17 +65,7 @@ public class ProfileSettingsManager {
     //  CREATE — add a new profile
     // ══════════════════════════════════════════════════════════════════════
 
-    /**
-     * CREATE operation.
-     *
-     * Prompts the user for profile details, validates them, and appends
-     * a new com.automart.Profile record to profiles.txt.
-     *
-     * Validation rules:
-     *  - com.automart.Profile ID must be unique (no duplicates in profiles.txt)
-     *  - Username and password cannot be blank
-     *  - Appearance must be one of: DarkMode | LightMode | SystemDefault
-     */
+
     public void createProfile() {
         printHeader("CREATE PROFILE SETTINGS");
 
@@ -131,12 +121,7 @@ public class ProfileSettingsManager {
     //  READ — view a profile
     // ══════════════════════════════════════════════════════════════════════
 
-    /**
-     * READ operation.
-     *
-     * Prompts for a com.automart.Profile ID, searches profiles.txt line-by-line, and
-     * prints the matching profile using com.automart.Profile.toString().
-     */
+
     public void viewProfile() {
         printHeader("VIEW PROFILE INFORMATION");
 
@@ -158,12 +143,7 @@ public class ProfileSettingsManager {
     //  UPDATE — three separate update operations
     // ══════════════════════════════════════════════════════════════════════
 
-    /**
-     * UPDATE — Username.
-     *
-     * Finds the profile by ID and replaces the username field, then
-     * rewrites the entire profiles.txt file with the updated record.
-     */
+
     public void updateUsername() {
         printHeader("UPDATE USERNAME");
 
@@ -191,12 +171,7 @@ public class ProfileSettingsManager {
         printSuccess("Username updated to '" + newUsername + "' successfully!");
     }
 
-    /**
-     * UPDATE — Appearance / Theme.
-     *
-     * Lets the user pick a new theme from a numbered list, then persists
-     * the change to profiles.txt.
-     */
+
     public void updateAppearance() {
         printHeader("UPDATE APPEARANCE SETTINGS");
 
@@ -270,12 +245,8 @@ public class ProfileSettingsManager {
     //  DELETE — remove a profile
     // ══════════════════════════════════════════════════════════════════════
 
-    /**
-     * DELETE operation.
-     *
-     * Asks for a com.automart.Profile ID and, after confirmation, removes that record
-     * from profiles.txt by rewriting the file without the deleted line.
-     */
+
+
     public void deleteProfile() {
         printHeader("DELETE PROFILE");
 
@@ -313,12 +284,7 @@ public class ProfileSettingsManager {
     //  Private helpers — file I/O and utility methods
     // ══════════════════════════════════════════════════════════════════════
 
-    /**
-     * Reads all profiles from profiles.txt into a List.
-     * Skips blank lines and malformed records.
-     *
-     * @return List of all valid com.automart.Profile objects
-     */
+
     private List<Profile> loadAllProfiles() {
         List<Profile> profiles = new ArrayList<>();
         Path path = Path.of(PROFILES_FILE);

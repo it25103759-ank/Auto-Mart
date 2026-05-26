@@ -5,9 +5,7 @@ import java.util.Scanner;
 
 public class AutoMartApplication {
 
-    // ── Shared Scanner (one instance for the whole application) ──────────
-    // We create it once here and pass it to com.automart.ProfileSettingsManager so
-    // we never accidentally open two Scanners on System.in at the same time.
+
     private static final Scanner scanner = new Scanner(System.in);
 
     // ── The service that handles all CRUD logic ───────────────────────────
@@ -16,14 +14,7 @@ public class AutoMartApplication {
 
     // ─────────────────────────────────────────────────────────────────────
 
-    /**
-     * Application entry point.
-     *
-     * Displays the welcome banner, then loops on the main menu until
-     * the user chooses to exit.
-     *
-     * @param args Command-line arguments (not used)
-     */
+   
     public static void main(String[] args) {
         printWelcomeBanner();
 
