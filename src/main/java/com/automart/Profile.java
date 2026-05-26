@@ -1,26 +1,6 @@
 package com.automart;
 
-/**
- * ============================================================
- *  com.automart.Profile.java
- *  Component 05 — com.automart.Profile Settings
- *  Student : Siriwardana A.K.L.B.  |  IT25103761
- * ============================================================
- *
- *  OOP CONCEPTS USED
- *  -----------------
- *  Encapsulation  : All fields are private; access only via getters/setters.
- *  Abstraction    : Callers work with com.automart.Profile objects — they never touch
- *                   the raw file format directly.
- *  Composition    : A com.automart.Profile "belongs to" a user (linked by profileId which
- *                   mirrors the username stored in AppUser).
- *
- *  FILE FORMAT  (profiles.txt, comma-separated)
- *  --------------------------------------------
- *  profileId , username , appearance , password
- *  Example:
- *  P001,Kasun,DarkMode,1234
- * ============================================================*/
+
 public class Profile {
 
 
